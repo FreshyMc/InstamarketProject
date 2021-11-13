@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+    <nav th:replace="common/fragments :: secondary-navigation"></nav>
+    <!-- Messaging main section -->
+    <main class="chat-page">
+        <div class="row m-0 p-0 g-0 h-100">
+            <div class="col-12 col-sm-3 col-lg-2 d-flex flex-column">
+                <form action="#" method="POST" onsubmit="return false;" class="search-contact-form d-flex">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="searchContact" placeholder="Search contact">
+                        <button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+                <div class="d-flex flex-grow-1 flex-sm-column contacts-list fancy-scroll">
+                    <a href="#" class="contact d-flex flex-column flex-sm-row justify-content-between justify-content-sm-start align-items-center">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="contact-picture">
+                        <span class="mt-2 m-sm-0 ms-sm-2">Username</span>
+                    </a>
+                    <a href="#" class="contact d-flex flex-column flex-sm-row justify-content-between justify-content-sm-start align-items-center">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="contact-picture">
+                        <span class="mt-2 m-sm-0 ms-sm-2">Username</span>
+                    </a>
+                    <a href="#" class="contact d-flex flex-column flex-sm-row justify-content-between justify-content-sm-start align-items-center">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="contact-picture">
+                        <span class="mt-2 m-sm-0 ms-sm-2">Username</span>
+                    </a>
+                    <a href="#" class="contact d-flex flex-column flex-sm-row justify-content-between justify-content-sm-start align-items-center">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="contact-picture">
+                        <span class="mt-2 m-sm-0 ms-sm-2">Username</span>
+                    </a>
+                    <a href="#" class="contact d-flex flex-column flex-sm-row justify-content-between justify-content-sm-start align-items-center">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="contact-picture">
+                        <span class="mt-2 m-sm-0 ms-sm-2">Username</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-12 col-sm-9 col-lg-10">
+                <div class="messaging d-flex flex-column">
+                    <div class="no-contact-selected closed d-flex justify-content-center">
+                        <h4>No contact selected.</h4>
+                    </div>
+                    <div class="messaging-heading d-flex align-items-center">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="messaging-profile-image">
+                        <div class="ms-2">
+                            <h6>FirstName LastName</h6>
+                            <p class="m-0 p-0">@Username</p>
+                        </div>
+                    </div>
+                    <div class="messages-wrapper flex-grow-1 d-flex flex-column">
+                        <div class="messages d-flex flex-column fancy-scroll flex-grow-1">
+                            <div class="receiver mb-2">
+                                <p class="message m-0">Message 1</p>
+                                <p class="message-timestamp">15:10</p>
+                            </div>
+                            <div class="sender mb-2">
+                                <p class="message  m-0">Message 1</p>
+                                <p class="message-timestamp">15:11</p>
+                            </div>
+                            <div class="sender mb-2">
+                                <p class="message  m-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, nulla aliquid? Quasi velit sunt qui architecto aliquid omnis eveniet eum eligendi unde explicabo repellat enim libero ipsam dicta numquam, repellendus quos
+                                    culpa voluptate dolores. Ex obcaecati veniam, dolore odit nihil ipsum ipsam eius praesentium dolores consequatur sint perferendis dolor cum vero dolorem. Aspernatur, excepturi eos. Nihil harum temporibus adipisci ipsa
+                                    consequatur non necessitatibus earum placeat reprehenderit similique, hic recusandae mollitia aliquid iste. Nostrum harum saepe possimus nemo suscipit optio pariatur! Praesentium voluptate maxime, quod consequuntur
+                                    facilis quia iure libero ipsum dolorum, dolores saepe tempore consectetur. Quae odio eligendi culpa excepturi!
+                                </p>
+                                <p class="message-timestamp">15:12</p>
+                            </div>
+                            <div class="sender mb-2">
+                                <p class="message  m-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, nulla aliquid? Quasi velit sunt qui architecto aliquid omnis eveniet eum eligendi unde explicabo repellat enim libero ipsam dicta numquam, repellendus quos
+                                    culpa voluptate dolores. Ex obcaecati veniam, dolore odit nihil ipsum ipsam eius praesentium dolores consequatur sint perferendis dolor cum vero dolorem. Aspernatur, excepturi eos. Nihil harum temporibus adipisci ipsa
+                                    consequatur non necessitatibus earum placeat reprehenderit similique, hic recusandae mollitia aliquid iste. Nostrum harum saepe possimus nemo suscipit optio pariatur! Praesentium voluptate maxime, quod consequuntur
+                                    facilis quia iure libero ipsum dolorum, dolores saepe tempore consectetur. Quae odio eligendi culpa excepturi!
+                                </p>
+                                <p class="message-timestamp">15:12</p>
+                            </div>
+                            <div class="sender mb-2">
+                                <p class="message  m-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, nulla aliquid? Quasi velit sunt qui architecto aliquid omnis eveniet eum eligendi unde explicabo repellat enim libero ipsam dicta numquam, repellendus quos
+                                    culpa voluptate dolores. Ex obcaecati veniam, dolore odit nihil ipsum ipsam eius praesentium dolores consequatur sint perferendis dolor cum vero dolorem. Aspernatur, excepturi eos. Nihil harum temporibus adipisci ipsa
+                                    consequatur non necessitatibus earum placeat reprehenderit similique, hic recusandae mollitia aliquid iste. Nostrum harum saepe possimus nemo suscipit optio pariatur! Praesentium voluptate maxime, quod consequuntur
+                                    facilis quia iure libero ipsum dolorum, dolores saepe tempore consectetur. Quae odio eligendi culpa excepturi!
+                                </p>
+                                <p class="message-timestamp">15:12</p>
+                            </div>
+                            <div class="sender mb-2">
+                                <p class="message  m-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, nulla aliquid? Quasi velit sunt qui architecto aliquid omnis eveniet eum eligendi unde explicabo repellat enim libero ipsam dicta numquam, repellendus quos
+                                    culpa voluptate dolores. Ex obcaecati veniam, dolore odit nihil ipsum ipsam eius praesentium dolores consequatur sint perferendis dolor cum vero dolorem. Aspernatur, excepturi eos. Nihil harum temporibus adipisci ipsa
+                                    consequatur non necessitatibus earum placeat reprehenderit similique, hic recusandae mollitia aliquid iste. Nostrum harum saepe possimus nemo suscipit optio pariatur! Praesentium voluptate maxime, quod consequuntur
+                                    facilis quia iure libero ipsum dolorum, dolores saepe tempore consectetur. Quae odio eligendi culpa excepturi!
+                                </p>
+                                <p class="message-timestamp">15:12</p>
+                            </div>
+                        </div>
+                        <div class="messaging-area d-flex flex-column">
+                            <form action="#" method="POST" onsubmit="return false;">
+                                <div class="input-group">
+                                    <textarea class="form-control" name="message" placeholder="Type your message" style="min-height: 50px;"></textarea>
+                                    <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-paper-plane"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+
+</html>

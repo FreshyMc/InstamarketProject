@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0 content-wrapper" id="top">
+    <nav th:replace="common/fragments :: primary-navigation"></nav>
+    <main class="product-wrapper" th:object="${offer}">
+        <section class="row g-0 g-lg-4 mt-4 mb-lg-4 col-sm-8 col-lg-12 m-auto">
+            <div class="col-12 col-lg-5">
+                <div class="product-images-wrapper d-flex flex-nowrap">
+                    <div class="product-images-previewer d-flex justify-content-between">
+                        <button type="button" class="d-flex justify-content-center align-items-center" disabled><i class="fas fa-chevron-left"></i></button>
+                        <button type="button" class="d-flex justify-content-center align-items-center"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="ratio ratio-1x1 product-image" th:each="imgName : *{offerImages}">
+                        <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
+                    </div>
+                    <!--
+                    <div class="ratio ratio-1x1 product-image">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs1.cdn.autoevolution.com%2Fimages%2Fnews%2Fgallery%2F2018-audi-r8-spyder-v10-plus-unleashed-with-610-ps_2.jpg&f=1&nofb=1" alt="#">
+                    </div>
+                    <div class="ratio ratio-1x1 product-image">
+                        <img src="https://s3.amazonaws.com/www-inside-design/uploads/2020/10/aspect-ratios-blogpost-1x1-1.png" alt="#">
+                    </div>
+                    -->
+                </div>
+            </div>
+            <div class="col-12 col-lg-7">
+                <!-- Advert Title -->
+                <div class="product-title">
+                    <h2 class="m-0" th:text="*{title}">Suzuki Swift 1.6 Turbo Navigation Unikat</h2>
+                </div>
+                <!-- Advert price tag -->
+                <div class="price-tag d-flex flex-column flex-lg-row justify-content-between justify-content-lg-start">
+                    <p class="price">$<span th:text="*{price}">$100,000.<small>50</small></span></p>
+                    <!--
+                    <div class="ms-lg-3">
+                        <span class="old-price">$150,000.<small>99</small></span>
+                    </div>
+                    -->
+                </div>
+                <div class="sold">5 sold</div>
+                <div class="product-options">
+                    <h3>Product options</h3>
+                    <div class="options">
+                        <th:block th:each="option : *{options}">
+                            <input type="radio" value="option_1" name="option" id="option_1" checked>
+                            <label class="option" for="option_1">
+                                <div class="ratio ratio-1x1 product-image">
+                                    <img th:src="@{/optionImage/{name}(name = ${option.getKey()})}" alt="#">
+                                </div>
+                                <p class="m-0" th:text="${option.getValue()}">Lorem ipsum dolor sit amet.</p>
+                            </label>
+                        </th:block>
+                        <!--
+                        <input type="radio" value="option_1" name="option" id="option_2">
+                        <label class="option" for="option_2">
+                            <div class="ratio ratio-1x1 product-image">
+                                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
+                            </div>
+                            <p class="m-0">Lorem ipsum dolor sit amet.</p>
+                        </label>
+                        <input type="radio" value="option_1" name="option" id="option_3">
+                        <label class="option" for="option_3">
+                            <div class="ratio ratio-1x1 product-image">
+                                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
+                            </div>
+                            <p class="m-0">Lorem ipsum dolor sit amet.</p>
+                        </label>
+                        <input type="radio" value="option_1" name="option" id="option_4">
+                        <label class="option" for="option_4">
+                            <div class="ratio ratio-1x1 product-image">
+                                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
+                            </div>
+                            <p class="m-0">Lorem ipsum dolor sit amet.</p>
+                        </label>
+                        <input type="radio" value="option_1" name="option" id="option_5">
+                        <label class="option" for="option_5">
+                            <div class="ratio ratio-1x1 product-image">
+                                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
+                            </div>
+                            <p class="m-0">Lorem ipsum dolor sit amet.</p>
+                        </label>
+                        -->
+                    </div>
+                </div>
+                <div class="my-3 d-none d-lg-block">
+                    <div class="dropdown-section closed" id="description-dropdown">
+                        <div class="dropdown-section-title d-flex justify-content-between align-items-center">
+                            <h3 class="p-0 m-0">Description</h3>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="dropdown-section-content">
+                            <p class="m-0" th:text="*{description}">
+                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos placeat quis suscipit, sequi in deserunt est officiis error voluptates a porro iusto eum dicta dolore esse officia. Perferendis aut consequatur veritatis maxime eius alias quibusdam, fugit
+                                voluptates cupiditate earum inventore odio nulla natus dolore doloribus optio nostrum dolor quasi perspiciatis! Maiores commodi dicta officia in? Ab soluta reiciendis sapiente voluptatem sunt quae laudantium laborum quasi
+                                iusto, iure doloremque voluptatum pariatur neque totam tempora doloribus voluptatibus ea voluptas enim quam ex distinctio. Iure aut nihil enim expedita qui molestiae nesciunt sunt eius consequatur consequuntur sequi, eum
+                                ex cum quis iste quasi?
+                            </p>
+                        </div>
+                    </div>
+                    <div class="dropdown-section closed" id="specifications-dropdown">
+                        <div class="dropdown-section-title d-flex justify-content-between align-items-center">
+                            <h3 class="p-0 m-0">Specifications</h3>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="dropdown-section-content">
+                            <div class="dropdown-row d-flex justify-content-between" th:each="property : *{properties}">
+                                <p class="m-0 p-0"><b th:text="${property.getKey()}">Test</b></p>
+                                <p class="m-0 p-0" th:text="${property.getValue()}">12345678</p>
+                            </div>
+                            <!--
+                            <div class="dropdown-row d-flex justify-content-between">
+                                <p class="m-0 p-0"><b>Test</b></p>
+                                <p class="m-0 p-0">12345678</p>
+                            </div>
+                            <div class="dropdown-row d-flex justify-content-between">
+                                <p class="m-0 p-0"><b>Test</b></p>
+                                <p class="m-0 p-0">12345678</p>
+                            </div>
+                            <div class="dropdown-row d-flex justify-content-between">
+                                <p class="m-0 p-0"><b>Test</b></p>
+                                <p class="m-0 p-0">12345678</p>
+                            </div>
+                            <div class="dropdown-row d-flex justify-content-between">
+                                <p class="m-0 p-0"><b>Test</b></p>
+                                <p class="m-0 p-0">12345678</p>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                    <div class="ask-question">
+                        <button class="question-btn d-flex justify-content-between align-items-center px-4">
+                            <span>Ask seller a question</span>
+                            <i class="fas fa-question"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="d-lg-none product-information py-3 col-sm-8 m-auto">
+            <div class="dropdown-section closed" id="description-dropdown-mobile">
+                <div class="dropdown-section-title d-flex justify-content-between align-items-center">
+                    <h3 class="p-0 m-0">Description</h3>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="dropdown-section-content">
+                    <p class="m-0" th:text="*{description}">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos placeat quis suscipit, sequi in deserunt est officiis error voluptates a porro iusto eum dicta dolore esse officia. Perferendis aut consequatur veritatis maxime eius alias quibusdam, fugit
+                        voluptates cupiditate earum inventore odio nulla natus dolore doloribus optio nostrum dolor quasi perspiciatis! Maiores commodi dicta officia in? Ab soluta reiciendis sapiente voluptatem sunt quae laudantium laborum quasi iusto,
+                        iure doloremque voluptatum pariatur neque totam tempora doloribus voluptatibus ea voluptas enim quam ex distinctio. Iure aut nihil enim expedita qui molestiae nesciunt sunt eius consequatur consequuntur sequi, eum ex cum quis iste
+                        quasi?
+                    </p>
+                </div>
+            </div>
+            <div class="dropdown-section closed" id="specifications-dropdown-mobile">
+                <div class="dropdown-section-title d-flex justify-content-between align-items-center">
+                    <h3 class="p-0 m-0">Specifications</h3>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="dropdown-section-content">
+                    <div class="dropdown-row d-flex justify-content-between" th:each="property : *{properties}">
+                        <p class="m-0 p-0"><b th:text="${property.getKey()}">Test</b></p>
+                        <p class="m-0 p-0" th:text="${property.getValue()}">12345678</p>
+                    </div>
+                    <!--
+                    <div class="dropdown-row d-flex justify-content-between">
+                        <p class="m-0 p-0"><b>Test</b></p>
+                        <p class="m-0 p-0">12345678</p>
+                    </div>
+                    <div class="dropdown-row d-flex justify-content-between">
+                        <p class="m-0 p-0"><b>Test</b></p>
+                        <p class="m-0 p-0">12345678</p>
+                    </div>
+                    <div class="dropdown-row d-flex justify-content-between">
+                        <p class="m-0 p-0"><b>Test</b></p>
+                        <p class="m-0 p-0">12345678</p>
+                    </div>
+                    <div class="dropdown-row d-flex justify-content-between">
+                        <p class="m-0 p-0"><b>Test</b></p>
+                        <p class="m-0 p-0">12345678</p>
+                    </div>
+                    -->
+                </div>
+            </div>
+            <div class="ask-question">
+                <button class="question-btn d-flex justify-content-between align-items-center px-4">
+                    <span>Ask seller a question</span>
+                    <i class="fas fa-question"></i>
+                </button>
+            </div>
+        </section>
+        <section class="product-seller">
+            <div class="seller-card">
+                <div class="col-sm-8 col-lg-6 m-auto">
+                    <div class="d-flex align-items-center">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="seller-picture">
+                        <h4 class="seller-name m-0">Seller name</h4>
+                    </div>
+                    <div class="seller-stats d-flex justify-content-between align-items-center">
+                        <p class="m-0 p-0">
+                            <span>95.5%</span>
+                            <span>Positive feedback</span>
+                        </p>
+                        <p class="m-0 p-0">
+                            <span>250</span>
+                            <span>Items</span>
+                        </p>
+                        <p class="m-0 p-0">
+                            <span>1456</span>
+                            <span>Subscribers</span>
+                        </p>
+                    </div>
+                    <div class="seller-subscribe">
+                        <button type="button" class="subscribe-btn">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="product-feedback py-3">
+            <h3>Feedback</h3>
+            <!-- Feeback comment -->
+            <div class="feedback d-flex">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
+                <div>
+                    <p class="m-0 pb-2"><b>First name Last name</b></p>
+                    <p class="m-0 pb-2 product-feedback-rating three-star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </p>
+                    <p class="m-0 p-0">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt qui, nulla nisi laborum soluta ex natus non illo excepturi minima debitis ipsam placeat consequatur iure.
+                    </p>
+                </div>
+            </div>
+            <!-- Feedback comment end -->
+            <div class="feedback d-flex">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
+                <div>
+                    <p class="m-0 pb-2"><b>First name Last name</b></p>
+                    <p class="m-0 pb-2 product-feedback-rating four-star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </p>
+                    <p class="m-0 p-0">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt qui, nulla nisi laborum soluta ex natus non illo excepturi minima debitis ipsam placeat consequatur iure.
+                    </p>
+                </div>
+            </div>
+            <div class="feedback d-flex">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
+                <div>
+                    <p class="m-0 pb-2"><b>First name Last name</b></p>
+                    <p class="m-0 pb-2 product-feedback-rating two-star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </p>
+                    <p class="m-0 p-0">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt qui, nulla nisi laborum soluta ex natus non illo excepturi minima debitis ipsam placeat consequatur iure.
+                    </p>
+                </div>
+            </div>
+            <div class="feedback d-flex">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
+                <div>
+                    <p class="m-0 pb-2"><b>First name Last name</b></p>
+                    <p class="m-0 pb-2 product-feedback-rating one-star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </p>
+                    <p class="m-0 p-0">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt qui, nulla nisi laborum soluta ex natus non illo excepturi minima debitis ipsam placeat consequatur iure.
+                    </p>
+                </div>
+            </div>
+            <!-- Feedback without comment -->
+            <div class="feedback d-flex">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
+                <div>
+                    <p class="m-0 pb-2"><b>First name Last name</b></p>
+                    <p class="m-0 pb-2 product-feedback-rating three-star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section class="similar-products py-3">
+            <h3>Similar products</h3>
+            <div class="similar-products-wrapper py-2 d-flex flex-nowrap fancy-scroll">
+                <a href="#" class="similar-product">
+                    <div class="ratio ratio-1x1 product-image">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
+                    </div>
+                    <p class="m-0 mt-2 p-0">Product title</p>
+                </a>
+                <a href="#" class="similar-product">
+                    <div class="ratio ratio-1x1 product-image">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
+                    </div>
+                    <p class="m-0 mt-2 p-0">Product title</p>
+                </a>
+                <a href="#" class="similar-product">
+                    <div class="ratio ratio-1x1 product-image">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
+                    </div>
+                    <p class="m-0 mt-2 p-0">Product title</p>
+                </a>
+            </div>
+        </section>
+    </main>
+    <!-- Bottom navigation -->
+    <div class="bottom-navigation-menu">
+        <a href="#top" class="scroll-top">Scroll to top</a>
+        <div class="d-flex justify-content-between align-items-center px-2">
+            <a href="/home" class="secondary-btn d-flex justify-content-center align-items-center"><i class="fas fa-chevron-left"></i></a>
+            <div class="d-flex flex-grow-1 justify-content-end align-items-stretch">
+                <a href="#" class="buy-btn">Buy Now</a>
+                <a href="#" class="favourite-btn"><i class="fas fa-heart"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- Shopping Cart preview -->
+    <div class="shopping-cart-preview closed" id="cart-preview">
+        <div class="cart-wrapper d-flex flex-column">
+            <button type="button" class="close-modal-btn"><i class="fas fa-times"></i></button>
+            <div class="cart-actions d-flex justify-content-between">
+                <span class="cart-count">Cart(10)</span>
+                <button type="button" class="basic-btn" id="trash-products"><i class="fas fa-trash"></i></button>
+            </div>
+            <div class="cart-contents d-flex flex-column">
+                <div class="cart-product">
+                    <div class="d-flex m-0 p-0 justify-content-between">
+                        <div class="m-0 p-0 d-flex align-self-center">
+                            <input type="checkbox" id="product-1" class="form-check-input m-0" name="product_checkout" value="product_id">
+                        </div>
+                        <label for="product-1" class="m-0 ps-2 flex-grow-1">Audi R8 V10 Navigation Unikat</label>
+                    </div>
+                    <div class="d-flex flex-wrap m-0 my-2 p-0 product-preview">
+                        <div class="product-preview-image me-2">
+                            <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="cart_product">
+                        </div>
+                        <div class="flex-grow-1 align-self-start m-0 p-0">
+                            <span class="product-price">
+                                $1,100,111,000.<small>00</small>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex m-0 p-0 align-items-stretch product-quantity">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="button"><i class="fas fa-plus"></i></button>
+                        <span>1</span>
+                        <button type="button"><i class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-bottom">
+                <button type="button" class="checkout-btn">Checkout</button>
+                <p class="m-0 p-0 py-2">Total: <b>$2,217,544.<small>55</small></b></p>
+            </div>
+        </div>
+    </div>
+    <!-- Alert Pop up -->
+    <div class="alert closed m-0 p-0" id="confirmation-alert">
+        <div class="alert-content">
+            <p>Are you sure to remove the selected items?</p>
+            <div class="d-flex justify-content-center alert-actions">
+                <button type="button" class="confirm-btn">Yes</button>
+                <button type="button" class="deny-btn selected">No</button>
+            </div>
+        </div>
+    </div>
+    <div th:replace="common/fragments :: bottom-scripts"></div>
+    <script>
+        let dropdownIds = ['specifications-dropdown', 'description-dropdown', 'specifications-dropdown-mobile', 'description-dropdown-mobile'];
+
+        dropdownIds.forEach(function(id) {
+            let dropdown = document.getElementById(id);
+            let dropdownTitle = dropdown.querySelector('.dropdown-section-title');
+            let dropdownContent = dropdown.querySelector('.dropdown-section-content');
+
+            dropdownTitle.addEventListener('click', function() {
+                toggleContent(dropdown);
+            });
+        });
+
+        function toggleContent(dropdown) {
+            dropdown.classList.toggle('closed');
+        }
+    </script>
+</body>
+
+</html>

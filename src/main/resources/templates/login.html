@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+    <!-- Navigtion -->
+    <nav class="row g-0 m-0">
+        <div class="col d-flex justify-content-center align-items-center">
+            <h1 class="d-flex m-0 p-0 logo-wrapper">
+                <a href="/">
+                    <span>Instamarket</span>
+                </a>
+            </h1>
+        </div>
+    </nav>
+    <main class="py-4">
+        <form th:action="@{/login}" th:method="POST" class="fancy-form">
+            <div class="form-wrapper">
+                <h2 class="mb-2">Login</h2>
+                <div class="mb-2 form-alert" th:if="${loginFailed}">
+                    <p class="m-0 p-0">Incorrect username/password.</p>
+                </div>
+                <div class="mb-2">
+                    <input type="text" name="username" th:value="${username}" class="form-control" placeholder="Username">
+                </div>
+                <div class="mb-2">
+                    <input type="password" name="password" class="form-control" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100" name="login">Login</button>
+                <div class="mt-4 pt-2 form-footer">
+                    <p class="m-0 p-0">Don't have an account? <a href="/register">Register now</a></p>
+                </div>
+            </div>
+        </form>
+    </main>
+    <footer th:replace="common/fragments :: footer"></footer>
+</body>
+
+</html>

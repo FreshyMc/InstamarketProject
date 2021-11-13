@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+    <!-- Navigtion -->
+    <nav class="m-0">
+        <div class="row g-0">
+            <div class="col d-flex align-items-center">
+                <h1 class="d-flex m-0 p-0 logo-wrapper">
+                    <a href="index.html">
+                        <span>Instamarket</span>
+                    </a>
+                </h1>
+            </div>
+            <div class="col-auto">
+                <a href="/login" class="login-btn px-4 d-flex justify-content-between align-items-center">
+                    <span class="me-3">Login</span>
+                    <i class="fas fa-sign-in-alt"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- Header -->
+    <header class="d-flex flex-column justify-content-center align-items-center">
+        <div class="text-center header-content">
+            <h2>Welcome to <strong class="underlined">Instamarket</strong>!</h2>
+            <h4 class="mb-2">Free and open marketplace.</h4>
+            <div class="mt-4 pt-4">
+                <a href="/register" class="call-to-action">Register Now</a>
+            </div>
+        </div>
+    </header>
+</body>

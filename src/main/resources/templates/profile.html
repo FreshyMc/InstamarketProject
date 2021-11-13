@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+    <nav th:replace="common/fragments :: secondary-navigation"></nav>
+    <main class="form-page">
+        <ul class="list-unstyled profile-actions-list m-0">
+            <li class="d-flex flex-row p-3 justify-content-start align-items-center">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="profile-image">
+                <th:block th:object="${#authentication.getPrincipal()}">
+                    <h3 class="m-0 ms-4 p-0" th:text="*{userFullname}">Nicolle Andrews</h3>
+                </th:block>
+            </li>
+            <th:block sec:authorize="hasAuthority('USER') && !hasAuthority('SELLER')">
+                <li>
+                    <a href="#" class="action-link d-flex justify-content-between align-items-center">
+                        <span>Become a seller</span>
+                        <i class="fas fa-coins"></i>
+                    </a>
+                </li>
+            </th:block>
+            <th:block sec:authorize="hasAuthority('SELLER')">
+                <li>
+                    <a href="#" class="basic-link">My subscribers</a>
+                </li>
+                <li>
+                    <a href="#" class="basic-link">Statistics</a>
+                </li>
+            </th:block>
+            <li>
+                <a href="./orders.html" class="basic-link">My orders</a>
+            </li>
+            <li>
+                <a class="toggle-btn" role="button" data-bs-toggle="collapse" href="#namesCollapse" aria-expanded="false" aria-controls="namesCollapse">Change profile names</a>
+                <div class="collapse" id="namesCollapse">
+                    <div class="form-wrapper">
+                        <form action="#" method="POST" onsubmit="return false;">
+                            <div class="mb-2">
+                                <input type="text" class="form-control" name="username" placeholder="First Name">
+                            </div>
+                            <div class="mb-2">
+                                <input type="text" class="form-control" name="username" placeholder="Last Name">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="toggle-btn" role="button" data-bs-toggle="collapse" href="#pictureCollapse" aria-expanded="false" aria-controls="pictureCollapse">Change profile picture</a>
+                <div class="collapse" id="pictureCollapse">
+                    <div class="form-wrapper">
+                        <form action="#" method="POST" onsubmit="return false;">
+                            <div class="mb-2">
+                                <input type="file" class="form-control" name="uploadFile">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="toggle-btn" role="button" data-bs-toggle="collapse" href="#addressCollapse" aria-expanded="false" aria-controls="addressCollapse">Manage addresses</a>
+                <div class="collapse" id="addressCollapse">
+                    <div class="form-wrapper">
+                        <form action="#" method="POST" onsubmit="return false;">
+                            <div class="mb-2 input-group">
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Remove address</a></li>
+                                </ul>
+                                <input type="text" class="form-control" name="address" placeholder="Address">
+                            </div>
+                            <div class="mb-2">
+                                <button type="button" class="btn btn-secondary col-12">Add address</button>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="toggle-btn" role="button" data-bs-toggle="collapse" href="#passwordCollapse" aria-expanded="false" aria-controls="passwordCollapse">Change password</a>
+                <div class="collapse" id="passwordCollapse">
+                    <div class="form-wrapper">
+                        <form action="#" method="POST" onsubmit="return false;">
+                            <div class="mb-2">
+                                <input type="text" class="form-control" name="oldPassword" placeholder="Old password">
+                            </div>
+                            <div class="mb-2">
+                                <input type="text" class="form-control" name="newPassword" placeholder="New password">
+                            </div>
+                            <div class="mb-2">
+                                <input type="text" class="form-control" name="confirmPassword" placeholder="Confirm password">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <form th:action="@{/logout}" th:method="POST">
+                    <button class="basic-link d-flex justify-content-between align-items-center" type="submit"><span>Logout</span><i class="fas fa-sign-out-alt"></i></button>
+                </form>
+            </li>
+        </ul>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+
+</html>

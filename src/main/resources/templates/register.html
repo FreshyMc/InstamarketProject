@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+    <!-- Navigtion -->
+    <nav class="row g-0 m-0">
+        <div class="col d-flex justify-content-center align-items-center">
+            <h1 class="d-flex m-0 p-0 logo-wrapper">
+                <a href="index.html">
+                    <span>Instamarket</span>
+                </a>
+            </h1>
+        </div>
+    </nav>
+    <main class="py-2">
+        <form th:action="@{/register}" th:method="POST" th:object="${userRegistrationBindingModel}" class="fancy-form">
+            <div class="form-wrapper">
+                <h2 class="mb-3">Registration</h2>
+                <div class="mb-2">
+                    <input type="text" name="username" th:field="*{username}" th:errorclass="is-invalid" class="form-control" placeholder="Username">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">Username should be between 2 and 30 characters long.</p>
+                    </div>
+                    <div th:if="${usernameTaken}" class="mt-2 form-alert">
+                        <p class="m-0 p-0">Provided username is already registered.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="text" name="firstName" th:field="*{firstName}" th:errorclass="is-invalid" class="form-control" placeholder="First name">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">First Name should be at least 2 characters long.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="text" name="lastName" th:field="*{lastName}" th:errorclass="is-invalid" class="form-control" placeholder="Last name">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">Last Name should be at least 2 characters long.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="email" name="email" th:field="*{email}" th:errorclass="is-invalid" class="form-control" placeholder="Email">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">Provided invalid email.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="text" name="country" th:field="*{country}" th:errorclass="is-invalid" class="form-control" placeholder="Country">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">Country name is required.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="text" name="postalCode" th:field="*{postalCode}" th:errorclass="is-invalid" class="form-control" placeholder="Postal Code">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">Postal Code name is required.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="text" name="city" th:field="*{city}" th:errorclass="is-invalid" class="form-control" placeholder="City">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">City name is required.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="text" name="street" th:field="*{street}" th:errorclass="is-invalid" class="form-control" placeholder="Street">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">Street name is required.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="password" name="password" th:field="*{password}" th:errorclass="is-invalid" class="form-control" placeholder="Password">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">Password should be at least 8 characters long.</p>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <input type="password" name="confirmPassword" th:field="*{confirmPassword}" th:errorclass="is-invalid" class="form-control" placeholder="Confirm password">
+                    <div class="mt-2 form-alert invalid-feedback">
+                        <p class="m-0 p-0">Confirm password is required.</p>
+                    </div>
+                    <div th:if="${passwordsDontMatch}" class="mt-2 form-alert">
+                        <p class="m-0 p-0">Passwords don't match.</p>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" name="register">Register</button>
+                <div class="mt-4 pt-2 form-footer">
+                    <p class="m-0 p-0">Have an account? <a href="/login">Login now</a></p>
+                </div>
+            </div>
+        </form>
+    </main>
+    <footer th:replace="common/fragments :: footer"></footer>
+</body>
+
+</html>

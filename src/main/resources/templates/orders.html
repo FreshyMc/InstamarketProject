@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+    <nav th:replace="common/fragments :: secondary-navigation"></nav>
+    <!-- Adverts main section -->
+    <main>
+        <section class="orders-section">
+            <h3 class="ms-2">Orders</h3>
+            <div class="order-section">
+                <a class="collapse-btn fw-bold" role="button" data-bs-toggle="collapse" href="#toBeDeliveredCollapse" role="button" aria-expanded="false" aria-controls="toBeDeliveredCollapse">To be delivered</a>
+                <ul class="list-unstyled m-0 collapse orders" id="toBeDeliveredCollapse">
+                    <li>
+                        <div class="order">
+                            <p class="order-title">Order title Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ducimus cum quos quisquam explicabo nobis.</p>
+                            <div class="d-flex mb-2 justify-content-between">
+                                <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="#">
+                                <div>
+                                    <p class="order-price m-0">$1 000 000 000.<small>50</small></p>
+                                    <p class="m-0">Quantity: 1x</p>
+                                </div>
+                            </div>
+                            <p class="mb-2"><strong>Delivery address:</strong> Bulgaria, Sofia bul. Hristo Botev N30</p>
+                            <p class="m-0 d-flex justify-content-between"><strong>Order time:</strong> 22:02 4.11.21</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="order-section">
+                <a class="collapse-btn fw-bold" role="button" data-bs-toggle="collapse" href="#deliveredCollapse" role="button" aria-expanded="false" aria-controls="deliveredCollapse">Delivered</a>
+                <ul class="list-unstyled m-0 collapse orders" id="deliveredCollapse">
+                    <li>
+                        <div class="order">
+                            <p class="order-title">Order title Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ducimus cum quos quisquam explicabo nobis.</p>
+                            <div class="d-flex mb-2 justify-content-between">
+                                <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="#">
+                                <div>
+                                    <p class="order-price m-0">$1 000 000 000.<small>50</small></p>
+                                    <p class="m-0">Quantity: 1x</p>
+                                </div>
+                            </div>
+                            <p class="mb-2"><strong>Delivery address:</strong> Bulgaria, Sofia bul. Hristo Botev N30</p>
+                            <p class="mb-2 d-flex justify-content-between"><strong>Order time:</strong> 22:02 4.11.21</p>
+                            <p class="m-0 d-flex justify-content-between"><strong>Delivered at:</strong> 22:02 24.11.21</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+
+</html>
