@@ -2,6 +2,7 @@ package com.example.instamarket.web;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,10 @@ public class OfferImageController {
 
         InputStreamResource inputStreamResource = new InputStreamResource(fileInputStream);
 
-        return new ResponseEntity<>(inputStreamResource, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .contentLength(f.length())
+                .contentType(MediaType.IMAGE_PNG)
+                .body(inputStreamResource);
     }
 
     @GetMapping("/optionImage/{name}")
@@ -44,6 +48,9 @@ public class OfferImageController {
 
         InputStreamResource inputStreamResource = new InputStreamResource(fileInputStream);
 
-        return new ResponseEntity<>(inputStreamResource, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .contentLength(f.length())
+                .contentType(MediaType.IMAGE_PNG)
+                .body(inputStreamResource);
     }
 }

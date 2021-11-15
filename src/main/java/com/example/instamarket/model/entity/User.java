@@ -69,7 +69,7 @@ public class User extends BaseEntity{
         return this;
     }
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Address> getAddresses() {
         return addresses;
     }

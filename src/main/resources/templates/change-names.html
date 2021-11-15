@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+    <!-- Navigtion -->
+    <nav th:replace="common/fragments :: profile-navigation"></nav>
+    <!-- Adverts main section -->
+    <main class="form-page">
+        <form class="p-2 p-sm-3 profile-form" th:action="@{/profile/change/names}" th:method="POST" th:object="${profileNamesBindingModel}">
+            <h3>Change profile names</h3>
+            <div class="mb-2">
+                <input type="text" class="form-control" name="username" placeholder="First Name" th:name="firstName" th:value="(${profileNames.firstName} != null)? ${profileNames.firstName} : ((${profileNamesBindingModel.firstName} != null)? ${profileNamesBindingModel.firstName} : '')" th:errorclass="is-invalid">
+                <div class="mt-2 form-alert invalid-feedback">
+                    <p class="m-0 p-0">First Name should be at least 2 characters long.</p>
+                </div>
+            </div>
+            <div class="mb-2">
+                <input type="text" class="form-control" name="username" placeholder="Last Name" th:name="lastName" th:value="(${profileNames.lastName} != null)? ${profileNames.lastName} : ((${profileNamesBindingModel.lastName} != null)? ${profileNamesBindingModel.lastName} : '')" th:errorclass="is-invalid">
+                <div class="mt-2 form-alert invalid-feedback">
+                    <p class="m-0 p-0">Last Name should be at least 2 characters long.</p>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+        </form>
+    </main>
+    <!-- Toast -->
+    <div class="position-fixed bottom-0 start-0 p-3">
+        <div th:if="${profileNamesChanged}" class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Profile names have been changed successfully!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" id="closeToastBtn"></button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        let doc = document;
+        let toast = doc.getElementById('toast');
+        let closeToastBtn = doc.getElementById('closeToastBtn');
+
+        closeToastBtn.addEventListener('click', hideToast);
+
+        function hideToast(){
+            toast.classList.remove('show');
+        }
+    </script>
+</body>
+
+</html>

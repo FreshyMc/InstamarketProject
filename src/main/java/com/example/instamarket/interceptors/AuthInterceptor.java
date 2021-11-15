@@ -1,5 +1,7 @@
 package com.example.instamarket.interceptors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +16,7 @@ import java.util.*;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
     private static List<String> targetPaths = Arrays.asList("/login", "/register", "/");
+    Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,10 +30,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String url = request.getRequestURI();
 
-        System.out.println(request.getMethod());
+        //logger.info(request.getMethod());
 
         if(targetPaths.contains(url)){
-            System.out.printf("Time of request: %s%nRequested url: %s%n", formattedTime, url);
+            logger.info(String.format("Time of request: %s%nRequested url: %s%n", formattedTime, url));
         }
 
         return true;

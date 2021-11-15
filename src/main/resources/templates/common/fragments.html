@@ -74,6 +74,24 @@
       -->
     </div>
   </div>
+  <!-- Profile Navigation -->
+  <nav class="m-0" th:fragment="profile-navigation">
+    <div class="row g-0">
+      <div class="col d-flex align-items-center">
+        <h1 class="d-flex m-0 p-0 logo-wrapper">
+          <a href="/home">
+            <span>Instamarket</span>
+          </a>
+        </h1>
+      </div>
+      <div class="col-auto">
+        <a href="/profile" class="home-btn d-flex justify-content-between align-items-center">
+          <span class="me-2">Profile</span>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
   <!-- Footer -->
   <footer class="mt-2" th:fragment="footer">
     <p class="m-0"><i class="far fa-copyright"></i> 2021 Instamarket. All rights reserved.</p>

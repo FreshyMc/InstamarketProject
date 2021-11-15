@@ -13,7 +13,7 @@
                     <h3 class="m-0 ms-4 p-0" th:text="*{userFullname}">Nicolle Andrews</h3>
                 </th:block>
             </li>
-            <th:block sec:authorize="hasAuthority('USER') && !hasAuthority('SELLER')">
+            <th:block sec:authorize="hasAnyAuthority('SELLER')">
                 <li>
                     <a href="#" class="action-link d-flex justify-content-between align-items-center">
                         <span>Become a seller</span>
@@ -30,77 +30,19 @@
                 </li>
             </th:block>
             <li>
-                <a href="./orders.html" class="basic-link">My orders</a>
+                <a href="/orders.html" class="basic-link">My orders</a>
             </li>
             <li>
-                <a class="toggle-btn" role="button" data-bs-toggle="collapse" href="#namesCollapse" aria-expanded="false" aria-controls="namesCollapse">Change profile names</a>
-                <div class="collapse" id="namesCollapse">
-                    <div class="form-wrapper">
-                        <form action="#" method="POST" onsubmit="return false;">
-                            <div class="mb-2">
-                                <input type="text" class="form-control" name="username" placeholder="First Name">
-                            </div>
-                            <div class="mb-2">
-                                <input type="text" class="form-control" name="username" placeholder="Last Name">
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                        </form>
-                    </div>
-                </div>
+                <a href="/profile/change/names" class="basic-link">Change profile names</a>
             </li>
             <li>
-                <a class="toggle-btn" role="button" data-bs-toggle="collapse" href="#pictureCollapse" aria-expanded="false" aria-controls="pictureCollapse">Change profile picture</a>
-                <div class="collapse" id="pictureCollapse">
-                    <div class="form-wrapper">
-                        <form action="#" method="POST" onsubmit="return false;">
-                            <div class="mb-2">
-                                <input type="file" class="form-control" name="uploadFile">
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                        </form>
-                    </div>
-                </div>
+                <a href="/profile/change/picture" class="basic-link">Change profile picture</a>
             </li>
             <li>
-                <a class="toggle-btn" role="button" data-bs-toggle="collapse" href="#addressCollapse" aria-expanded="false" aria-controls="addressCollapse">Manage addresses</a>
-                <div class="collapse" id="addressCollapse">
-                    <div class="form-wrapper">
-                        <form action="#" method="POST" onsubmit="return false;">
-                            <div class="mb-2 input-group">
-                                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="visually-hidden">Toggle Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Remove address</a></li>
-                                </ul>
-                                <input type="text" class="form-control" name="address" placeholder="Address">
-                            </div>
-                            <div class="mb-2">
-                                <button type="button" class="btn btn-secondary col-12">Add address</button>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                        </form>
-                    </div>
-                </div>
+                <a href="/profile/manage/addresses" class="basic-link">Manage addresses</a>
             </li>
             <li>
-                <a class="toggle-btn" role="button" data-bs-toggle="collapse" href="#passwordCollapse" aria-expanded="false" aria-controls="passwordCollapse">Change password</a>
-                <div class="collapse" id="passwordCollapse">
-                    <div class="form-wrapper">
-                        <form action="#" method="POST" onsubmit="return false;">
-                            <div class="mb-2">
-                                <input type="text" class="form-control" name="oldPassword" placeholder="Old password">
-                            </div>
-                            <div class="mb-2">
-                                <input type="text" class="form-control" name="newPassword" placeholder="New password">
-                            </div>
-                            <div class="mb-2">
-                                <input type="text" class="form-control" name="confirmPassword" placeholder="Confirm password">
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                        </form>
-                    </div>
-                </div>
+                <a href="/profile/change/password" class="basic-link">Change password</a>
             </li>
             <li>
                 <form th:action="@{/logout}" th:method="POST">

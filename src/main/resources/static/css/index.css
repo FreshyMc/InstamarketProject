@@ -1233,6 +1233,74 @@ header {
 }
 
 
+/* Profile Form Styling */
+
+.profile-form {
+    margin: auto;
+    border: 1px solid rgba(0, 0, 0, .09);
+    background-color: rgba(0, 0, 0, .01);
+}
+
+
+/* Addresses input groups */
+
+.address {
+    background-color: rgba(0, 0, 0, .01);
+    border: 1px solid rgba(0, 0, 0, .09);
+}
+
+.remove-address-btn {
+    background-color: #333;
+    color: #fff !important;
+    border-radius: .4em;
+}
+
+
+/* Subscribers Page */
+
+.subscribers-wrapper {
+    width: 100%;
+    margin: auto;
+    background-color: rgba(0, 0, 0, .01);
+    border: 1px solid rgba(0, 0, 0, .09);
+    overflow: hidden;
+}
+
+.account-holder {
+    border-bottom: 1px solid rgba(0, 0, 0, .09);
+}
+
+.subscribers-badge {
+    height: 50px;
+    border-radius: .4em;
+}
+
+.subscribers-list {
+    border-top: 1px solid rgba(0, 0, 0, .09);
+}
+
+.subscriber {
+    padding: 9px;
+    background-color: rgba(0, 0, 0, .01);
+    border: 1px solid rgba(0, 0, 0, .09);
+}
+
+.subscriber img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Toast Styling */
+
+.toast{
+    background-color: #333 !important;
+    color: #fff !important;
+    border: 1px solid rgba(0, 0, 0, .09);
+    box-shadow: 0 0 9px 1.5px rgba(0, 0, 0, .2);
+}
+
+
 /* ----------------------------------------- */
 
 
@@ -1349,7 +1417,8 @@ header {
         padding: 15px;
     }
     .offer-form,
-    .checkout-form {
+    .checkout-form,
+    .profile-form {
         width: 70%;
     }
     .similar-product {
@@ -1358,7 +1427,8 @@ header {
         padding: 15px;
     }
     .profile-actions-list,
-    .orders-section {
+    .orders-section,
+    .subscribers-wrapper {
         width: 60%;
     }
     .profile-image {
@@ -1415,11 +1485,13 @@ header {
         width: 40%;
     }
     .offer-form,
-    .checkout-form {
+    .checkout-form,
+    .profile-form {
         width: 60%;
     }
     .profile-actions-list,
-    .orders-section {
+    .orders-section,
+    .subscribers-wrapper {
         width: 50%;
     }
     main.chat-page {

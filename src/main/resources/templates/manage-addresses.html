@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+    <!-- Navigtion -->
+    <nav th:replace="common/fragments :: profile-navigation"></nav>
+    <!-- Adverts main section -->
+    <main class="form-page">
+        <div class="p-2 p-sm-3 profile-form">
+            <h3>Manage addresses</h3>
+            <div id="currentAddresses">
+                <div class="mb-2 p-2 address" th:each="address, itemStat : ${addresses}">
+                    <div class="mb-2">
+                        <input type="text" class="form-control" th:value="*{addresses[__${itemStat.index}__].country}" placeholder="Country" disabled>
+                        <div class="mt-2 form-alert invalid-feedback">
+                            <p class="m-0 p-0">Country field is required.</p>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" class="form-control" th:value="*{addresses[__${itemStat.index}__].postalCode}" placeholder="Postal Code" disabled>
+                        <div class="mt-2 form-alert invalid-feedback">
+                            <p class="m-0 p-0">Postal Code field is required.</p>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" class="form-control" th:value="*{addresses[__${itemStat.index}__].city}" placeholder="City" disabled>
+                        <div class="mt-2 form-alert invalid-feedback">
+                            <p class="m-0 p-0">City field is required.</p>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" class="form-control" th:value="*{addresses[__${itemStat.index}__].street}" placeholder="Street" disabled>
+                        <div class="mt-2 form-alert invalid-feedback">
+                            <p class="m-0 p-0">Street field is required.</p>
+                        </div>
+                    </div>
+                    <textarea class="form-control" th:text="*{addresses[__${itemStat.index}__].details}" placeholder="More information (Optional)" disabled></textarea>
+                    <form th:action="@{/profile/manage/addresses/{id}/delete(id=*{addresses[__${itemStat.index}__].id})}" th:method="DELETE">
+                        <div class="mt-2 d-flex justify-content-end align-items-center">
+                            <button class="remove-address-btn btn d-flex" type="submit"><i class="fas fa-times align-self-center"></i><span class="ps-2">Remove address</span></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <form id="addressesForm" th:action="@{/profile/manage/addresses}" th:method="POST" th:object="${manageAddressesBindingModel}">
+                <div class="mb-2">
+                    <button type="button" class="btn btn-secondary col-12" id="addAddressBtn">Add address</button>
+                </div>
+                <div id="newAddresses">
+                    <div class="mb-2 p-2 address" th:each="address, itemStat : *{newAddress}">
+                        <div class="mb-2">
+                            <input type="text" class="form-control" th:field="*{newAddress[__${itemStat.index}__].country}" th:errorclass="is-invalid" placeholder="Country">
+                            <div class="mt-2 form-alert invalid-feedback">
+                                <p class="m-0 p-0">Country field is required.</p>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control" th:field="*{newAddress[__${itemStat.index}__].postalCode}" th:errorclass="is-invalid" placeholder="Postal Code">
+                            <div class="mt-2 form-alert invalid-feedback">
+                                <p class="m-0 p-0">Postal Code field is required.</p>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control" th:field="*{newAddress[__${itemStat.index}__].city}" th:errorclass="is-invalid" placeholder="City">
+                            <div class="mt-2 form-alert invalid-feedback">
+                                <p class="m-0 p-0">City field is required.</p>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control" th:field="*{newAddress[__${itemStat.index}__].street}" th:errorclass="is-invalid" placeholder="Street">
+                            <div class="mt-2 form-alert invalid-feedback">
+                                <p class="m-0 p-0">Street field is required.</p>
+                            </div>
+                        </div>
+                        <textarea class="form-control" th:field="*{newAddress[__${itemStat.index}__].details}" placeholder="More information (Optional)"></textarea>
+                        <div class="mt-2 d-flex justify-content-end align-items-center">
+                            <button class="remove-address-btn btn d-flex" type="button"><i class="fas fa-times align-self-center"></i><span class="ps-2">Remove address</span></button>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" style="display: none;" id="saveNewAddressesBtn">Save</button>
+            </form>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="/js/address.js" type="module"></script>
+</body>
+
+</html>
