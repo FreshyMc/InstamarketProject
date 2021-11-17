@@ -1,5 +1,6 @@
 package com.example.instamarket.web;
 
+import com.example.instamarket.misc.AuthHelper;
 import com.example.instamarket.model.binding.ChangePasswordBindingModel;
 import com.example.instamarket.model.binding.ManageAddressesBindingModel;
 import com.example.instamarket.model.binding.ProfileNamesBindingModel;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Controller
@@ -29,12 +31,14 @@ public class ProfileController {
     private final UserService userService;
     private final AddressService addressService;
     private final ModelMapper modelMapper;
+    private final AuthHelper authHelper;
     private Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
-    public ProfileController(UserService userService, AddressService addressService, ModelMapper modelMapper) {
+    public ProfileController(UserService userService, AddressService addressService, ModelMapper modelMapper, AuthHelper authHelper) {
         this.userService = userService;
         this.addressService = addressService;
         this.modelMapper = modelMapper;
+        this.authHelper = authHelper;
     }
 
     @GetMapping
@@ -92,7 +96,7 @@ public class ProfileController {
     }
 
     @PostMapping("/change/password")
-    public String changePassword(@Valid ChangePasswordBindingModel changePasswordBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal InstamarketUser user){
+    public String changePassword(@Valid ChangePasswordBindingModel changePasswordBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal InstamarketUser user, HttpServletRequest request, HttpServletResponse response){
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("changePasswordBindingModel", changePasswordBindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.changePasswordBindingModel", bindingResult);
@@ -101,7 +105,7 @@ public class ProfileController {
         }
 
         if(!changePasswordBindingModel.passwordMatch()){
-            redirectAttributes.addFlashAttribute("changePasswordBindingModel", changePasswordBindingModel);
+            //redirectAttributes.addFlashAttribute("changePasswordBindingModel", changePasswordBindingModel);
             redirectAttributes.addFlashAttribute("passwordsDontMatch", true);
 
             return "redirect:/profile/change/password";
@@ -112,13 +116,15 @@ public class ProfileController {
         boolean changePasswordSuccess = userService.changeUserPassword(model, user.getUserIdentifier());
 
         if(!changePasswordSuccess){
-            redirectAttributes.addFlashAttribute("changePasswordBindingModel", changePasswordBindingModel);
+            //redirectAttributes.addFlashAttribute("changePasswordBindingModel", changePasswordBindingModel);
             redirectAttributes.addFlashAttribute("incorrectPassword", true);
 
             return "redirect:/profile/change/password";
         }
 
-        return "redirect:/profile/change/password";
+        authHelper.logout(request, response);
+
+        return "redirect:/login";
     }
 
     @GetMapping("/change/picture")
@@ -133,6 +139,7 @@ public class ProfileController {
         return "manage-addresses";
     }
 
+    //TODO add preauthorize
     @DeleteMapping("/manage/addresses/{id}/delete")
     public String deleteAddress(@PathVariable Long id){
         addressService.deleteAddress(id);

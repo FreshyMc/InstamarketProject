@@ -87,6 +87,7 @@ img {
     width: 100%;
     height: auto;
     overflow: hidden;
+    cursor: default;
 }
 
 .product-images-previewer {
@@ -1298,6 +1299,14 @@ header {
     color: #fff !important;
     border: 1px solid rgba(0, 0, 0, .09);
     box-shadow: 0 0 9px 1.5px rgba(0, 0, 0, .2);
+}
+
+/* Form message alert styling */
+
+.form-message{
+    color: #333;
+    background-color: rgba(0,0,0, .01);
+    border: 1px solid rgba(0, 0, 0, .09);
 }
 
 

@@ -7,71 +7,7 @@
     <nav th:replace="common/fragments :: primary-navigation"></nav>
     <!-- Adverts main section -->
     <main>
-        <div class="row g-0 p-0 m-0">
-            <div class="col-12 col-md-4 product">
-                <a class="product-link" href="./product.html">
-                    <!-- Advert carousel -->
-                    <div class="product-images-wrapper d-flex flex-nowrap">
-                        <div class="product-images-previewer d-flex justify-content-between">
-                            <button type="button" class="d-flex justify-content-center align-items-center" disabled><i class="fas fa-chevron-left"></i></button>
-                            <button type="button" class="d-flex justify-content-center align-items-center"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                        <div class="ratio ratio-1x1 product-image">
-                            <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
-                        </div>
-                        <div class="ratio ratio-1x1 product-image">
-                            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs1.cdn.autoevolution.com%2Fimages%2Fnews%2Fgallery%2F2018-audi-r8-spyder-v10-plus-unleashed-with-610-ps_2.jpg&f=1&nofb=1" alt="#">
-                        </div>
-                    </div>
-                    <!-- Advert Title -->
-                    <div class="product-title">
-                        Suzuki Swift 1.6 Turbo Navigation Unikat
-                    </div>
-                    <!-- Advert price tag -->
-                    <div class="price-tag d-flex flex-column flex-lg-row justify-content-between">
-                        <span class="price">$100,000.<small>50</small></span>
-                        <div>
-                            <span class="old-price">$150,000.<small>99</small></span>
-                        </div>
-                    </div>
-                    <div class="sold">5 sold</div>
-                </a>
-            </div>
-            <!-- Product without multiple images -->
-            <div class="col-12 col-md-4 product">
-                <a class="product-link" href="./product.html">
-                    <div class="ratio ratio-1x1 product-image">
-                        <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="#">
-                    </div>
-                    <div class="product-title">
-                        Suzuki Swift 1.6 Turbo
-                    </div>
-                    <div class="price-tag d-flex flex-column flex-lg-row justify-content-between">
-                        <span class="price">$100,000.<small>50</small></span>
-                        <div>
-                            <span class="old-price">$150,000.<small>99</small></span>
-                        </div>
-                    </div>
-                    <div class="sold">5 sold</div>
-                </a>
-            </div>
-            <div class="col-12 col-md-4 product">
-                <a class="product-link" href="./product.html">
-                    <div class="ratio ratio-1x1 product-image">
-                        <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="#">
-                    </div>
-                    <div class="product-title">
-                        Suzuki Swift 1.6 Turbo
-                    </div>
-                    <div class="price-tag d-flex flex-column flex-lg-row justify-content-between">
-                        <span class="price">$100,000.<small>50</small></span>
-                        <div>
-                            <span class="old-price">$150,000.<small>99</small></span>
-                        </div>
-                    </div>
-                    <div class="sold">5 sold</div>
-                </a>
-            </div>
+        <div class="row g-0 p-0 m-0" id="offersWrapper">
         </div>
     </main>
     <!-- Bottom navigation -->
@@ -381,6 +317,7 @@
         </div>
     </div>
     <th:block th:replace="common/fragments :: bottom-scripts"></th:block>
+    <script src="/js/home.js" type="module"></script>
 </body>
 
 </html>

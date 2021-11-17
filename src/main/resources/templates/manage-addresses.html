@@ -11,6 +11,9 @@
         <div class="p-2 p-sm-3 profile-form">
             <h3>Manage addresses</h3>
             <div id="currentAddresses">
+                <div class="mb-2 p-2 form-message" th:if="${addresses.isEmpty()}">
+                    <p class="text-center m-0">There are no addresses connected with this account. Add one!</p>
+                </div>
                 <div class="mb-2 p-2 address" th:each="address, itemStat : ${addresses}">
                     <div class="mb-2">
                         <input type="text" class="form-control" th:value="*{addresses[__${itemStat.index}__].country}" placeholder="Country" disabled>

@@ -1,5 +1,6 @@
 package com.example.instamarket.service.impl;
 
+import com.example.instamarket.model.dto.OfferDTO;
 import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.CategoriesEnum;
 import com.example.instamarket.model.enums.ShippingTypesEnum;
@@ -11,6 +12,10 @@ import com.example.instamarket.repository.ShippingRepository;
 import com.example.instamarket.repository.UserRepository;
 import com.example.instamarket.service.OfferService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OfferServiceImpl implements OfferService {
@@ -229,6 +235,13 @@ public class OfferServiceImpl implements OfferService {
         return offerModel;
     }
 
+    @Override
+    public Page<OfferDTO> getOffers(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
+
+        return offerRepository.findAll(pageable).map(this::asOffer);
+    }
+
     private boolean isValidFileFormat(String filename){
         String fileExt = FilenameUtils.getExtension(filename);
 
@@ -253,5 +266,19 @@ public class OfferServiceImpl implements OfferService {
         }
 
         return String.format("%s.%s", uploadFilename, ext);
+    }
+
+    private OfferDTO asOffer(Offer offer){
+        OfferDTO offerDTO = modelMapper.map(offer, OfferDTO.class);
+
+        Set<String> imageUrls = offer.getImages().stream().map(img -> {
+            return img.getImageUrl();
+        }).collect(Collectors.toSet());
+
+        offerDTO.setImages(imageUrls);
+
+        offerDTO.setOfferUrl(String.format("/offers/%d/details", offer.getId()));
+
+        return offerDTO;
     }
 }
