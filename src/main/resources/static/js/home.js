@@ -194,6 +194,8 @@ const apiUrl = '/api/offers';
 
         let searchCategory = form.querySelector('select').value;
 
+        let csrf = form.querySelector('#searchCsrf');
+
         if(!searchText){
             return;
         }
@@ -203,9 +205,16 @@ const apiUrl = '/api/offers';
         formData.append('search', searchText);
         formData.append('category', searchCategory);
 
+        let csrfHeader = csrf.getAttribute('name');
+        let csrfValue = csrf.value;
+
         let request = await fetch(`${apiUrl}/search?pageNo=${lastSearchPageNo}`, {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfValue
+            },
+            body: JSON.stringify(formData)
         });
 
         if(request.ok){
