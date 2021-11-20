@@ -128,6 +128,7 @@ img {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-bottom: 5px solid #ff7979;
 }
 
 .price-tag {
@@ -639,6 +640,12 @@ img {
 
 .dropdown-section .dropdown-section-title i {
     transform: rotate(45deg);
+}
+
+.specifications-empty-message{
+    padding: 15px;
+    background-color: rgba(0, 0, 0, .01);
+    border: 1px solid rgba(0, 0, 0, .09);
 }
 
 
@@ -1309,6 +1316,28 @@ header {
     border: 1px solid rgba(0, 0, 0, .09);
 }
 
+/* Search Form Top */
+
+.search-form-top{
+    background-color: rgba(0, 0, 0, .01);
+    border-bottom: 1px solid rgba(0, 0, 0, .09);
+}
+
+.search-form-top form{
+    display: block;
+    width: 95%;
+}
+
+.search-form-top input[type=text]{
+    flex-grow: 3 !important;
+}
+
+.search-top-btn{
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .01), rgba(0, 0, 0, .04));
+    padding: 0 25px;
+    border: 1px solid rgba(0, 0, 0, .09);
+}
+
 
 /* ----------------------------------------- */
 
@@ -1368,6 +1397,9 @@ header {
     }
     .buy-btn {
         width: 60%;
+    }
+    .search-form-top form{
+        width: 90%;
     }
 }
 
@@ -1452,6 +1484,9 @@ header {
     .contact {
         border-bottom: 1px solid rgba(0, 0, 0, .09);
     }
+    .search-form-top form{
+        width: 65%;
+    }
 }
 
 
@@ -1505,5 +1540,8 @@ header {
     }
     main.chat-page {
         overflow: hidden;
+    }
+    .search-form-top form{
+        width: 50%;
     }
 }

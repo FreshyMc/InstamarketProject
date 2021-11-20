@@ -5,6 +5,7 @@ import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.CategoriesEnum;
 import com.example.instamarket.model.enums.ShippingTypesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
+import com.example.instamarket.model.service.SearchServiceModel;
 import com.example.instamarket.model.view.OfferDetailsViewModel;
 import com.example.instamarket.repository.CategoryRepository;
 import com.example.instamarket.repository.OfferRepository;
@@ -240,6 +241,20 @@ public class OfferServiceImpl implements OfferService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
 
         return offerRepository.findAll(pageable).map(this::asOffer);
+    }
+
+    @Override
+    public Page<OfferDTO> searchOffers(int pageNo, int pageSize, String sortBy, SearchServiceModel model) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
+
+        if(model.getCategory() != null){
+            //TODO custom exception insert
+            Category category = categoryRepository.findCategoryByCategory(model.getCategory()).orElseThrow();
+
+            return offerRepository.findAllByTitleContainingAndOfferCategory(model.getSearch(), category, pageable).map(this::asOffer);
+        }
+
+        return offerRepository.findAllByTitleContaining(model.getSearch(), pageable).map(this::asOffer);
     }
 
     private boolean isValidFileFormat(String filename){

@@ -10,8 +10,8 @@
             <div class="col-12 col-lg-5">
                 <div class="product-images-wrapper d-flex flex-nowrap">
                     <div class="product-images-previewer d-flex justify-content-between">
-                        <button type="button" class="d-flex justify-content-center align-items-center" disabled><i class="fas fa-chevron-left"></i></button>
-                        <button type="button" class="d-flex justify-content-center align-items-center"><i class="fas fa-chevron-right"></i></button>
+                        <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(offer.offerImages.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
+                        <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(offer.offerImages.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
                     </div>
                     <div class="ratio ratio-1x1 product-image" th:each="imgName : *{offerImages}">
                         <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
@@ -106,6 +106,9 @@
                             <i class="fas fa-plus"></i>
                         </div>
                         <div class="dropdown-section-content">
+                            <div class="p-2" th:if="*{properties.isEmpty()}">
+                                <p class="m-0 specifications-empty-message">There are no specifications for this offer.</p>
+                            </div>
                             <div class="dropdown-row d-flex justify-content-between" th:each="property : *{properties}">
                                 <p class="m-0 p-0"><b th:text="${property.getKey()}">Test</b></p>
                                 <p class="m-0 p-0" th:text="${property.getValue()}">12345678</p>
@@ -160,6 +163,9 @@
                     <i class="fas fa-plus"></i>
                 </div>
                 <div class="dropdown-section-content">
+                    <div class="p-2" th:if="*{properties.isEmpty()}">
+                        <p class="m-0 specifications-empty-message">There are no specifications for this offer.</p>
+                    </div>
                     <div class="dropdown-row d-flex justify-content-between" th:each="property : *{properties}">
                         <p class="m-0 p-0"><b th:text="${property.getKey()}">Test</b></p>
                         <p class="m-0 p-0" th:text="${property.getValue()}">12345678</p>
@@ -326,7 +332,7 @@
         <div class="d-flex justify-content-between align-items-center px-2">
             <a href="/home" class="secondary-btn d-flex justify-content-center align-items-center"><i class="fas fa-chevron-left"></i></a>
             <div class="d-flex flex-grow-1 justify-content-end align-items-stretch">
-                <a href="#" class="buy-btn">Buy Now</a>
+                <a href="#" class="buy-btn">Add to cart</a>
                 <a href="#" class="favourite-btn"><i class="fas fa-heart"></i></a>
             </div>
         </div>
@@ -399,6 +405,7 @@
             dropdown.classList.toggle('closed');
         }
     </script>
+    <script src="/js/details.js"></script>
 </body>
 
 </html>
