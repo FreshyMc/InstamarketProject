@@ -1328,7 +1328,7 @@ header {
     width: 95%;
 }
 
-.search-form-top input[type=text]{
+.expanded-input{
     flex-grow: 3 !important;
 }
 

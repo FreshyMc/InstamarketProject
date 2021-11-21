@@ -10,7 +10,7 @@
             <form id="searchForm">
                 <input type="hidden" th:name="${_csrf.headerName}" th:value="${_csrf.token}" id="searchCsrf">
                 <div class="input-group">
-                    <input type="text" name="search" class="form-control" placeholder="Search">
+                    <input type="text" name="search" class="form-control expanded-input" placeholder="Search">
                     <select name="category" class="form-select">
                         <option th:each="c : ${categories}" th:value="${c.name()}" th:text="${c.getDisplayName()}">Option</option>
                     </select>
@@ -23,6 +23,7 @@
         <!-- Adverts main section -->
         <div class="row g-0 p-0 m-0" id="offersWrapper">
         </div>
+        <div id="bottom" style="visibility: hidden; min-height: 1px;"></div>
     </main>
     <!-- Bottom navigation -->
     <div class="bottom-navigation-menu">

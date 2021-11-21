@@ -5,20 +5,39 @@ const doc = document;
 const apiUrl = '/api/offers';
 
 (function (){
-    let searchForm = doc.getElementById('searchForm');
     let offersWrapper = doc.getElementById('offersWrapper');
     let firstFetch = false;
     let lastFetchedPage = 0;
-    let pageNumber = 0;
-    let totalPages = 0;
+    //Search
+    let searchForm = doc.getElementById('searchForm');
+    let lastSearchPageNo = 0;
+    let firstSearch = false;
+    let searchInput = searchForm.querySelector('input[type=text]');
+    let searchCategorySelect = searchForm.querySelector('select');
 
-    searchForm.addEventListener('submit', search);
+    searchForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-    window.addEventListener('scroll', checkScroll);
+        await search();
+    });
 
-    window.onload = ()=>{
-      getOffers();
-    };
+    searchInput.addEventListener('change', resetSearch);
+    searchCategorySelect.addEventListener('change', resetSearch);
+
+    let observer = new IntersectionObserver(async function(entries) {
+        // isIntersecting is true when element and viewport are overlapping
+        // isIntersecting is false when element and viewport don't overlap
+        if(entries[0].isIntersecting === true) {
+            if(firstSearch !== false){
+                await search();
+                return;
+            }
+
+            await getOffers();
+        }
+    }, { threshold: [0] });
+
+    observer.observe(doc.getElementById('bottom'));
 
     let offerTemplate = (content) => html.node`
         <div class="col-12 col-md-4 product">
@@ -52,34 +71,32 @@ const apiUrl = '/api/offers';
     `;
 
     async function getOffers(){
-        let request = await fetch(`${apiUrl}?pageNo=${lastFetchedPage++}`, {
-            method: 'GET'
-        });
-
-        if(request.ok){
-            let response = await request.json();
-
-            lastFetchedPage = response.number;
-
-            if(!firstFetch){
-                firstFetch = true;
-                totalPages = response.totalPages - 1;
-                renderContent(response.content);
-                return;
-            }
-
-            //console.log(pageNumber);
-            //console.log(response);
-
-            if(lastFetchedPage >= totalPages){
-                lastFetchedPage = totalPages;
-                return;
-            }
-
-            renderContent(response.content);
+        if(await request()){
+            lastFetchedPage++;
         }
 
-        return false;
+        async function request(){
+            let request = await fetch(`${apiUrl}?pageNo=${lastFetchedPage}`, {
+                method: 'GET'
+            });
+
+            if(request.ok){
+                let response = await request.json();
+
+                console.log(response);
+
+                if(!firstFetch){
+                    firstFetch = true;
+                    renderContent(response.content);
+                    return true;
+                }
+
+                renderContent(response.content);
+                return true;
+            }
+
+            return false;
+        }
     }
 
     function renderContent(offers){
@@ -90,12 +107,6 @@ const apiUrl = '/api/offers';
 
             offersWrapper.appendChild(o);
         });
-    }
-
-    function checkScroll(e){
-        if ((window.innerHeight + window.scrollY) >= doc.body.offsetHeight) {
-            getOffers();
-        }
     }
 
     function preventClick(e){
@@ -117,8 +128,6 @@ const apiUrl = '/api/offers';
         carousel.setAttribute('data-index', 0);
 
         let images = [...carousel.querySelectorAll('.product-image')];
-
-        console.log(images);
 
         let nextBtn = carousel.querySelector('.product-images-previewer button:last-child');
         let prevBtn = carousel.querySelector('.product-images-previewer button:first-child');
@@ -183,18 +192,12 @@ const apiUrl = '/api/offers';
         });
     }
 
-    let lastSearchPageNo = 0;
+    async function search(){
+        let searchText = searchInput.value.trim();
 
-    async function search(e){
-        e.preventDefault();
+        let searchCategory = searchCategorySelect.value;
 
-        let form = e.target;
-
-        let searchText = form.querySelector('input[type=text]').value.trim();
-
-        let searchCategory = form.querySelector('select').value;
-
-        let csrf = form.querySelector('#searchCsrf');
+        let csrf = searchForm.querySelector('#searchCsrf');
 
         if(!searchText){
             return;
@@ -205,23 +208,44 @@ const apiUrl = '/api/offers';
         let csrfHeader = csrf.getAttribute('name');
         let csrfValue = csrf.value;
 
-        let request = await fetch(`${apiUrl}/search?pageNo=${lastSearchPageNo}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                [csrfHeader]: csrfValue
-            },
-            body: JSON.stringify(data)
-        });
-
-        if(request.ok){
-            let result = await request.json();
-
-            console.log(result);
-
-            return result;
+        if(await request()){
+            lastSearchPageNo++;
         }
 
-        return false;
+        async function request(){
+            let request = await fetch(`${apiUrl}/search?pageNo=${lastSearchPageNo}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfValue
+                },
+                body: JSON.stringify(data)
+            });
+
+            if(request.ok){
+                let result = await request.json();
+
+                if(!firstSearch){
+                    firstSearch = true;
+                    offersWrapper.innerHTML = '';
+                    renderContent(result.content);
+                    return true;
+                }
+
+                extendSearch(result);
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    function extendSearch(result){
+        renderContent(result.content);
+    }
+
+    function resetSearch(e){
+        firstSearch = false;
+        lastSearchPageNo = 0;
     }
 })();
