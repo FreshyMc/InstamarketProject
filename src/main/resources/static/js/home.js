@@ -200,10 +200,7 @@ const apiUrl = '/api/offers';
             return;
         }
 
-        let formData = new FormData();
-
-        formData.append('search', searchText);
-        formData.append('category', searchCategory);
+        let data = {search: searchText, category: searchCategory};
 
         let csrfHeader = csrf.getAttribute('name');
         let csrfValue = csrf.value;
@@ -214,7 +211,7 @@ const apiUrl = '/api/offers';
                 'Content-Type': 'application/json',
                 [csrfHeader]: csrfValue
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(data)
         });
 
         if(request.ok){
