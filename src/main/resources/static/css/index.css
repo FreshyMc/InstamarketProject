@@ -114,10 +114,33 @@ img {
 }
 
 .product-image {
+    position: relative;
     min-width: 100%;
     border-radius: 9px;
     overflow: hidden;
     transition: margin-left .5s ease;
+}
+
+.option .product-image::after{
+    content: '\f002';
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(to bottom, #eb4d4b, #ff7979);
+    color: #fff;
+    font-weight: bolder;
+    font-family: "Font Awesome 5 Free";
+    box-shadow: 0 0 9px 1.5px rgba(0, 0, 0, .09);
+    pointer-events: none;
+}
+
+.option:hover .product-image::after{
+    display: flex;
 }
 
 .product-title {
@@ -1336,6 +1359,17 @@ header {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .01), rgba(0, 0, 0, .04));
     padding: 0 25px;
     border: 1px solid rgba(0, 0, 0, .09);
+}
+
+/* Page Loader Styling */
+
+.page-loader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #ff7979;
 }
 
 

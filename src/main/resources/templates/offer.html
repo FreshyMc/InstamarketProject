@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" id="top">
 
 <head th:replace="common/fragments :: head"></head>
 
-<body class="container-fluid p-0 m-0 content-wrapper" id="top">
+<body class="container-fluid p-0 m-0 content-wrapper" th:object="${offer}">
     <nav th:replace="common/fragments :: primary-navigation"></nav>
-    <main class="product-wrapper" th:object="${offer}">
+    <main class="product-wrapper">
         <section class="row g-0 g-lg-4 mt-4 mb-lg-4 col-sm-8 col-lg-12 m-auto">
             <div class="col-12 col-lg-5">
                 <div class="product-images-wrapper d-flex flex-nowrap">
@@ -16,14 +16,6 @@
                     <div class="ratio ratio-1x1 product-image" th:each="imgName : *{offerImages}">
                         <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
                     </div>
-                    <!--
-                    <div class="ratio ratio-1x1 product-image">
-                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fs1.cdn.autoevolution.com%2Fimages%2Fnews%2Fgallery%2F2018-audi-r8-spyder-v10-plus-unleashed-with-610-ps_2.jpg&f=1&nofb=1" alt="#">
-                    </div>
-                    <div class="ratio ratio-1x1 product-image">
-                        <img src="https://s3.amazonaws.com/www-inside-design/uploads/2020/10/aspect-ratios-blogpost-1x1-1.png" alt="#">
-                    </div>
-                    -->
                 </div>
             </div>
             <div class="col-12 col-lg-7">
@@ -41,48 +33,18 @@
                     -->
                 </div>
                 <div class="sold">5 sold</div>
-                <div class="product-options">
+                <div class="product-options" th:if="*{!options.isEmpty()}">
                     <h3>Product options</h3>
                     <div class="options">
-                        <th:block th:each="option : *{options}">
-                            <input type="radio" value="option_1" name="option" id="option_1" checked>
-                            <label class="option" for="option_1">
+                        <th:block th:each="option, itemStat : *{options}">
+                            <input type="radio" th:value="${itemStat.index}" name="option" th:id="${option.getKey()}" checked>
+                            <label class="option" th:for="${option.getKey()}">
                                 <div class="ratio ratio-1x1 product-image">
                                     <img th:src="@{/optionImage/{name}(name = ${option.getKey()})}" alt="#">
                                 </div>
                                 <p class="m-0" th:text="${option.getValue()}">Lorem ipsum dolor sit amet.</p>
                             </label>
                         </th:block>
-                        <!--
-                        <input type="radio" value="option_1" name="option" id="option_2">
-                        <label class="option" for="option_2">
-                            <div class="ratio ratio-1x1 product-image">
-                                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
-                            </div>
-                            <p class="m-0">Lorem ipsum dolor sit amet.</p>
-                        </label>
-                        <input type="radio" value="option_1" name="option" id="option_3">
-                        <label class="option" for="option_3">
-                            <div class="ratio ratio-1x1 product-image">
-                                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
-                            </div>
-                            <p class="m-0">Lorem ipsum dolor sit amet.</p>
-                        </label>
-                        <input type="radio" value="option_1" name="option" id="option_4">
-                        <label class="option" for="option_4">
-                            <div class="ratio ratio-1x1 product-image">
-                                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
-                            </div>
-                            <p class="m-0">Lorem ipsum dolor sit amet.</p>
-                        </label>
-                        <input type="radio" value="option_1" name="option" id="option_5">
-                        <label class="option" for="option_5">
-                            <div class="ratio ratio-1x1 product-image">
-                                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fst.automobilemag.com%2Fuploads%2Fsites%2F11%2F2019%2F02%2FAudi-R8-V10-Decennium-.jpg&f=1&nofb=1" alt="#">
-                            </div>
-                            <p class="m-0">Lorem ipsum dolor sit amet.</p>
-                        </label>
-                        -->
                     </div>
                 </div>
                 <div class="my-3 d-none d-lg-block">
@@ -113,24 +75,6 @@
                                 <p class="m-0 p-0"><b th:text="${property.getKey()}">Test</b></p>
                                 <p class="m-0 p-0" th:text="${property.getValue()}">12345678</p>
                             </div>
-                            <!--
-                            <div class="dropdown-row d-flex justify-content-between">
-                                <p class="m-0 p-0"><b>Test</b></p>
-                                <p class="m-0 p-0">12345678</p>
-                            </div>
-                            <div class="dropdown-row d-flex justify-content-between">
-                                <p class="m-0 p-0"><b>Test</b></p>
-                                <p class="m-0 p-0">12345678</p>
-                            </div>
-                            <div class="dropdown-row d-flex justify-content-between">
-                                <p class="m-0 p-0"><b>Test</b></p>
-                                <p class="m-0 p-0">12345678</p>
-                            </div>
-                            <div class="dropdown-row d-flex justify-content-between">
-                                <p class="m-0 p-0"><b>Test</b></p>
-                                <p class="m-0 p-0">12345678</p>
-                            </div>
-                            -->
                         </div>
                     </div>
                     <div class="ask-question">
@@ -170,24 +114,6 @@
                         <p class="m-0 p-0"><b th:text="${property.getKey()}">Test</b></p>
                         <p class="m-0 p-0" th:text="${property.getValue()}">12345678</p>
                     </div>
-                    <!--
-                    <div class="dropdown-row d-flex justify-content-between">
-                        <p class="m-0 p-0"><b>Test</b></p>
-                        <p class="m-0 p-0">12345678</p>
-                    </div>
-                    <div class="dropdown-row d-flex justify-content-between">
-                        <p class="m-0 p-0"><b>Test</b></p>
-                        <p class="m-0 p-0">12345678</p>
-                    </div>
-                    <div class="dropdown-row d-flex justify-content-between">
-                        <p class="m-0 p-0"><b>Test</b></p>
-                        <p class="m-0 p-0">12345678</p>
-                    </div>
-                    <div class="dropdown-row d-flex justify-content-between">
-                        <p class="m-0 p-0"><b>Test</b></p>
-                        <p class="m-0 p-0">12345678</p>
-                    </div>
-                    -->
                 </div>
             </div>
             <div class="ask-question">
@@ -331,63 +257,31 @@
         <a href="#top" class="scroll-top">Scroll to top</a>
         <div class="d-flex justify-content-between align-items-center px-2">
             <a href="/home" class="secondary-btn d-flex justify-content-center align-items-center"><i class="fas fa-chevron-left"></i></a>
-            <div class="d-flex flex-grow-1 justify-content-end align-items-stretch">
-                <a href="#" class="buy-btn">Add to cart</a>
-                <a href="#" class="favourite-btn"><i class="fas fa-heart"></i></a>
-            </div>
+            <form id="offerActions" class="d-flex flex-grow-1 justify-content-end align-items-stretch">
+                <input type="hidden" th:name="${_csrf.headerName}" th:value="${_csrf.token}" id="searchCsrf">
+                <button role="button" class="buy-btn" id="addToCart" th:data-id="*{id}">Add to cart</button>
+                <button role="button" class="favourite-btn" id="favouriteOffer" th:data-id="*{id}"><i class="fas fa-heart pe-none"></i></button>
+            </form>
         </div>
     </div>
-    <!-- Shopping Cart preview -->
-    <div class="shopping-cart-preview closed" id="cart-preview">
-        <div class="cart-wrapper d-flex flex-column">
-            <button type="button" class="close-modal-btn"><i class="fas fa-times"></i></button>
-            <div class="cart-actions d-flex justify-content-between">
-                <span class="cart-count">Cart(10)</span>
-                <button type="button" class="basic-btn" id="trash-products"><i class="fas fa-trash"></i></button>
-            </div>
-            <div class="cart-contents d-flex flex-column">
-                <div class="cart-product">
-                    <div class="d-flex m-0 p-0 justify-content-between">
-                        <div class="m-0 p-0 d-flex align-self-center">
-                            <input type="checkbox" id="product-1" class="form-check-input m-0" name="product_checkout" value="product_id">
-                        </div>
-                        <label for="product-1" class="m-0 ps-2 flex-grow-1">Audi R8 V10 Navigation Unikat</label>
-                    </div>
-                    <div class="d-flex flex-wrap m-0 my-2 p-0 product-preview">
-                        <div class="product-preview-image me-2">
-                            <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="cart_product">
-                        </div>
-                        <div class="flex-grow-1 align-self-start m-0 p-0">
-                            <span class="product-price">
-                                $1,100,111,000.<small>00</small>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="d-flex m-0 p-0 align-items-stretch product-quantity">
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="button"><i class="fas fa-plus"></i></button>
-                        <span>1</span>
-                        <button type="button"><i class="fas fa-minus"></i></button>
-                    </div>
+    <div class="modal fade" id="optionExpandGallery" tabindex="-1" aria-labelledby="optionExpandGallery" aria-hidden="true">
+        <button type="button" class="close-btn p-4 d-flex justify-content-center align-items-center position-absolute end-0 top-0" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-transparent border-0">
+                <div class="ratio ratio-1x1 product-image">
+                    <img src="" alt="#" id="optionExpandGalleryImage">
                 </div>
             </div>
-            <div class="cart-bottom">
-                <button type="button" class="checkout-btn">Checkout</button>
-                <p class="m-0 p-0 py-2">Total: <b>$2,217,544.<small>55</small></b></p>
-            </div>
         </div>
     </div>
-    <!-- Alert Pop up -->
-    <div class="alert closed m-0 p-0" id="confirmation-alert">
-        <div class="alert-content">
-            <p>Are you sure to remove the selected items?</p>
-            <div class="d-flex justify-content-center alert-actions">
-                <button type="button" class="confirm-btn">Yes</button>
-                <button type="button" class="deny-btn selected">No</button>
-            </div>
-        </div>
-    </div>
+    <!-- Shopping cart -->
+    <div th:replace="common/fragments :: cart"></div>
     <div th:replace="common/fragments :: bottom-scripts"></div>
+    <!-- Toast -->
+    <div class="position-fixed top-0 start-0 p-3 w-100 d-flex justify-content-center align-items-center flex-column" id="toastMessages" style="z-index: 15;">
+    </div>
     <script>
         let dropdownIds = ['specifications-dropdown', 'description-dropdown', 'specifications-dropdown-mobile', 'description-dropdown-mobile'];
 
@@ -405,7 +299,7 @@
             dropdown.classList.toggle('closed');
         }
     </script>
-    <script src="/js/details.js"></script>
+    <script src="/js/details.js" type="module"></script>
 </body>
 
 </html>

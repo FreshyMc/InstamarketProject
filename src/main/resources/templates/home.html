@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" id="top">
 
 <head th:replace="common/fragments :: head"></head>
 
-<body class="container-fluid p-0 m-0 content-wrapper" id="top">
+<body class="container-fluid p-0 m-0 content-wrapper">
     <nav th:replace="common/fragments :: primary-navigation"></nav>
     <main>
         <div class="search-form-top py-2 d-flex justify-content-center align-items-center">
@@ -14,6 +14,23 @@
                     <select name="category" class="form-select">
                         <option th:each="c : ${categories}" th:value="${c.name()}" th:text="${c.getDisplayName()}">Option</option>
                     </select>
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-filter"></i></button>
+                    <ul class="dropdown-menu p-2">
+                        <li class="mb-2">
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="minPrice" placeholder="Min price">
+                                <input type="number" class="form-control" name="maxPrice" placeholder="Max price">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <input type="checkbox" class="form-check-input m-0" name="freeShipping" id="freeShipping" value="true">
+                                </div>
+                                <label class="input-group-text flex-grow-1" for="freeShipping">Free shipping</label>
+                            </div>
+                        </li>
+                    </ul>
                     <button type="submit" class="search-top-btn">
                         <i class="fas fa-search"></i>
                     </button>
@@ -24,6 +41,11 @@
         <div class="row g-0 p-0 m-0" id="offersWrapper">
         </div>
         <div id="bottom" style="visibility: hidden; min-height: 1px;"></div>
+        <div class="page-loader d-flex justify-content-center align-items-center">
+            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </main>
     <!-- Bottom navigation -->
     <div class="bottom-navigation-menu">
@@ -36,174 +58,10 @@
             <button class="secondary-btn active" type="button" data-bs-toggle="offcanvas" data-bs-target="#notifications" aria-controls="notifications">
                 <i class="fas fa-bell"></i>
             </button>
-            <!--
-                <button class="secondary-btn active"><i class="fas fa-bell"></i></button>
-            -->
         </div>
     </div>
-    <!-- Shopping Cart preview -->
-    <div class="shopping-cart-preview closed" id="cart-preview">
-        <div class="cart-wrapper d-flex flex-column">
-            <button type="button" class="close-modal-btn"><i class="fas fa-times"></i></button>
-            <div class="cart-actions d-flex justify-content-between">
-                <div class="d-flex align-items-center">
-                    <input type="checkbox" class="form-check-input" id="selectAll" name="all" value="selectAll">
-                    <label for="selectAll" class="cart-count ms-2">Cart(10)</label>
-                </div>
-                <button type="button" class="basic-btn" id="trash-products"><i class="fas fa-trash"></i></button>
-            </div>
-            <div class="cart-contents d-flex flex-column fancy-scroll">
-                <!-- Cart product -->
-                <div class="cart-product">
-                    <div class="d-flex m-0 p-0 justify-content-between">
-                        <div class="m-0 p-0 d-flex align-self-center">
-                            <input type="checkbox" id="product-1" class="form-check-input m-0" name="product_checkout" value="product_id">
-                        </div>
-                        <label for="product-1" class="m-0 ps-2 flex-grow-1">Audi R8 V10 Navigation Unikat</label>
-                    </div>
-                    <div class="d-flex flex-wrap m-0 my-2 p-0 product-preview">
-                        <div class="product-preview-image me-2">
-                            <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="cart_product">
-                        </div>
-                        <div class="flex-grow-1 d-flex flex-column justify-content-between m-0 p-0">
-                            <span class="product-price">
-                                $1,100,111,000.<small>00</small>
-                            </span>
-                            <div class="d-flex m-0 p-0 align-items-stretch product-quantity">
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="button"><i class="fas fa-plus"></i></button>
-                                <span>1</span>
-                                <button type="button"><i class="fas fa-minus"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Cart product END -->
-                <!-- Cart product -->
-                <div class="cart-product">
-                    <div class="d-flex m-0 p-0 justify-content-between">
-                        <div class="m-0 p-0 d-flex align-self-center">
-                            <input type="checkbox" id="product-1" class="form-check-input m-0" name="product_checkout" value="product_id">
-                        </div>
-                        <label for="product-1" class="m-0 ps-2 flex-grow-1">Audi R8 V10 Navigation Unikat</label>
-                    </div>
-                    <div class="d-flex flex-wrap m-0 my-2 p-0 product-preview">
-                        <div class="product-preview-image me-2">
-                            <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="cart_product">
-                        </div>
-                        <div class="flex-grow-1 d-flex flex-column justify-content-between m-0 p-0">
-                            <span class="product-price">
-                                $1,100,111,000.<small>00</small>
-                            </span>
-                            <div class="d-flex m-0 p-0 align-items-stretch product-quantity">
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="button"><i class="fas fa-plus"></i></button>
-                                <span>1</span>
-                                <button type="button"><i class="fas fa-minus"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Cart product END -->
-                <!-- Cart product -->
-                <div class="cart-product">
-                    <div class="d-flex m-0 p-0 justify-content-between">
-                        <div class="m-0 p-0 d-flex align-self-center">
-                            <input type="checkbox" id="product-1" class="form-check-input m-0" name="product_checkout" value="product_id">
-                        </div>
-                        <label for="product-1" class="m-0 ps-2 flex-grow-1">Audi R8 V10 Navigation Unikat</label>
-                    </div>
-                    <div class="d-flex flex-wrap m-0 my-2 p-0 product-preview">
-                        <div class="product-preview-image me-2">
-                            <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="cart_product">
-                        </div>
-                        <div class="flex-grow-1 d-flex flex-column justify-content-between m-0 p-0">
-                            <span class="product-price">
-                                $1,100,111,000.<small>00</small>
-                            </span>
-                            <div class="d-flex m-0 p-0 align-items-stretch product-quantity">
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="button"><i class="fas fa-plus"></i></button>
-                                <span>1</span>
-                                <button type="button"><i class="fas fa-minus"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Cart product END -->
-                <!-- Cart product -->
-                <div class="cart-product">
-                    <div class="d-flex m-0 p-0 justify-content-between">
-                        <div class="m-0 p-0 d-flex align-self-center">
-                            <input type="checkbox" id="product-1" class="form-check-input m-0" name="product_checkout" value="product_id">
-                        </div>
-                        <label for="product-1" class="m-0 ps-2 flex-grow-1">Audi R8 V10 Navigation Unikat</label>
-                    </div>
-                    <div class="d-flex flex-wrap m-0 my-2 p-0 product-preview">
-                        <div class="product-preview-image me-2">
-                            <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="cart_product">
-                        </div>
-                        <div class="flex-grow-1 d-flex flex-column justify-content-between m-0 p-0">
-                            <span class="product-price">
-                                $1,100,111,000.<small>00</small>
-                            </span>
-                            <div class="d-flex m-0 p-0 align-items-stretch product-quantity">
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="button"><i class="fas fa-plus"></i></button>
-                                <span>1</span>
-                                <button type="button"><i class="fas fa-minus"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Cart product END -->
-            </div>
-            <div class="cart-bottom">
-                <a href="./checkout.html" role="button" class="checkout-btn d-flex justify-content-center align-items-center">Checkout</a>
-                <p class="m-0 p-0 py-2">Total: <b>$2,217,544.<small>55</small></b></p>
-            </div>
-        </div>
-    </div>
-    <!-- Search Pop up -->
-    <div class="pop-up closed">
-        <div class="pop-up-content d-flex flex-column">
-            <button type="button" class="close-modal-btn"><i class="fas fa-times"></i></button>
-            <form class="search-form d-flex flex-column" action="#" method="POST" onsubmit="return false;">
-                <div class="flex-grow-1">
-                    <div class="mb-2">
-                        <select class="form-select" name="category">
-                            <option value="" selected>Select search category</option>
-                            <option value="cars">Cars</option>
-                            <option value="phones">Phones, Tablets</option>
-                            <option value="laptops">Laptops</option>
-                            <option value="pc">Desktop PC and Peripherals</option>
-                            <option value="tv">TV, Audio and Photo</option>
-                            <option value="lg-appliances">Large appliances</option>
-                            <option value="sm-appliances">Small appliances</option>
-                        </select>
-                    </div>
-                    <div class="mb-2">
-                        <input type="text" class="form-control" name="search" placeholder="What are you looking for?">
-                    </div>
-                    <div class="mb-2 input-group">
-                        <input type="number" class="form-control" name="minPrice" placeholder="Min price">
-                        <input type="number" class="form-control" name="maxPrice" placeholder="Max price">
-                    </div>
-                    <div class="mb-2 d-flex">
-                        <div>
-                            <input type="checkbox" class="form-check-input" id="freeShipping" name="freeShipping" value="true">
-                        </div>
-                        <label class="flex-grow-1 ms-2" for="freeShipping">
-                            Free shipping
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-primary btn-lg col-12">Search</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <!-- Shopping cart -->
+    <div th:replace="common/fragments :: cart"></div>
     <!-- Notifications -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="notifications" aria-labelledby="notifications">
         <div class="offcanvas-header notifications-title">
@@ -259,75 +117,6 @@
                     <span>15 hours ago</span>
                     <button type="button">Read</button>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!--
-        <div class="notifications-pop-up closed d-flex flex-column">
-        <div class="notifications-title d-flex justify-content-between align-items-center">
-            <h3 class="m-0 ms-2">Notifications</h3>
-            <button class="close-btn"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="notifications-wrapper flex-grow-1">
-            <div class="notification">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nam modi eaque, quas sint repudiandae, consectetur autem nisi exercitationem hic quae! Similique dolores sed dicta! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit neque
-                    consequuntur libero laborum labore!
-                </p>
-                <div class="notification-actions d-flex justify-content-between align-items-center">
-                    <span>15 hours ago</span>
-                    <button type="button">Read</button>
-                </div>
-            </div>
-            <div class="notification">
-                <p>
-                    New message from <b>Unknown</b>: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, perferendis!
-                </p>
-                <div class="notification-actions d-flex justify-content-between align-items-center">
-                    <span>15 hours ago</span>
-                    <button type="button">Reply</button>
-                </div>
-            </div>
-            <div class="notification">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nam modi eaque, quas sint repudiandae, consectetur autem nisi exercitationem hic quae! Similique dolores sed dicta! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit neque
-                    consequuntur libero laborum labore!
-                </p>
-                <div class="notification-actions d-flex justify-content-between align-items-center">
-                    <span>15 hours ago</span>
-                    <button type="button">Read</button>
-                </div>
-            </div>
-            <div class="notification">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nam modi eaque, quas sint repudiandae, consectetur autem nisi exercitationem hic quae! Similique dolores sed dicta! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit neque
-                    consequuntur libero laborum labore!
-                </p>
-                <div class="notification-actions d-flex justify-content-between align-items-center">
-                    <span>15 hours ago</span>
-                    <button type="button">Read</button>
-                </div>
-            </div>
-            <div class="notification">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nam modi eaque, quas sint repudiandae, consectetur autem nisi exercitationem hic quae! Similique dolores sed dicta! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit neque
-                    consequuntur libero laborum labore!
-                </p>
-                <div class="notification-actions d-flex justify-content-between align-items-center">
-                    <span>15 hours ago</span>
-                    <button type="button">Read</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-    <!-- Alert Pop up -->
-    <div class="alert closed m-0 p-0" id="confirmation-alert">
-        <div class="alert-content">
-            <p>Are you sure to remove the selected items?</p>
-            <div class="d-flex justify-content-center alert-actions">
-                <button type="button" class="confirm-btn">Yes</button>
-                <button type="button" class="deny-btn selected">No</button>
             </div>
         </div>
     </div>

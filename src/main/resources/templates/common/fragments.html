@@ -8,7 +8,7 @@
   <!-- Font Awesome -->
   <link href="/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <!-- Styling -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/css/index.css" type="text/css">
 </head>
 <body>
@@ -92,13 +92,65 @@
       </div>
     </div>
   </nav>
+  <th:block th:fragment="cart">
+    <!-- Shopping Cart preview -->
+    <div class="shopping-cart-preview closed" id="cart-preview">
+      <div class="cart-wrapper d-flex flex-column">
+        <button type="button" class="close-modal-btn"><i class="fas fa-times"></i></button>
+        <div class="cart-actions d-flex justify-content-between">
+          <span class="cart-count">Cart(10)</span>
+          <button type="button" class="basic-btn" id="trash-products"><i class="fas fa-trash"></i></button>
+        </div>
+        <div class="cart-contents d-flex flex-column">
+          <div class="cart-product">
+            <div class="d-flex m-0 p-0 justify-content-between">
+              <div class="m-0 p-0 d-flex align-self-center">
+                <input type="checkbox" id="product-1" class="form-check-input m-0" name="product_checkout" value="product_id">
+              </div>
+              <label for="product-1" class="m-0 ps-2 flex-grow-1">Audi R8 V10 Navigation Unikat</label>
+            </div>
+            <div class="d-flex flex-wrap m-0 my-2 p-0 product-preview">
+              <div class="product-preview-image me-2">
+                <img src="https://images.ams.bg/images/galleries/184257/obnoveniyat-audi-r8-sas-zadno-predavane-e-po-evtin-1573044261_big.jpg" alt="cart_product">
+              </div>
+              <div class="flex-grow-1 align-self-start m-0 p-0">
+                            <span class="product-price">
+                                $1,100,111,000.<small>00</small>
+                            </span>
+              </div>
+            </div>
+            <div class="d-flex m-0 p-0 align-items-stretch product-quantity">
+              <input type="hidden" name="quantity" value="1">
+              <button type="button"><i class="fas fa-plus"></i></button>
+              <span>1</span>
+              <button type="button"><i class="fas fa-minus"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="cart-bottom">
+          <button type="button" class="checkout-btn">Checkout</button>
+          <p class="m-0 p-0 py-2">Total: <b>$2,217,544.<small>55</small></b></p>
+        </div>
+      </div>
+    </div>
+    <!-- Alert Pop up -->
+    <div class="alert closed m-0 p-0" id="confirmation-alert">
+      <div class="alert-content">
+        <p>Are you sure to remove the selected items?</p>
+        <div class="d-flex justify-content-center alert-actions">
+          <button type="button" class="confirm-btn">Yes</button>
+          <button type="button" class="deny-btn selected">No</button>
+        </div>
+      </div>
+    </div>
+  </th:block>
   <!-- Footer -->
   <footer class="mt-2" th:fragment="footer">
     <p class="m-0"><i class="far fa-copyright"></i> 2021 Instamarket. All rights reserved.</p>
   </footer>
   <!-- Bottom Scripts -->
   <th:block th:fragment="bottom-scripts">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/js/index.js"></script>
   </th:block>
 </body>

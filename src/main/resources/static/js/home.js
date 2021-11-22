@@ -14,6 +14,8 @@ const apiUrl = '/api/offers';
     let firstSearch = false;
     let searchInput = searchForm.querySelector('input[type=text]');
     let searchCategorySelect = searchForm.querySelector('select');
+    //Page Loader Animation
+    let pageLoader = doc.querySelector('.page-loader');
 
     searchForm.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -28,16 +30,31 @@ const apiUrl = '/api/offers';
         // isIntersecting is true when element and viewport are overlapping
         // isIntersecting is false when element and viewport don't overlap
         if(entries[0].isIntersecting === true) {
+            showLoader();
+
             if(firstSearch !== false){
                 await search();
+
+                hideLoader();
                 return;
             }
 
             await getOffers();
+            hideLoader();
         }
     }, { threshold: [0] });
 
     observer.observe(doc.getElementById('bottom'));
+
+    function hideLoader(){
+        pageLoader.classList.remove('d-flex');
+        pageLoader.classList.add('d-none');
+    }
+
+    function showLoader(){
+        pageLoader.classList.remove('d-none');
+        pageLoader.classList.add('d-flex');
+    }
 
     let offerTemplate = (content) => html.node`
         <div class="col-12 col-md-4 product">

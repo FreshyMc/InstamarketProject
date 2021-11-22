@@ -1,5 +1,6 @@
 package com.example.instamarket.model.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,8 +18,8 @@ public class Order extends BaseEntity{
     private Address deliveryAddress;
     private LocalDateTime orderTime;
     private LocalDate deliveryDate;
+    private boolean isDelivered = false;
 
-    //TODO - Columns types also set nullables
     public Order() {
     }
 
@@ -42,6 +43,7 @@ public class Order extends BaseEntity{
         return this;
     }
 
+    @Column(nullable = false)
     public Integer getQuantity() {
         return quantity;
     }
@@ -51,6 +53,7 @@ public class Order extends BaseEntity{
         return this;
     }
 
+    @Column(nullable = false)
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
@@ -85,6 +88,15 @@ public class Order extends BaseEntity{
 
     public Order setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
+        return this;
+    }
+
+    public boolean isDelivered() {
+        return isDelivered;
+    }
+
+    public Order setDelivered(boolean delivered) {
+        isDelivered = delivered;
         return this;
     }
 }

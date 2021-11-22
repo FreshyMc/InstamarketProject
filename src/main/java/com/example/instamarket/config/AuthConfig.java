@@ -24,7 +24,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
         http.
                 authorizeRequests().
                 // with this line we allow access to all static resources
-                        antMatchers("/css/**", "/js/**", "/fontawesome-free/**", "/img/**").permitAll().
+                        antMatchers("/css/**", "/js/**", "/fontawesome-free/**", "/img/**", "/bootstrap/**").permitAll().
                     //requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
                 // the next line allows access to the home page, login page and registration for everyone
                         antMatchers("/", "/login", "/register").permitAll().

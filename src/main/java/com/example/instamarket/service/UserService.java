@@ -1,5 +1,6 @@
 package com.example.instamarket.service;
 
+import com.example.instamarket.model.dto.FavouriteOfferDTO;
 import com.example.instamarket.model.service.ChangePasswordServiceModel;
 import com.example.instamarket.model.service.ProfileNamesServiceModel;
 import com.example.instamarket.model.service.SaveAddressesServiceModel;
@@ -25,4 +26,6 @@ public interface UserService {
     void saveNewAddresses(SaveAddressesServiceModel model, String username);
 
     boolean changeUserPassword(ChangePasswordServiceModel model, String username);
+
+    FavouriteOfferDTO addToWishList(Long offerId, String userIdentifier);
 }

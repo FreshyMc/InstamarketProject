@@ -24,6 +24,7 @@ public class Offer extends BaseEntity{
     private Shipping shippingType;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private boolean isDeleted = false;
 
     public Offer() {
     }
@@ -132,6 +133,15 @@ public class Offer extends BaseEntity{
 
     public Offer setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public Offer setDeleted(boolean deleted) {
+        isDeleted = deleted;
         return this;
     }
 

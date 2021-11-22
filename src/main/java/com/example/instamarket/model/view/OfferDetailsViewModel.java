@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class OfferDetailsViewModel {
+    private Long id;
     private String title;
-    private BigDecimal price;
+    private String price;
     private String description;
     private Set<String> offerImages = new HashSet<>();
     private Map<String, String> options = new HashMap<>();
@@ -20,6 +21,15 @@ public class OfferDetailsViewModel {
     public OfferDetailsViewModel() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public OfferDetailsViewModel setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -29,11 +39,11 @@ public class OfferDetailsViewModel {
         return this;
     }
 
-    public BigDecimal getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public OfferDetailsViewModel setPrice(BigDecimal price) {
+    public OfferDetailsViewModel setPrice(String price) {
         this.price = price;
         return this;
     }

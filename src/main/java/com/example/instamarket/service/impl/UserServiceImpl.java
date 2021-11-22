@@ -1,8 +1,7 @@
 package com.example.instamarket.service.impl;
 
-import com.example.instamarket.model.entity.Address;
-import com.example.instamarket.model.entity.Role;
-import com.example.instamarket.model.entity.User;
+import com.example.instamarket.model.dto.FavouriteOfferDTO;
+import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.RolesEnum;
 import com.example.instamarket.model.service.ChangePasswordServiceModel;
 import com.example.instamarket.model.service.ProfileNamesServiceModel;
@@ -10,9 +9,7 @@ import com.example.instamarket.model.service.SaveAddressesServiceModel;
 import com.example.instamarket.model.service.UserRegisterServiceModel;
 import com.example.instamarket.model.view.ProfileAddressesViewModel;
 import com.example.instamarket.model.view.ProfileNamesViewModel;
-import com.example.instamarket.repository.AddressRepository;
-import com.example.instamarket.repository.RoleRepository;
-import com.example.instamarket.repository.UserRepository;
+import com.example.instamarket.repository.*;
 import com.example.instamarket.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,14 +29,20 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final CartRepository cartRepository;
+    private final WishListRepository wishListRepository;
+    private final OfferRepository offerRepository;
     private final InstamarketUserServiceImpl instamarketUserService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, AddressRepository addressRepository, InstamarketUserServiceImpl instamarketUserService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, WishListRepository wishListRepository, OfferRepository offerRepository, InstamarketUserServiceImpl instamarketUserService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
+        this.cartRepository = cartRepository;
+        this.wishListRepository = wishListRepository;
+        this.offerRepository = offerRepository;
         this.instamarketUserService = instamarketUserService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
@@ -63,6 +66,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).isEmpty();
     }
 
+    //TODO Check if email is already registered
     @Override
     public void registerUser(UserRegisterServiceModel userModel) {
         User user = new User();
@@ -169,6 +173,50 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return true;
+    }
+
+    @Override
+    public FavouriteOfferDTO addToWishList(Long offerId, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+        WishList isAdded = wishListRepository.findByOfferIdAndUser(offerId, user).orElse(null);
+
+        if(isAdded == null){
+            Offer offer = offerRepository.findById(offerId).orElseThrow();
+
+            WishList wishList = new WishList();
+
+            wishList.setUser(user);
+            wishList.setOffer(offer);
+
+            wishListRepository.save(wishList);
+
+            FavouriteOfferDTO favouriteOffer = modelMapper.map(offer, FavouriteOfferDTO.class);
+
+            favouriteOffer.setFavourite(true);
+
+            return favouriteOffer;
+        }else if(isAdded.isRemoved()){
+            isAdded.setRemoved(false);
+
+            wishListRepository.save(isAdded);
+
+            FavouriteOfferDTO favouriteOffer = new FavouriteOfferDTO();
+
+            favouriteOffer.setFavourite(true);
+
+            return favouriteOffer;
+        }
+
+        isAdded.setRemoved(true);
+
+        wishListRepository.save(isAdded);
+
+        FavouriteOfferDTO favouriteOffer = new FavouriteOfferDTO();
+
+        favouriteOffer.setFavourite(false);
+
+        return favouriteOffer;
     }
 
     private boolean checkPasswords(User user, String oldPassword){
