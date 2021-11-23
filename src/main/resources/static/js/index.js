@@ -16,7 +16,7 @@ let shoppingCart = doc.getElementById('cart-preview');
 let openCartBtn = doc.getElementById('openCart');
 let closeCartBtn = shoppingCart.querySelector('.close-modal-btn');
 let cartShown = false;
-
+/*
 openCartBtn.addEventListener('click', toggleCart);
 closeCartBtn.addEventListener('click', toggleCart);
 
@@ -76,3 +76,4 @@ function trashProducts(e) {
 confirmBtn.addEventListener('click', trashProducts);
 
 denyBtn.addEventListener('click', hideAlert);
+ */

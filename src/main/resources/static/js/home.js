@@ -1,4 +1,4 @@
-import {render, html} from '//unpkg.com/lighterhtml?module';
+import {html} from '//unpkg.com/lighterhtml?module';
 
 const doc = document;
 
@@ -13,6 +13,8 @@ const apiUrl = '/api/offers';
     let lastSearchPageNo = 0;
     let firstSearch = false;
     let searchInput = searchForm.querySelector('input[type=text]');
+    let searchFreeShipping = searchForm.querySelector('input[name=freeShipping]');
+    let searchFavouriteOffer = searchForm.querySelector('input[name=favouriteOffer]');
     let searchCategorySelect = searchForm.querySelector('select');
     //Page Loader Animation
     let pageLoader = doc.querySelector('.page-loader');
@@ -25,6 +27,8 @@ const apiUrl = '/api/offers';
 
     searchInput.addEventListener('change', resetSearch);
     searchCategorySelect.addEventListener('change', resetSearch);
+    searchFreeShipping.addEventListener('change', resetSearch);
+    searchFavouriteOffer.addEventListener('change', resetSearch);
 
     let observer = new IntersectionObserver(async function(entries) {
         // isIntersecting is true when element and viewport are overlapping
@@ -214,13 +218,16 @@ const apiUrl = '/api/offers';
 
         let searchCategory = searchCategorySelect.value;
 
+        let freeShipping = searchFreeShipping.checked;
+        let favouriteOffer = searchFavouriteOffer.checked;
+
         let csrf = searchForm.querySelector('#searchCsrf');
 
         if(!searchText){
             return;
         }
 
-        let data = {search: searchText, category: searchCategory};
+        let data = {search: searchText, category: searchCategory, freeShipping, favouriteOffer};
 
         let csrfHeader = csrf.getAttribute('name');
         let csrfValue = csrf.value;

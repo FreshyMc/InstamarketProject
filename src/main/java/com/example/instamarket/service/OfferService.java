@@ -17,5 +17,5 @@ public interface OfferService {
 
     Page<OfferDTO> getOffers(int pageNo, int pageSize, String sortBy);
 
-    Page<OfferDTO> searchOffers(int pageNo, int pageSize, String sortBy, SearchServiceModel model);
+    Page<OfferDTO> searchOffers(int pageNo, int pageSize, String sortBy, SearchServiceModel model, String username);
 }

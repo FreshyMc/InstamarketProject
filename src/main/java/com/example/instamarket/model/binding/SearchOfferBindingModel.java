@@ -13,6 +13,10 @@ public class SearchOfferBindingModel {
     private String search;
     @NotNull
     private SearchCategoriesEnum category;
+    @NotNull
+    private Boolean freeShipping;
+    @NotNull
+    private Boolean favouriteOffer;
 
     public SearchOfferBindingModel() {
     }
@@ -32,6 +36,24 @@ public class SearchOfferBindingModel {
 
     public SearchOfferBindingModel setCategory(SearchCategoriesEnum category) {
         this.category = category;
+        return this;
+    }
+
+    public Boolean getFreeShipping() {
+        return freeShipping;
+    }
+
+    public SearchOfferBindingModel setFreeShipping(Boolean freeShipping) {
+        this.freeShipping = freeShipping;
+        return this;
+    }
+
+    public Boolean getFavouriteOffer() {
+        return favouriteOffer;
+    }
+
+    public SearchOfferBindingModel setFavouriteOffer(Boolean favouriteOffer) {
+        this.favouriteOffer = favouriteOffer;
         return this;
     }
 }

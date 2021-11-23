@@ -3,6 +3,16 @@ button {
     outline: 0;
 }
 
+a{
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+a.fancy-link{
+    color: #ff7979 !important;
+    text-decoration: underline !important;
+}
+
 body.content-wrapper {
     margin-bottom: 78px !important;
 }
@@ -1372,6 +1382,54 @@ header {
     color: #ff7979;
 }
 
+/* Cart Page Styling */
+
+.cart-offer, .cart-checkout, .seller-redeem-code, .seller{
+    background-color: rgba(0, 0, 0, .03);
+    border: 1px solid rgba(0, 0, 0, .09);
+}
+
+.cart-check-option{
+    border-right: 1px solid rgba(0, 0, 0, .09);
+}
+
+.seller-profile-image{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.offer-link{
+    text-decoration: none !important;
+}
+
+.offer-title{
+    color: #333;
+    font-size: 18px;
+    padding-bottom: 4px;
+    border-bottom: 4px solid #ff7979;
+}
+
+.offer-price{
+    font-size: 24px;
+}
+
+.offer-price-preview{
+    margin-bottom: 9px;
+    border-bottom: 2px solid #333;
+}
+
+/* WishList Page Styling */
+
+.wishlist-item{
+    padding: 9px;
+    background-color: rgba(0, 0, 0, .03);
+    border: 1px solid rgba(0, 0, 0, .09);
+}
+
+.wishlist-item .product-images-wrapper{
+    width: 300px;
+}
 
 /* ----------------------------------------- */
 
@@ -1520,6 +1578,18 @@ header {
     }
     .search-form-top form{
         width: 65%;
+    }
+    .offer-link .product-image{
+        margin: 0 !important;
+        min-width: 150px !important;
+        width: 150px !important;
+        height: 150px;
+    }
+    .offer-link .offer-title{
+        width: 100%;
+    }
+    .offer-quantity{
+        width: 35% !important;
     }
 }
 

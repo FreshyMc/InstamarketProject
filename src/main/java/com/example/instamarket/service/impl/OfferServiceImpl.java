@@ -244,17 +244,56 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public Page<OfferDTO> searchOffers(int pageNo, int pageSize, String sortBy, SearchServiceModel model) {
+    public Page<OfferDTO> searchOffers(int pageNo, int pageSize, String sortBy, SearchServiceModel model, String username) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
 
         if(model.getCategory() != null){
             //TODO custom exception insert
             Category category = categoryRepository.findCategoryByCategory(model.getCategory()).orElseThrow();
 
-            return offerRepository.findAllByTitleContainingAndOfferCategory(model.getSearch(), category, pageable).map(this::asOffer);
+            //Filter if searching in one category with free shipping and favourite offers
+            if(model.getFreeShipping() && model.getFavouriteOffer()){
+                Shipping shipping = shippingRepository.findShippingByShipping(ShippingTypesEnum.FREE).orElseThrow();
+
+                return offerRepository.findAllByTitleAndFreeShippingAndFavouriteUserOffers(model.getSearch(), username, shipping, category, pageable).map(this::asOffer);
+            }
+
+            //Filter if searching in one category with free shipping only
+            if(model.getFreeShipping()){
+                Shipping shipping = shippingRepository.findShippingByShipping(ShippingTypesEnum.FREE).orElseThrow();
+
+                return offerRepository.findAllByTitleAndFreeShipping(model.getSearch(), shipping, category, pageable).map(this::asOffer);
+            }
+
+            //Filter if searching in one category for favourite offers only
+            if(model.getFavouriteOffer()){
+                return offerRepository.findAllByTitleAndFavouriteUserOffers(model.getSearch(), username, category, pageable).map(this::asOffer);
+            }
+
+            return offerRepository.findAllByTitleContainingAndOfferCategoryAndDeleted(model.getSearch(), category, false, pageable).map(this::asOffer);
         }
 
-        return offerRepository.findAllByTitleContaining(model.getSearch(), pageable).map(this::asOffer);
+        //Filter if searching in all categories with free shipping and favourite offers
+        if(model.getFreeShipping() && model.getFavouriteOffer()){
+            Shipping shipping = shippingRepository.findShippingByShipping(ShippingTypesEnum.FREE).orElseThrow();
+
+            return offerRepository.findAllByTitleAndFreeShippingAndFavouriteUserOffers(model.getSearch(), username, shipping, pageable).map(this::asOffer);
+        }
+
+        //Filter if searching in all categories with free shipping only
+        if(model.getFreeShipping()){
+            Shipping shipping = shippingRepository.findShippingByShipping(ShippingTypesEnum.FREE).orElseThrow();
+
+            return offerRepository.findAllByTitleAndFreeShipping(model.getSearch(), shipping, pageable).map(this::asOffer);
+        }
+
+        //Filter if searching in all categories for favourite offers only
+        if(model.getFavouriteOffer()){
+            return offerRepository.findAllByTitleAndFavouriteUserOffers(model.getSearch(), username, pageable).map(this::asOffer);
+        }
+
+        //Basic search in all categories without special filters
+        return offerRepository.findAllByTitleContainingAndDeleted(model.getSearch(), false, pageable).map(this::asOffer);
     }
 
     private boolean isValidFileFormat(String filename){

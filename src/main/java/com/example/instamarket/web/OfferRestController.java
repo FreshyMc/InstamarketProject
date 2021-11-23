@@ -42,11 +42,12 @@ public class OfferRestController {
             @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
             @RequestParam(name = "pageSize", defaultValue = "6") Integer pageSize,
             @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy,
-            @RequestBody @Valid SearchOfferBindingModel searchModel){
+            @RequestBody @Valid SearchOfferBindingModel searchModel,
+            @AuthenticationPrincipal InstamarketUser user){
 
         SearchServiceModel model = modelMapper.map(searchModel, SearchServiceModel.class);
 
-        return ResponseEntity.ok(offerService.searchOffers(pageNo, pageSize, sortBy, model));
+        return ResponseEntity.ok(offerService.searchOffers(pageNo, pageSize, sortBy, model, user.getUserIdentifier()));
     }
 
     @PostMapping("/{offerId}/favourite")

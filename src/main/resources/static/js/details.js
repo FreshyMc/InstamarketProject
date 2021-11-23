@@ -1,4 +1,4 @@
-import {render, html} from '//unpkg.com/lighterhtml?module';
+import {html} from '//unpkg.com/lighterhtml?module';
 
 const apiUrl = '/api/offers';
 

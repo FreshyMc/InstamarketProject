@@ -48,6 +48,11 @@ public class WishList extends BaseEntity{
         this.setAddedAt(LocalDateTime.now());
     }
 
+    @PreUpdate
+    public void updateAddedAt(){
+        this.setAddedAt(LocalDateTime.now());
+    }
+
     public boolean isRemoved() {
         return isRemoved;
     }

@@ -2,81 +2,86 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" id="top">
 <head th:replace="common/fragments :: head"></head>
 <body class="container-fluid p-0 m-0 content-wrapper">
-  <nav th:replace="common/fragments :: primary-navigation"></nav>
+  <nav th:replace="common/fragments :: secondary-navigation"></nav>
   <!-- Cart Content -->
-  <main>
-
+  <main class="row g-0 p-0 py-3 px-1 px-sm-3">
+    <div class="col-lg-8 col-12">
+      <!-- Cart Product -->
+      <div class="cart-offer d-flex w-100 mb-2">
+        <label class="px-2 d-flex align-items-center cart-check-option">
+          <input type="checkbox" class="form-check-input" name="productSelector">
+        </label>
+        <div class="flex-grow-1 p-2">
+          <div class="offer-seller mb-2 d-flex align-items-center">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" class="seller-profile-image" alt="#">
+            <p class="m-0 ms-2 fw-bold">Seller name</p>
+          </div>
+          <a href="#demo" class="offer-link d-flex flex-column flex-sm-row mb-2">
+            <div class="ratio ratio-1x1 product-image mb-2">
+              <img src="https://s7g10.scene7.com/is/image/maserati/maserati/international/Models/mc20/mc20-hero.jpg?$600x2000$&fit=constrain" alt="#">
+            </div>
+            <p class="offer-title m-0 align-self-sm-start mx-2">Offer title</p>
+          </a>
+          <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-sm-between">
+            <p class="offer-price fw-bold m-sm-0">$150 000.99</p>
+            <div class="input-group offer-quantity">
+              <div class="input-group-text">Quantity</div>
+              <button class="btn btn-secondary"><i class="fas fa-minus"></i></button>
+              <input type="number" class="form-control text-center" name="offerQuantity" min="1" value="1">
+              <button class="btn btn-secondary"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Cart Product END -->
+    </div>
+    <div class="col-lg-4 ps-lg-3 col-12">
+      <div class="cart-checkout p-2">
+        <div class="pb-2">
+          <p class="mb-2">Delivery address</p>
+          <label class="shipping-address-option mb-2 p-2 d-flex align-items-center">
+            <div class="me-2">
+              <input type="radio" name="deliveryAddress" value="1">
+            </div>
+            <p class="m-0 p-0">Bulgaria, Sofia, bul. Ivan Malinov N24 apartment 4 floor 4</p>
+          </label>
+          <label class="shipping-address-option mb-2 p-2 d-flex align-items-center">
+            <div class="me-2">
+              <input type="radio" name="deliveryAddress" value="1">
+            </div>
+            <p class="m-0 p-0">Bulgaria, Vratsa, bul. Hristo Botev N48 apartment 4 floor 4</p>
+          </label>
+        </div>
+        <div class="seller-redeem-code p-2">
+          <div class="seller mb-2 p-2">
+            <div class="offer-seller mb-2 d-flex align-items-center">
+              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" class="seller-profile-image" alt="#">
+              <p class="m-0 ms-2 fw-bold">Seller name</p>
+            </div>
+            <div class="offers mb-2">
+              <div class="offer-price-preview">
+                <p class="m-0">Offer title 1</p>
+                <p class="offer-price fw-bold m-sm-0">$150 000.99</p>
+              </div>
+              <div class="offer-price-preview">
+                <p class="m-0">Offer title 2</p>
+                <p class="offer-price fw-bold m-sm-0">$150 000.99</p>
+              </div>
+              <div class="offer-price-preview">
+                <p class="m-0">Offer title 3</p>
+                <p class="offer-price fw-bold m-sm-0">$150 000.99</p>
+              </div>
+            </div>
+            <div class="input-group">
+              <input type="text" class="form-control" name="promoCode" placeholder="Promo code">
+              <button type="button" class="btn btn-secondary">Redeem</button>
+            </div>
+          </div>
+        </div>
+        <h4 class="mt-4">Total: <b>$1 000 000.99</b></h4>
+        <button class="mt-3 btn btn-primary btn-lg col-12">Make Order</button>
+      </div>
+    </div>
   </main>
-  <div class="bottom-navigation-menu">
-    <a href="#top" class="scroll-top">Scroll to top</a>
-    <div class="d-flex justify-content-center align-items-center">
-      <a href="/profile" class="secondary-btn d-flex justify-content-center align-items-center"><i class="fas fa-user-circle"></i></a>
-      <a href="/message" class="secondary-btn active d-flex justify-content-center align-items-center"><i class="fas fa-bolt"></i></a>
-      <a href="/offers/add" class="action-btn d-flex justify-content-center align-items-center"><i class="fas fa-plus"></i></a>
-      <button class="secondary-btn"><i class="fas fa-search"></i></button>
-      <button class="secondary-btn active" type="button" data-bs-toggle="offcanvas" data-bs-target="#notifications" aria-controls="notifications">
-        <i class="fas fa-bell"></i>
-      </button>
-    </div>
-  </div>
-  <!-- Notifications -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="notifications" aria-labelledby="notifications">
-    <div class="offcanvas-header notifications-title">
-      <h3 class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h3>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body m-0 p-0 notifications-wrapper fancy-scroll">
-      <div class="notification">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nam modi eaque, quas sint repudiandae, consectetur autem nisi exercitationem hic quae! Similique dolores sed dicta! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit neque
-          consequuntur libero laborum labore!
-        </p>
-        <div class="notification-actions d-flex justify-content-between align-items-center">
-          <span>15 hours ago</span>
-          <button type="button">Read</button>
-        </div>
-      </div>
-      <div class="notification">
-        <p>
-          New message from <b>Unknown</b>: Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, perferendis!
-        </p>
-        <div class="notification-actions d-flex justify-content-between align-items-center">
-          <span>15 hours ago</span>
-          <button type="button">Reply</button>
-        </div>
-      </div>
-      <div class="notification">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nam modi eaque, quas sint repudiandae, consectetur autem nisi exercitationem hic quae! Similique dolores sed dicta! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit neque
-          consequuntur libero laborum labore!
-        </p>
-        <div class="notification-actions d-flex justify-content-between align-items-center">
-          <span>15 hours ago</span>
-          <button type="button">Read</button>
-        </div>
-      </div>
-      <div class="notification">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nam modi eaque, quas sint repudiandae, consectetur autem nisi exercitationem hic quae! Similique dolores sed dicta! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit neque
-          consequuntur libero laborum labore!
-        </p>
-        <div class="notification-actions d-flex justify-content-between align-items-center">
-          <span>15 hours ago</span>
-          <button type="button">Read</button>
-        </div>
-      </div>
-      <div class="notification">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nam modi eaque, quas sint repudiandae, consectetur autem nisi exercitationem hic quae! Similique dolores sed dicta! Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit neque
-          consequuntur libero laborum labore!
-        </p>
-        <div class="notification-actions d-flex justify-content-between align-items-center">
-          <span>15 hours ago</span>
-          <button type="button">Read</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <th:block th:replace="common/fragments :: bottom-scripts"></th:block>
 </body>
 </html>

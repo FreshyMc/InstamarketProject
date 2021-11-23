@@ -10,7 +10,8 @@ import java.util.List;
 @Table(name = "subscribers")
 public class Subscriber extends BaseEntity {
     private User seller;
-    private List<User> subscribers;
+    private User subscriber;
+    private boolean isSubscribed;
 
     public Subscriber() {
     }
@@ -25,13 +26,22 @@ public class Subscriber extends BaseEntity {
         return this;
     }
 
-    @OneToMany
-    public List<User> getSubscribers() {
-        return subscribers;
+    @ManyToOne
+    public User getSubscriber() {
+        return subscriber;
     }
 
-    public Subscriber setSubscribers(List<User> subscribers) {
-        this.subscribers = subscribers;
+    public Subscriber setSubscriber(User subscriber) {
+        this.subscriber = subscriber;
+        return this;
+    }
+
+    public boolean isSubscribed() {
+        return isSubscribed;
+    }
+
+    public Subscriber setSubscribed(boolean subscribed) {
+        isSubscribed = subscribed;
         return this;
     }
 }
