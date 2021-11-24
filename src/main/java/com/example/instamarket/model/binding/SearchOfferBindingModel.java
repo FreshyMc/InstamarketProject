@@ -3,10 +3,7 @@ package com.example.instamarket.model.binding;
 import com.example.instamarket.model.enums.CategoriesEnum;
 import com.example.instamarket.model.enums.SearchCategoriesEnum;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 public class SearchOfferBindingModel {
@@ -19,9 +16,9 @@ public class SearchOfferBindingModel {
     private Boolean freeShipping;
     @NotNull
     private Boolean favouriteOffer;
-    @Positive
+    @PositiveOrZero
     private BigDecimal minPrice;
-    @Positive
+    @PositiveOrZero
     private BigDecimal maxPrice;
 
     public SearchOfferBindingModel() {
