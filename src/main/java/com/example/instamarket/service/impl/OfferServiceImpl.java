@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -76,6 +77,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Transactional
     public Long addOffer(AddOfferServiceModel model, String username) {
         User user = userRepository.findByUsername(username).orElseThrow();
 
@@ -96,7 +98,7 @@ public class OfferServiceImpl implements OfferService {
 
         Set<OfferProperty> offerProperties = new HashSet<>();
 
-        Set<OfferOption> offerOptions = new HashSet<>();
+        List<OfferOption> offerOptions = new LinkedList<>();
 
         model.getOfferImages().stream().filter(img -> {
            return isValidFileFormat(img.getOriginalFilename());
@@ -201,6 +203,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Transactional
     public OfferDetailsViewModel getOffer(Long offerId, String username) {
         User user = userRepository.findByUsername(username).orElseThrow();
 
@@ -210,7 +213,7 @@ public class OfferServiceImpl implements OfferService {
 
         Set<String> offerImagesUrl = new HashSet<>();
 
-        Map<String, String> offerOptions = new HashMap<>();
+        Map<String, String> offerOptions = new LinkedHashMap<>();
 
         Map<String, String> offerProperties = new HashMap<>();
 

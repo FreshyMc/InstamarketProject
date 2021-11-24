@@ -37,7 +37,7 @@
                     <h3>Product options</h3>
                     <div class="options">
                         <th:block th:each="option, itemStat : *{options}">
-                            <input type="radio" th:value="${itemStat.index}" name="option" th:id="${option.getKey()}" checked>
+                            <input type="radio" th:value="${itemStat.index}" name="option" th:id="${option.getKey()}">
                             <label class="option" th:for="${option.getKey()}">
                                 <div class="ratio ratio-1x1 product-image">
                                     <img th:src="@{/optionImage/{name}(name = ${option.getKey()})}" alt="#">

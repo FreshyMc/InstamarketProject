@@ -2,11 +2,15 @@ package com.example.instamarket.model.service;
 
 import com.example.instamarket.model.enums.CategoriesEnum;
 
+import java.math.BigDecimal;
+
 public class SearchServiceModel {
     private String search;
     private CategoriesEnum category;
     private Boolean freeShipping;
     private Boolean favouriteOffer;
+    private BigDecimal minPrice;
+    private BigDecimal maxPrice;
 
     public SearchServiceModel() {
     }
@@ -44,6 +48,24 @@ public class SearchServiceModel {
 
     public SearchServiceModel setFavouriteOffer(Boolean favouriteOffer) {
         this.favouriteOffer = favouriteOffer;
+        return this;
+    }
+
+    public BigDecimal getMinPrice() {
+        return minPrice;
+    }
+
+    public SearchServiceModel setMinPrice(BigDecimal minPrice) {
+        this.minPrice = minPrice;
+        return this;
+    }
+
+    public BigDecimal getMaxPrice() {
+        return maxPrice;
+    }
+
+    public SearchServiceModel setMaxPrice(BigDecimal maxPrice) {
+        this.maxPrice = maxPrice;
         return this;
     }
 }

@@ -5,7 +5,9 @@ import com.example.instamarket.model.enums.SearchCategoriesEnum;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 public class SearchOfferBindingModel {
     @NotBlank
@@ -17,6 +19,10 @@ public class SearchOfferBindingModel {
     private Boolean freeShipping;
     @NotNull
     private Boolean favouriteOffer;
+    @Positive
+    private BigDecimal minPrice;
+    @Positive
+    private BigDecimal maxPrice;
 
     public SearchOfferBindingModel() {
     }
@@ -54,6 +60,24 @@ public class SearchOfferBindingModel {
 
     public SearchOfferBindingModel setFavouriteOffer(Boolean favouriteOffer) {
         this.favouriteOffer = favouriteOffer;
+        return this;
+    }
+
+    public BigDecimal getMinPrice() {
+        return minPrice;
+    }
+
+    public SearchOfferBindingModel setMinPrice(BigDecimal minPrice) {
+        this.minPrice = minPrice;
+        return this;
+    }
+
+    public BigDecimal getMaxPrice() {
+        return maxPrice;
+    }
+
+    public SearchOfferBindingModel setMaxPrice(BigDecimal maxPrice) {
+        this.maxPrice = maxPrice;
         return this;
     }
 }

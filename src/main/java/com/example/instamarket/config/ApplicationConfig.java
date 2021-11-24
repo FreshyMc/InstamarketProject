@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 @Configuration
 public class ApplicationConfig {
@@ -33,7 +34,11 @@ public class ApplicationConfig {
                     return null;
                 }
 
-                DecimalFormat decimalFormat = new DecimalFormat("###,###,###.##");
+                DecimalFormatSymbols separator = new DecimalFormatSymbols();
+
+                separator.setDecimalSeparator('.');
+
+                DecimalFormat decimalFormat = new DecimalFormat("###,###,###.00", separator);
 
                 return decimalFormat.format(mappingContext.getSource());
             }

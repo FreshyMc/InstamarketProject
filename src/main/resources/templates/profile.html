@@ -13,7 +13,7 @@
                     <h3 class="m-0 ms-4 p-0" th:text="*{userFullname}">Nicolle Andrews</h3>
                 </th:block>
             </li>
-            <th:block sec:authorize="hasAnyAuthority('SELLER')">
+            <th:block sec:authorize="!hasAuthority('SELLER')">
                 <li>
                     <a href="#" class="action-link d-flex justify-content-between align-items-center">
                         <span>Become a seller</span>

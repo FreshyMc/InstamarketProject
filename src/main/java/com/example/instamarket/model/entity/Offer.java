@@ -18,7 +18,7 @@ public class Offer extends BaseEntity{
     private BigDecimal price;
     private String description;
     private Set<OfferImage> images;
-    private Set<OfferOption> offerOptions;
+    private List<OfferOption> offerOptions;
     private Set<OfferProperty> offerProperties;
     private Category offerCategory;
     private Shipping shippingType;
@@ -68,12 +68,12 @@ public class Offer extends BaseEntity{
         return this;
     }
 
-    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    public Set<OfferOption> getOfferOptions() {
+    @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public List<OfferOption> getOfferOptions() {
         return offerOptions;
     }
 
-    public Offer setOfferOptions(Set<OfferOption> offerOptions) {
+    public Offer setOfferOptions(List<OfferOption> offerOptions) {
         this.offerOptions = offerOptions;
         return this;
     }

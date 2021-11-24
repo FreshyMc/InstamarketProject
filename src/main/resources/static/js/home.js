@@ -15,6 +15,8 @@ const apiUrl = '/api/offers';
     let searchInput = searchForm.querySelector('input[type=text]');
     let searchFreeShipping = searchForm.querySelector('input[name=freeShipping]');
     let searchFavouriteOffer = searchForm.querySelector('input[name=favouriteOffer]');
+    let searchMinPrice = searchForm.querySelector('input[name=minPrice]');
+    let searchMaxPrice = searchForm.querySelector('input[name=maxPrice]');
     let searchCategorySelect = searchForm.querySelector('select');
     //Page Loader Animation
     let pageLoader = doc.querySelector('.page-loader');
@@ -29,6 +31,8 @@ const apiUrl = '/api/offers';
     searchCategorySelect.addEventListener('change', resetSearch);
     searchFreeShipping.addEventListener('change', resetSearch);
     searchFavouriteOffer.addEventListener('change', resetSearch);
+    searchMinPrice.addEventListener('input', resetSearch);
+    searchMaxPrice.addEventListener('input', resetSearch);
 
     let observer = new IntersectionObserver(async function(entries) {
         // isIntersecting is true when element and viewport are overlapping
@@ -104,15 +108,15 @@ const apiUrl = '/api/offers';
             if(request.ok){
                 let response = await request.json();
 
-                console.log(response);
+                let result = response.content;
 
                 if(!firstFetch){
                     firstFetch = true;
-                    renderContent(response.content);
+                    renderContent(result);
                     return true;
                 }
 
-                renderContent(response.content);
+                renderContent(result);
                 return true;
             }
 
@@ -223,11 +227,13 @@ const apiUrl = '/api/offers';
 
         let csrf = searchForm.querySelector('#searchCsrf');
 
+        let {minPrice, maxPrice} = getPriceFiltering();
+
         if(!searchText){
             return;
         }
 
-        let data = {search: searchText, category: searchCategory, freeShipping, favouriteOffer};
+        let data = {search: searchText, category: searchCategory, freeShipping, favouriteOffer, minPrice, maxPrice};
 
         let csrfHeader = csrf.getAttribute('name');
         let csrfValue = csrf.value;
@@ -247,12 +253,14 @@ const apiUrl = '/api/offers';
             });
 
             if(request.ok){
-                let result = await request.json();
+                let response = await request.json();
+
+                let result = response.content;
 
                 if(!firstSearch){
                     firstSearch = true;
                     offersWrapper.innerHTML = '';
-                    renderContent(result.content);
+                    renderContent(result);
                     return true;
                 }
 
@@ -265,10 +273,28 @@ const apiUrl = '/api/offers';
     }
 
     function extendSearch(result){
-        renderContent(result.content);
+        renderContent(result);
+    }
+
+    function getPriceFiltering(){
+        let minPrice = Math.max(Number(searchMinPrice.value), 0);
+        let maxPrice = Math.max(Number(searchMaxPrice.value), 0);
+
+        if(maxPrice < minPrice){
+            let temp = maxPrice;
+            maxPrice = minPrice;
+            minPrice = temp;
+
+            searchMinPrice.value = minPrice;
+            searchMaxPrice.value = maxPrice;
+        }
+
+        return {minPrice, maxPrice};
     }
 
     function resetSearch(e){
+        e.preventDefault();
+
         firstSearch = false;
         lastSearchPageNo = 0;
     }
