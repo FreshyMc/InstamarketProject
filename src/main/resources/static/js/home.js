@@ -280,6 +280,14 @@ const apiUrl = '/api/offers';
         let minPrice = Math.max(Number(searchMinPrice.value), 0);
         let maxPrice = Math.max(Number(searchMaxPrice.value), 0);
 
+        if(maxPrice === 0){
+            return {minPrice, maxPrice};
+        }
+
+        if(minPrice === 0){
+            return {minPrice, maxPrice};
+        }
+
         if(maxPrice < minPrice){
             let temp = maxPrice;
             maxPrice = minPrice;

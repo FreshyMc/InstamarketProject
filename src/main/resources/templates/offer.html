@@ -32,12 +32,12 @@
                     </div>
                     -->
                 </div>
-                <div class="sold">5 sold</div>
+                <div class="sold">5 orders</div>
                 <div class="product-options" th:if="*{!options.isEmpty()}">
                     <h3>Product options</h3>
                     <div class="options">
                         <th:block th:each="option, itemStat : *{options}">
-                            <input type="radio" th:value="${itemStat.index}" name="option" th:id="${option.getKey()}">
+                            <input type="radio" th:value="${itemStat.index}" name="option" th:id="${option.getKey()}" th:checked="${itemStat.index == 0}">
                             <label class="option" th:for="${option.getKey()}">
                                 <div class="ratio ratio-1x1 product-image">
                                     <img th:src="@{/optionImage/{name}(name = ${option.getKey()})}" alt="#">
@@ -300,6 +300,7 @@
         }
     </script>
     <script src="/js/details.js" type="module"></script>
+    <script src="/js/cart.js" type="module"></script>
 </body>
 
 </html>

@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 public class Cart extends BaseEntity{
     private User buyer;
     private Offer offer;
+    private OfferOption offerOption;
     private LocalDateTime addedAt;
+    private boolean isRemoved = false;
 
     public Cart() {
     }
@@ -36,6 +38,16 @@ public class Cart extends BaseEntity{
         return this;
     }
 
+    @ManyToOne
+    public OfferOption getOfferOption() {
+        return offerOption;
+    }
+
+    public Cart setOfferOption(OfferOption offerOption) {
+        this.offerOption = offerOption;
+        return this;
+    }
+
     public LocalDateTime getAddedAt() {
         return addedAt;
     }
@@ -48,5 +60,14 @@ public class Cart extends BaseEntity{
     @PrePersist
     public void populateAddedAt(){
         this.setAddedAt(LocalDateTime.now());
+    }
+
+    public boolean isRemoved() {
+        return isRemoved;
+    }
+
+    public Cart setRemoved(boolean removed) {
+        isRemoved = removed;
+        return this;
     }
 }

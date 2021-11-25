@@ -11,6 +11,7 @@ import com.example.instamarket.repository.CategoryRepository;
 import com.example.instamarket.repository.OfferRepository;
 import com.example.instamarket.repository.ShippingRepository;
 import com.example.instamarket.repository.UserRepository;
+import com.example.instamarket.repository.specification.OfferSearchSpecification;
 import com.example.instamarket.service.OfferService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -250,53 +251,7 @@ public class OfferServiceImpl implements OfferService {
     public Page<OfferDTO> searchOffers(int pageNo, int pageSize, String sortBy, SearchServiceModel model, String username) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
 
-        if(model.getCategory() != null){
-            //TODO custom exception insert
-            Category category = categoryRepository.findCategoryByCategory(model.getCategory()).orElseThrow();
-
-            //Filter if searching in one category with free shipping and favourite offers
-            if(model.getFreeShipping() && model.getFavouriteOffer()){
-                Shipping shipping = shippingRepository.findShippingByShipping(ShippingTypesEnum.FREE).orElseThrow();
-
-                return offerRepository.findAllByTitleAndFreeShippingAndFavouriteUserOffers(model.getSearch(), username, shipping, category, pageable).map(this::asOffer);
-            }
-
-            //Filter if searching in one category with free shipping only
-            if(model.getFreeShipping()){
-                Shipping shipping = shippingRepository.findShippingByShipping(ShippingTypesEnum.FREE).orElseThrow();
-
-                return offerRepository.findAllByTitleAndFreeShipping(model.getSearch(), shipping, category, pageable).map(this::asOffer);
-            }
-
-            //Filter if searching in one category for favourite offers only
-            if(model.getFavouriteOffer()){
-                return offerRepository.findAllByTitleAndFavouriteUserOffers(model.getSearch(), username, category, pageable).map(this::asOffer);
-            }
-
-            return offerRepository.findAllByTitleContainingAndOfferCategoryAndDeleted(model.getSearch(), category, false, pageable).map(this::asOffer);
-        }
-
-        //Filter if searching in all categories with free shipping and favourite offers
-        if(model.getFreeShipping() && model.getFavouriteOffer()){
-            Shipping shipping = shippingRepository.findShippingByShipping(ShippingTypesEnum.FREE).orElseThrow();
-
-            return offerRepository.findAllByTitleAndFreeShippingAndFavouriteUserOffers(model.getSearch(), username, shipping, pageable).map(this::asOffer);
-        }
-
-        //Filter if searching in all categories with free shipping only
-        if(model.getFreeShipping()){
-            Shipping shipping = shippingRepository.findShippingByShipping(ShippingTypesEnum.FREE).orElseThrow();
-
-            return offerRepository.findAllByTitleAndFreeShipping(model.getSearch(), shipping, pageable).map(this::asOffer);
-        }
-
-        //Filter if searching in all categories for favourite offers only
-        if(model.getFavouriteOffer()){
-            return offerRepository.findAllByTitleAndFavouriteUserOffers(model.getSearch(), username, pageable).map(this::asOffer);
-        }
-
-        //Basic search in all categories without special filters
-        return offerRepository.findAllByTitleContainingAndDeleted(model.getSearch(), false, pageable).map(this::asOffer);
+        return offerRepository.findAll(new OfferSearchSpecification(model), pageable).map(this::asOffer);
     }
 
     private boolean isValidFileFormat(String filename){

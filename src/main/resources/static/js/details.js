@@ -5,7 +5,6 @@ const apiUrl = '/api/offers';
 (function(){
     let doc = document;
     let offerActions = doc.getElementById('offerActions');
-    let addToCartBtn = doc.getElementById('addToCart');
     let favouriteOfferBtn = doc.getElementById('favouriteOffer');
     let toastMessageWrapper = doc.getElementById('toastMessages');
     let productImagesWrapper = doc.querySelector('.product-images-wrapper');
