@@ -6,13 +6,20 @@ import com.example.instamarket.model.entity.Cart;
 import com.example.instamarket.model.entity.Offer;
 import com.example.instamarket.model.entity.OfferOption;
 import com.example.instamarket.model.entity.User;
+import com.example.instamarket.model.view.CartItemViewModel;
 import com.example.instamarket.repository.CartRepository;
 import com.example.instamarket.repository.OfferOptionRepository;
 import com.example.instamarket.repository.OfferRepository;
 import com.example.instamarket.repository.UserRepository;
 import com.example.instamarket.service.CartService;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -20,12 +27,14 @@ public class CartServiceImpl implements CartService {
     private final OfferRepository offerRepository;
     private final OfferOptionRepository offerOptionRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public CartServiceImpl(CartRepository cartRepository, OfferRepository offerRepository, OfferOptionRepository offerOptionRepository, UserRepository userRepository) {
+    public CartServiceImpl(CartRepository cartRepository, OfferRepository offerRepository, OfferOptionRepository offerOptionRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.cartRepository = cartRepository;
         this.offerRepository = offerRepository;
         this.offerOptionRepository = offerOptionRepository;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -93,6 +102,36 @@ public class CartServiceImpl implements CartService {
         CartDTO item = new CartDTO();
 
         item.setAdded(saved.isRemoved()).setOfferId(saved.getId());
+
+        return item;
+    }
+
+    @Override
+    public List<CartItemViewModel> getAllItems(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+        return cartRepository.findAllByBuyerAndRemovedOrderByAddedAtDesc(user, false).stream().map(this::toCartItem).collect(Collectors.toList());
+    }
+
+    private CartItemViewModel toCartItem(Cart cartItem){
+        Offer offer = cartItem.getOffer();
+
+        CartItemViewModel item = modelMapper.map(offer, CartItemViewModel.class);
+
+        Set<String> offerImagesUrl = new HashSet<>();
+
+        offer.getImages().forEach(img -> {
+            offerImagesUrl.add(img.getImageUrl());
+        });
+
+        if(cartItem.getOfferOption() != null){
+            item.setOptionKey(cartItem.getOfferOption().getOptionName());
+            item.setOptionValue(cartItem.getOfferOption().getOptionValue());
+        }
+
+        item.setOfferImages(offerImagesUrl);
+        item.setSellerUsername(offer.getSeller().getUsername());
+        item.setSellerProfilePicture(offer.getSeller().getProfilePicture());
 
         return item;
     }

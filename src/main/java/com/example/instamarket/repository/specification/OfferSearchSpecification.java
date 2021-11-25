@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.*;
 
 public class OfferSearchSpecification implements Specification<Offer> {
+    private static final String TITLE = "title";
     private static final String CATEGORY = "offerCategory";
     private static final String SHIPPING = "shippingType";
     private static final String PRICE = "price";
@@ -23,10 +24,12 @@ public class OfferSearchSpecification implements Specification<Offer> {
     public Predicate toPredicate(Root<Offer> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate p = criteriaBuilder.conjunction();
 
+        p.getExpressions().add(criteriaBuilder.like(root.get(TITLE), "%" + searchServiceModel.getSearch() + "%"));
+
         if(searchServiceModel.getCategory() != null){
             p.getExpressions()
-                    .add(criteriaBuilder.equal(root.join(CATEGORY).get("category"),
-                            searchServiceModel.getCategory()));
+                    .add(criteriaBuilder.and(criteriaBuilder.equal(root.join(CATEGORY).get("category"),
+                            searchServiceModel.getCategory())));
         }
 
         if(searchServiceModel.getMinPrice().intValue() > 0){
@@ -62,7 +65,8 @@ public class OfferSearchSpecification implements Specification<Offer> {
         Subquery<WishList> subquery = query.subquery(WishList.class);
         Root<WishList> subqueryRoot = subquery.from(WishList.class);
 
-        subquery.select(subqueryRoot);
+        //Problem line
+        subquery.select(subqueryRoot).where(cb.and(cb.equal(subqueryRoot.get("isRemoved"), Boolean.FALSE)));
 
         Predicate conditions = cb.and(cb.equal(root.get("id"), subqueryRoot.get("offer")));
 
