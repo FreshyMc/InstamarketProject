@@ -4,6 +4,7 @@ import com.example.instamarket.misc.AuthHelper;
 import com.example.instamarket.model.binding.ChangePasswordBindingModel;
 import com.example.instamarket.model.binding.ManageAddressesBindingModel;
 import com.example.instamarket.model.binding.ProfileNamesBindingModel;
+import com.example.instamarket.model.binding.ProfilePictureBindingModel;
 import com.example.instamarket.model.service.ChangePasswordServiceModel;
 import com.example.instamarket.model.service.ProfileNamesServiceModel;
 import com.example.instamarket.model.service.SaveAddressesServiceModel;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/profile")
@@ -124,12 +126,24 @@ public class ProfileController {
 
         authHelper.logout(request, response);
 
+        redirectAttributes.addFlashAttribute("passwordChanged", true);
+
         return "redirect:/login";
     }
 
+    //TODO Make profile picture upload with cloudinary
     @GetMapping("/change/picture")
     public String showProfileChangePictureForm(){
         return "change-picture";
+    }
+
+    @PostMapping("/change/picture")
+    public String changeProfilePicture(ProfilePictureBindingModel bindingModel, @AuthenticationPrincipal InstamarketUser user) throws IOException {
+        boolean result = userService.changeProfilePicture(bindingModel, user.getUserIdentifier());
+
+        logger.info("Upload result: {}", result);
+
+        return "redirect:/profile";
     }
 
     @GetMapping("/manage/addresses")
@@ -176,5 +190,10 @@ public class ProfileController {
     @ModelAttribute
     public ChangePasswordBindingModel changePasswordBindingModel(){
         return new ChangePasswordBindingModel();
+    }
+
+    @ModelAttribute
+    public ProfilePictureBindingModel profilePictureBindingModel(){
+        return new ProfilePictureBindingModel();
     }
 }

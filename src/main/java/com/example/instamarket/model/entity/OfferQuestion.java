@@ -8,14 +8,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "offer_questions")
 public class OfferQuestion extends BaseEntity{
+    @ManyToOne
     private User inquiring;
+    @ManyToOne
     private Offer offer;
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String question;
 
     public OfferQuestion() {
     }
 
-    @ManyToOne
     public User getInquiring() {
         return inquiring;
     }
@@ -25,7 +27,6 @@ public class OfferQuestion extends BaseEntity{
         return this;
     }
 
-    @ManyToOne
     public Offer getOffer() {
         return offer;
     }
@@ -35,7 +36,6 @@ public class OfferQuestion extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
     public String getQuestion() {
         return question;
     }

@@ -7,13 +7,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "offer_images")
 public class OfferImage extends BaseEntity {
+    @ManyToOne
     private Offer offer;
     private String imageUrl;
 
     public OfferImage() {
     }
 
-    @ManyToOne
     public Offer getOffer() {
         return offer;
     }

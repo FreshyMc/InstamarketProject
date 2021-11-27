@@ -7,13 +7,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "shipping")
 public class Shipping extends BaseEntity{
+    @Enumerated(EnumType.STRING)
     private ShippingTypesEnum shipping;
+    @Column(nullable = false)
     private String displayName;
 
     public Shipping() {
     }
 
-    @Enumerated(EnumType.STRING)
     public ShippingTypesEnum getShipping() {
         return shipping;
     }
@@ -23,7 +24,6 @@ public class Shipping extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false)
     public String getDisplayName() {
         return displayName;
     }

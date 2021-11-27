@@ -1,22 +1,21 @@
 package com.example.instamarket.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "subscribers")
 public class Subscriber extends BaseEntity {
+    @ManyToOne
     private User seller;
+    @ManyToOne
     private User subscriber;
+    @Column
     private boolean isSubscribed;
 
     public Subscriber() {
     }
 
-    @ManyToOne
     public User getSeller() {
         return seller;
     }
@@ -26,7 +25,6 @@ public class Subscriber extends BaseEntity {
         return this;
     }
 
-    @ManyToOne
     public User getSubscriber() {
         return subscriber;
     }

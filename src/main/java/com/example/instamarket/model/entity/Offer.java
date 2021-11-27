@@ -13,23 +13,31 @@ import java.util.Set;
 @Entity
 @Table(name = "offers")
 public class Offer extends BaseEntity{
+    @ManyToOne
     private User seller;
+    @Column(nullable = false)
     private String title;
     private BigDecimal price;
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String description;
+    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<OfferImage> images;
+    @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OfferOption> offerOptions;
+    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<OfferProperty> offerProperties;
+    @ManyToOne
     private Category offerCategory;
+    @ManyToOne
     private Shipping shippingType;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private boolean isDeleted = false;
+    @Column
+    private boolean deleted = false;
 
     public Offer() {
     }
 
-    @ManyToOne
     public User getSeller() {
         return seller;
     }
@@ -48,7 +56,6 @@ public class Offer extends BaseEntity{
         return this;
     }
 
-    @ManyToOne
     public Category getOfferCategory() {
         return offerCategory;
     }
@@ -58,7 +65,6 @@ public class Offer extends BaseEntity{
         return this;
     }
 
-    @ManyToOne
     public Shipping getShippingType() {
         return shippingType;
     }
@@ -68,7 +74,6 @@ public class Offer extends BaseEntity{
         return this;
     }
 
-    @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public List<OfferOption> getOfferOptions() {
         return offerOptions;
     }
@@ -78,7 +83,6 @@ public class Offer extends BaseEntity{
         return this;
     }
 
-    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public Set<OfferProperty> getOfferProperties() {
         return offerProperties;
     }
@@ -106,7 +110,6 @@ public class Offer extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false)
     public String getTitle() {
         return title;
     }
@@ -116,7 +119,6 @@ public class Offer extends BaseEntity{
         return this;
     }
 
-    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public Set<OfferImage> getImages() {
         return images;
     }
@@ -126,22 +128,12 @@ public class Offer extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
     public String getDescription() {
         return description;
     }
 
     public Offer setDescription(String description) {
         this.description = description;
-        return this;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public Offer setDeleted(boolean deleted) {
-        isDeleted = deleted;
         return this;
     }
 
@@ -153,5 +145,14 @@ public class Offer extends BaseEntity{
     @PreUpdate
     private void populateModifiedAt(){
         this.setModifiedAt(LocalDateTime.now());
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public Offer setDeleted(boolean deleted) {
+        this.deleted = deleted;
+        return this;
     }
 }

@@ -107,7 +107,6 @@ public class OfferServiceImpl implements OfferService {
             String fileName = "";
 
             try {
-                //TODO file upload
                 String fileExt = FilenameUtils.getExtension(img.getOriginalFilename());
 
                 byte[] bytes = img.getBytes();
@@ -251,7 +250,9 @@ public class OfferServiceImpl implements OfferService {
     public Page<OfferDTO> searchOffers(int pageNo, int pageSize, String sortBy, SearchServiceModel model, String username) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
 
-        return offerRepository.findAll(new OfferSearchSpecification(model), pageable).map(this::asOffer);
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+        return offerRepository.findAll(new OfferSearchSpecification(model, user), pageable).map(this::asOffer);
     }
 
     private boolean isValidFileFormat(String filename){

@@ -1,24 +1,24 @@
 package com.example.instamarket.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cart")
 public class Cart extends BaseEntity{
+    @ManyToOne
     private User buyer;
+    @ManyToOne
     private Offer offer;
+    @ManyToOne
     private OfferOption offerOption;
     private LocalDateTime addedAt;
-    private boolean isRemoved = false;
+    @Column
+    private boolean removed = false;
 
     public Cart() {
     }
 
-    @ManyToOne
     public User getBuyer() {
         return buyer;
     }
@@ -28,7 +28,6 @@ public class Cart extends BaseEntity{
         return this;
     }
 
-    @ManyToOne
     public Offer getOffer() {
         return offer;
     }
@@ -38,7 +37,6 @@ public class Cart extends BaseEntity{
         return this;
     }
 
-    @ManyToOne
     public OfferOption getOfferOption() {
         return offerOption;
     }
@@ -63,11 +61,11 @@ public class Cart extends BaseEntity{
     }
 
     public boolean isRemoved() {
-        return isRemoved;
+        return removed;
     }
 
     public Cart setRemoved(boolean removed) {
-        isRemoved = removed;
+        this.removed = removed;
         return this;
     }
 }

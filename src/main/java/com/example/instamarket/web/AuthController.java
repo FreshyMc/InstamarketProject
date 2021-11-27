@@ -29,9 +29,13 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String showLogin(){
+    public String showLogin(Model model){
         if(authHelper.isLoggedIn()){
             return "redirect:/home";
+        }
+
+        if(!model.containsAttribute("passwordChanged")){
+            model.addAttribute("passwordChanged", false);
         }
 
         return "login";
@@ -59,6 +63,10 @@ public class AuthController {
             model.addAttribute("usernameTaken", false);
         }
 
+        if(!model.containsAttribute("emailAlreadyRegistered")){
+            model.addAttribute("emailAlreadyRegistered", false);
+        }
+
         return "register";
     }
 
@@ -78,7 +86,6 @@ public class AuthController {
             return "redirect:/register";
         }
 
-        //TODO: username validation and registration method into the user service
         if(!userService.isUsernameTaken(userRegistrationBindingModel.getUsername())){
             redirectAttributes.addFlashAttribute("userRegistrationBindingModel", userRegistrationBindingModel);
             redirectAttributes.addFlashAttribute("usernameTaken", true);
@@ -86,7 +93,12 @@ public class AuthController {
             return "redirect:/register";
         }
 
-        //TODO: check if email already exists
+        if(!userService.isEmailAlreadyRegistered(userRegistrationBindingModel.getEmail())){
+            redirectAttributes.addFlashAttribute("userRegistrationBindingModel", userRegistrationBindingModel);
+            redirectAttributes.addFlashAttribute("emailAlreadyRegistered", true);
+
+            return "redirect:/register";
+        }
 
         UserRegisterServiceModel user = modelMapper.map(userRegistrationBindingModel, UserRegisterServiceModel.class);
 

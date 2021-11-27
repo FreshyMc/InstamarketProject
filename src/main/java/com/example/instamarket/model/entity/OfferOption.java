@@ -6,14 +6,16 @@ import java.util.List;
 @Entity
 @Table(name = "offer_options")
 public class OfferOption extends BaseEntity{
+    @ManyToOne
     private Offer offer;
+    @Column(nullable = false, length = 200)
     private String optionName;
+    @Column(nullable = false, length = 200)
     private String optionValue;
 
     public OfferOption() {
     }
 
-    @Column(nullable = false, length = 200)
     public String getOptionName() {
         return optionName;
     }
@@ -23,7 +25,6 @@ public class OfferOption extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false, length = 200)
     public String getOptionValue() {
         return optionValue;
     }
@@ -33,7 +34,6 @@ public class OfferOption extends BaseEntity{
         return this;
     }
 
-    @ManyToOne
     public Offer getOffer() {
         return offer;
     }

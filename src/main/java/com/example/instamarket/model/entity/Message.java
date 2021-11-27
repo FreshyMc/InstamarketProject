@@ -9,15 +9,18 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "messages")
 public class Message extends BaseEntity {
+    @ManyToOne
     private User sender;
+    @ManyToOne
     private User receiver;
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String message;
+    @Column(nullable = false)
     private LocalDateTime sentAt;
 
     public Message() {
     }
 
-    @ManyToOne
     public User getSender() {
         return sender;
     }
@@ -27,7 +30,6 @@ public class Message extends BaseEntity {
         return this;
     }
 
-    @ManyToOne
     public User getReceiver() {
         return receiver;
     }
@@ -37,7 +39,6 @@ public class Message extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
     public String getMessage() {
         return message;
     }
@@ -47,7 +48,6 @@ public class Message extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public LocalDateTime getSentAt() {
         return sentAt;
     }

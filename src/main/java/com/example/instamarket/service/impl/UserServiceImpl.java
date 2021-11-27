@@ -1,5 +1,7 @@
 package com.example.instamarket.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.example.instamarket.model.binding.ProfilePictureBindingModel;
 import com.example.instamarket.model.dto.FavouriteOfferDTO;
 import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.RolesEnum;
@@ -18,34 +20,44 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private static final String TEMP_FILE = "temp-file";
+    private static final String URL = "url";
+    private static final String PUBLIC_ID = "public_id";
+
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
-    private final CartRepository cartRepository;
+    private final ProfilePictureRepository profilePictureRepository;
     private final WishListRepository wishListRepository;
     private final OfferRepository offerRepository;
     private final InstamarketUserServiceImpl instamarketUserService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final Cloudinary cloudinary;
 
-    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, WishListRepository wishListRepository, OfferRepository offerRepository, InstamarketUserServiceImpl instamarketUserService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, ProfilePictureRepository profilePictureRepository, WishListRepository wishListRepository, OfferRepository offerRepository, InstamarketUserServiceImpl instamarketUserService, PasswordEncoder passwordEncoder, ModelMapper modelMapper, Cloudinary cloudinary) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
-        this.cartRepository = cartRepository;
+        this.profilePictureRepository = profilePictureRepository;
         this.wishListRepository = wishListRepository;
         this.offerRepository = offerRepository;
         this.instamarketUserService = instamarketUserService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
+        this.cloudinary = cloudinary;
     }
 
     @Override
@@ -66,7 +78,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).isEmpty();
     }
 
-    //TODO Check if email is already registered
     @Override
     public void registerUser(UserRegisterServiceModel userModel) {
         User user = new User();
@@ -75,11 +86,17 @@ public class UserServiceImpl implements UserService {
 
         Address userAddress = new Address();
 
+        ProfilePicture profilePicture = new ProfilePicture();
+
         userAddress.
                 setCountry(userModel.getCountry()).
                 setPostalCode(userModel.getPostalCode()).
                 setCity(userModel.getCity()).
                 setStreet(userModel.getStreet());
+
+        profilePicture.setUrl("https://res.cloudinary.com/tsetsig/image/upload/v1637943223/default_profile_elxa2z.png");
+
+        profilePictureRepository.save(profilePicture);
 
         user.
                 setUsername(userModel.getUsername()).
@@ -88,7 +105,8 @@ public class UserServiceImpl implements UserService {
                 setEmail(userModel.getEmail()).
                 setRoles(Set.of(role)).
                 setPassword(passwordEncoder.encode(userModel.getPassword())).
-                setAddresses(List.of(userAddress));
+                setAddresses(List.of(userAddress)).
+                setProfilePicture(profilePicture);
 
         user = userRepository.save(user);
 
@@ -217,6 +235,49 @@ public class UserServiceImpl implements UserService {
         favouriteOffer.setFavourite(false);
 
         return favouriteOffer;
+    }
+
+    @Override
+    public boolean isEmailAlreadyRegistered(String email) {
+        return userRepository.findByEmail(email).isEmpty();
+    }
+
+    @Override
+    public boolean changeProfilePicture(ProfilePictureBindingModel bindingModel, String username) throws IOException {
+        MultipartFile profilePicture = bindingModel.getProfilePicture();
+
+        File tempFile = File.createTempFile(TEMP_FILE, profilePicture.getOriginalFilename());
+        profilePicture.transferTo(tempFile);
+        try{
+            Map<String, String> uploadResult = cloudinary.uploader().upload(tempFile, Map.of());
+
+            String pictureUrl = uploadResult.getOrDefault(URL, null);
+
+            String publicId = uploadResult.getOrDefault(PUBLIC_ID, null);
+
+            if(pictureUrl == null || publicId == null){
+                return false;
+            }
+
+            //TODO Error
+            ProfilePicture userProfilePicture = userRepository.findByUsername(username).orElseThrow().getProfilePicture();
+
+            if(userProfilePicture.isDefault() == false){
+                cloudinary.uploader().destroy(userProfilePicture.getPublicId(), Map.of());
+
+                userProfilePicture.setUrl(pictureUrl).setPublicId(publicId);
+            }else{
+                userProfilePicture.setUrl(pictureUrl).setPublicId(publicId).setDefault(false);
+            }
+
+            ProfilePicture saved = profilePictureRepository.save(userProfilePicture);
+
+            return true;
+        }catch (Exception ex) {
+            return false;
+        }finally {
+            tempFile.delete();
+        }
     }
 
     private boolean checkPasswords(User user, String oldPassword){

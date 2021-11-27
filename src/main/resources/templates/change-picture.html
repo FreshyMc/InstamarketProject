@@ -8,10 +8,10 @@
     <nav th:replace="common/fragments :: profile-navigation"></nav>
     <!-- Adverts main section -->
     <main class="form-page">
-        <form class="p-2 p-sm-3 profile-form" action="#" method="POST" onsubmit="return false;">
+        <form class="p-2 p-sm-3 profile-form" th:action="@{/profile/change/picture}" th:method="POST" enctype="multipart/form-data" th:object="${profilePictureBindingModel}">
             <h3>Change profile picture</h3>
             <div class="mb-2">
-                <input type="file" class="form-control" name="uploadFile">
+                <input type="file" class="form-control" name="uploadFile" th:field="*{profilePicture}">
             </div>
             <button type="submit" class="btn btn-primary btn-lg">Save</button>
         </form>

@@ -8,17 +8,22 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "addresses")
 public class Address extends BaseEntity {
+    @ManyToOne
     private User user;
+    @Column(nullable = false, length = 100)
     private String country;
+    @Column(nullable = false)
     private String postalCode;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private String street;
+    @Column(columnDefinition = "TEXT")
     private String details;
 
     public Address() {
     }
 
-    @ManyToOne
     public User getUser() {
         return user;
     }
@@ -28,7 +33,6 @@ public class Address extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false, length = 100)
     public String getCountry() {
         return country;
     }
@@ -38,7 +42,6 @@ public class Address extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public String getPostalCode() {
         return postalCode;
     }
@@ -48,7 +51,6 @@ public class Address extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public String getStreet() {
         return street;
     }
@@ -58,7 +60,6 @@ public class Address extends BaseEntity {
         return this;
     }
 
-    @Column(columnDefinition = "TEXT")
     public String getDetails() {
         return details;
     }
@@ -68,7 +69,6 @@ public class Address extends BaseEntity {
         return this;
     }
 
-    @Column(nullable = false)
     public String getCity() {
         return city;
     }

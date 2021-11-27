@@ -10,15 +10,18 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "promo_codes")
 public class PromoCode extends BaseEntity{
+    @ManyToOne
     private User seller;
+    @Column(nullable = false, length = 50)
     private String code;
+    @Column(nullable = false)
     private BigDecimal promotionRate;
+    @Column(nullable = false)
     private LocalDateTime expiration;
 
     public PromoCode() {
     }
 
-    @ManyToOne
     public User getSeller() {
         return seller;
     }
@@ -28,7 +31,6 @@ public class PromoCode extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false, length = 50)
     public String getCode() {
         return code;
     }
@@ -38,7 +40,6 @@ public class PromoCode extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false)
     public BigDecimal getPromotionRate() {
         return promotionRate;
     }
@@ -48,7 +49,6 @@ public class PromoCode extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false)
     public LocalDateTime getExpiration() {
         return expiration;
     }

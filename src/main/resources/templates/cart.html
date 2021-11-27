@@ -54,13 +54,18 @@
     <div class="col-lg-4 ps-lg-3 col-12">
       <div class="cart-checkout p-2">
         <div class="pb-2">
-          <p class="mb-2">Delivery address</p>
-          <label th:each="address : ${deliveryAddresses}" class="shipping-address-option mb-2 p-2 d-flex align-items-center">
-            <div class="me-2">
-              <input type="radio" name="deliveryAddress" th:value="${address.id}">
-            </div>
-            <p class="m-0 p-0" th:text="|${address.country}, ${address.postalCode}, ${address.city}, ${address.street}|">Bulgaria, Sofia, bul. Ivan Malinov N24 apartment 4 floor 4</p>
-          </label>
+          <th:block th:if="${!deliveryAddresses.isEmpty()}">
+            <p class="mb-2">Delivery address</p>
+            <label th:each="address : ${deliveryAddresses}" class="shipping-address-option mb-2 p-2 d-flex align-items-center">
+              <div class="me-2">
+                <input type="radio" name="deliveryAddress" th:value="${address.id}">
+              </div>
+              <p class="m-0 p-0" th:text="|${address.country}, ${address.postalCode}, ${address.city}, ${address.street}|">Bulgaria, Sofia, bul. Ivan Malinov N24 apartment 4 floor 4</p>
+            </label>
+          </th:block>
+          <th:block th:if="${deliveryAddresses.isEmpty()}">
+            <p class="specifications-empty-message m-0">Delivery address is required to make an order! <a href="/profile/manage/addresses" class="fancy-link">Go and add one.</a></p>
+          </th:block>
         </div>
         <div class="seller-redeem-code p-2">
           <div class="seller mb-2 p-2">
@@ -89,7 +94,7 @@
           </div>
         </div>
         <h4 class="mt-4">Total: <b>$1 000 000.99</b></h4>
-        <button class="mt-3 btn btn-primary btn-lg col-12">Make Order</button>
+        <button class="mt-3 btn btn-primary btn-lg col-12" th:disabled="${deliveryAddresses.isEmpty()}">Make Order</button>
       </div>
     </div>
   </main>

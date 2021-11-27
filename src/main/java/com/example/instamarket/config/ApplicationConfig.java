@@ -1,5 +1,6 @@
 package com.example.instamarket.config;
 
+import com.cloudinary.Cloudinary;
 import com.example.instamarket.misc.AuthHelper;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -15,9 +16,25 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Map;
 
 @Configuration
 public class ApplicationConfig {
+    private final CloudinaryConfig cloudinaryConfig;
+
+    public ApplicationConfig(CloudinaryConfig cloudinaryConfig) {
+        this.cloudinaryConfig = cloudinaryConfig;
+    }
+
+    @Bean
+    public Cloudinary cloudinary(){
+        return new Cloudinary(Map.of(
+                "cloud_name", cloudinaryConfig.getCloudName(),
+                "api_key", cloudinaryConfig.getApiKey(),
+                "api_secret", cloudinaryConfig.getApiSecret()
+        ));
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new Pbkdf2PasswordEncoder();

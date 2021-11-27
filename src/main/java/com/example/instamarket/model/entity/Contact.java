@@ -6,13 +6,14 @@ import java.util.List;
 @Entity
 @Table(name = "contacts")
 public class Contact extends BaseEntity{
+    @ManyToOne
     private User user;
+    @OneToMany
     private List<User> contacts;
 
     public Contact() {
     }
 
-    @ManyToOne
     public User getUser() {
         return user;
     }
@@ -22,7 +23,6 @@ public class Contact extends BaseEntity{
         return this;
     }
 
-    @OneToMany
     public List<User> getContacts() {
         return contacts;
     }

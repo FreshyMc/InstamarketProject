@@ -8,8 +8,8 @@
     <main class="form-page">
         <ul class="list-unstyled profile-actions-list m-0">
             <li class="d-flex flex-row p-3 justify-content-start align-items-center">
-                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="profile-image">
                 <th:block th:object="${#authentication.getPrincipal()}">
+                    <img th:src="*{profilePictureUrl}" alt="#" class="profile-image">
                     <h3 class="m-0 ms-4 p-0" th:text="*{userFullname}">Nicolle Andrews</h3>
                 </th:block>
             </li>

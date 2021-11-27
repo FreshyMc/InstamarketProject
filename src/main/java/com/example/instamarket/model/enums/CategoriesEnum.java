@@ -3,7 +3,6 @@ package com.example.instamarket.model.enums;
 public enum CategoriesEnum {
     VEHICLE("Vehicles"),
     HOME_APPLIANCE("Home appliances"),
-    REAL_ESTATES("Real estates"),
     ELECTRONICS("Electronics"),
     LARGE_APPLIANCE("Large appliances"),
     BOOKS("Books");

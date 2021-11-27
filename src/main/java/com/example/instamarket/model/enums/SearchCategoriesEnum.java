@@ -4,7 +4,6 @@ public enum SearchCategoriesEnum {
     ALL("All categories"),
     VEHICLE("Vehicles"),
     HOME_APPLIANCE("Home appliances"),
-    REAL_ESTATES("Real estates"),
     ELECTRONICS("Electronics"),
     LARGE_APPLIANCE("Large appliances"),
     BOOKS("Books");

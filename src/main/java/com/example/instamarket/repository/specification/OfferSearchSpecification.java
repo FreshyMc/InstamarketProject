@@ -1,6 +1,7 @@
 package com.example.instamarket.repository.specification;
 
 import com.example.instamarket.model.entity.Offer;
+import com.example.instamarket.model.entity.User;
 import com.example.instamarket.model.entity.WishList;
 import com.example.instamarket.model.enums.ShippingTypesEnum;
 import com.example.instamarket.model.service.SearchServiceModel;
@@ -15,9 +16,11 @@ public class OfferSearchSpecification implements Specification<Offer> {
     private static final String PRICE = "price";
 
     private final SearchServiceModel searchServiceModel;
+    private final User user;
 
-    public OfferSearchSpecification(SearchServiceModel searchServiceModel) {
+    public OfferSearchSpecification(SearchServiceModel searchServiceModel, User user) {
         this.searchServiceModel = searchServiceModel;
+        this.user = user;
     }
 
     @Override
@@ -65,11 +68,14 @@ public class OfferSearchSpecification implements Specification<Offer> {
         Subquery<WishList> subquery = query.subquery(WishList.class);
         Root<WishList> subqueryRoot = subquery.from(WishList.class);
 
-        //Problem line
-        subquery.select(subqueryRoot).where(cb.and(cb.equal(subqueryRoot.get("isRemoved"), Boolean.FALSE)));
+        subquery.select(subqueryRoot);
 
-        Predicate conditions = cb.and(cb.equal(root.get("id"), subqueryRoot.get("offer")));
+        Predicate offer = cb.and(cb.equal(root.get("id"), subqueryRoot.get("offer")));
 
-        return subquery.where(conditions);
+        Predicate belongsToUser = cb.and(cb.equal(subqueryRoot.get("user"), user.getId()));
+
+        Predicate wishlisted = cb.and(cb.equal(subqueryRoot.get("removed"), false));
+
+        return subquery.where(offer, wishlisted, belongsToUser);
     }
 }

@@ -44,6 +44,9 @@
                     <div class="mt-2 form-alert invalid-feedback">
                         <p class="m-0 p-0">Provided invalid email.</p>
                     </div>
+                    <div th:if="${emailAlreadyRegistered}" class="mt-2 form-alert">
+                        <p class="m-0 p-0">Provided email is already registered.</p>
+                    </div>
                 </div>
                 <div class="mb-2">
                     <input type="text" name="country" th:field="*{country}" th:errorclass="is-invalid" class="form-control" placeholder="Country">

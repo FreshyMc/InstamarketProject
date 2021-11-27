@@ -6,15 +6,17 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "wishlist")
 public class WishList extends BaseEntity{
+    @ManyToOne
     private User user;
+    @ManyToOne
     private Offer offer;
     private LocalDateTime addedAt;
-    private boolean isRemoved = false;
+    @Column
+    private boolean removed = false;
 
     public WishList() {
     }
 
-    @ManyToOne
     public User getUser() {
         return user;
     }
@@ -24,7 +26,6 @@ public class WishList extends BaseEntity{
         return this;
     }
 
-    @ManyToOne
     public Offer getOffer() {
         return offer;
     }
@@ -54,11 +55,11 @@ public class WishList extends BaseEntity{
     }
 
     public boolean isRemoved() {
-        return isRemoved;
+        return removed;
     }
 
     public WishList setRemoved(boolean removed) {
-        isRemoved = removed;
+        this.removed = removed;
         return this;
     }
 }

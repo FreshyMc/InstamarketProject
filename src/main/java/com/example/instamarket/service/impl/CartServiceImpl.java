@@ -131,7 +131,7 @@ public class CartServiceImpl implements CartService {
 
         item.setOfferImages(offerImagesUrl);
         item.setSellerUsername(offer.getSeller().getUsername());
-        item.setSellerProfilePicture(offer.getSeller().getProfilePicture());
+        item.setSellerProfilePicture(offer.getSeller().getProfilePicture().getUrl());
 
         return item;
     }

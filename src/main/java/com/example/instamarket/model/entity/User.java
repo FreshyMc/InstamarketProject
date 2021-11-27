@@ -7,19 +7,26 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity{
+    @Column(length = 30, nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false, unique = true)
     private String email;
-    private String profilePicture;
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
+    @OneToOne
+    private ProfilePicture profilePicture;
 
     public User() {
     }
 
-    @Column(length = 30, nullable = false, unique = true)
     public String getUsername() {
         return username;
     }
@@ -29,7 +36,6 @@ public class User extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false)
     public String getFirstName() {
         return firstName;
     }
@@ -39,7 +45,6 @@ public class User extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false)
     public String getLastName() {
         return lastName;
     }
@@ -49,7 +54,6 @@ public class User extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false)
     public String getPassword() {
         return password;
     }
@@ -59,7 +63,6 @@ public class User extends BaseEntity{
         return this;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
     public Set<Role> getRoles() {
         return roles;
     }
@@ -69,7 +72,6 @@ public class User extends BaseEntity{
         return this;
     }
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Address> getAddresses() {
         return addresses;
     }
@@ -79,7 +81,6 @@ public class User extends BaseEntity{
         return this;
     }
 
-    @Column(nullable = false, unique = true)
     public String getEmail() {
         return email;
     }
@@ -89,12 +90,11 @@ public class User extends BaseEntity{
         return this;
     }
 
-    @Column
-    public String getProfilePicture() {
+    public ProfilePicture getProfilePicture() {
         return profilePicture;
     }
 
-    public User setProfilePicture(String profilePicture) {
+    public User setProfilePicture(ProfilePicture profilePicture) {
         this.profilePicture = profilePicture;
         return this;
     }
