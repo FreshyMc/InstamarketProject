@@ -1,5 +1,7 @@
 package com.example.instamarket.service.impl;
 
+import com.example.instamarket.exception.OfferNotFoundException;
+import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.dto.OfferDTO;
 import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.CategoriesEnum;
@@ -83,7 +85,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     public Long addOffer(AddOfferServiceModel model, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         Category category = categoryRepository.findCategoryByCategory(model.getOfferCategory()).get();
 
@@ -208,9 +210,9 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     public OfferDetailsViewModel getOffer(Long offerId, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
-        Offer offer = offerRepository.findById(offerId).orElseThrow();
+        Offer offer = offerRepository.findById(offerId).orElseThrow(()-> new OfferNotFoundException());
 
         OfferDetailsViewModel offerModel = modelMapper.map(offer, OfferDetailsViewModel.class);
 
@@ -253,14 +255,14 @@ public class OfferServiceImpl implements OfferService {
     public Page<OfferDTO> searchOffers(int pageNo, int pageSize, String sortBy, SearchServiceModel model, String username) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
 
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         return offerRepository.findAll(new OfferSearchSpecification(model, user), pageable).map(this::asOffer);
     }
 
     @Override
     public OfferSellerViewModel getOfferSeller(Long offerId) {
-        Offer offer = offerRepository.findById(offerId).orElseThrow();
+        Offer offer = offerRepository.findById(offerId).orElseThrow(()-> new OfferNotFoundException());
 
         User seller = offer.getSeller();
 
@@ -277,9 +279,9 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public void saveOfferQuestion(OfferQuestionServiceModel model, String username) {
-        User inquiring = userRepository.findByUsername(username).orElseThrow();
+        User inquiring = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
-        Offer offer = offerRepository.findById(model.getOfferId()).orElseThrow();
+        Offer offer = offerRepository.findById(model.getOfferId()).orElseThrow(()-> new OfferNotFoundException());
 
         OfferQuestion offerQuestion = new OfferQuestion();
 

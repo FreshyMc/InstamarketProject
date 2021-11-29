@@ -12,6 +12,7 @@ const apiUrl = '/api/offers';
     let questionForm = doc.getElementById('questionForm');
     let csrfInput = questionForm.querySelector('#questionCsrf');
     let questionInput = questionForm.querySelector('textarea');
+    let questionSubmitBtn = questionForm.querySelector('button[type=submit]');
 
     let toastMessageTemplate = (message) => html.node`
         <div class="toast align-items-center show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
@@ -163,11 +164,14 @@ const apiUrl = '/api/offers';
 
     async function sendQuestion(e){
         e.preventDefault();
+        questionSubmitBtn.disabled = true;
 
         let question = questionInput.value.trim();
 
         if(!question){
             questionInput.classList.add('is-invalid');
+
+            questionSubmitBtn.disabled = false;
 
             return;
         }
@@ -181,6 +185,8 @@ const apiUrl = '/api/offers';
         }else{
             appendToastMessage('We failed to send your question. Try again later!');
         }
+
+        questionSubmitBtn.disabled = false;
     }
 
     function validateInput(e){

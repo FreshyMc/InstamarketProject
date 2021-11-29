@@ -1,6 +1,7 @@
 package com.example.instamarket.service.impl;
 
 import com.cloudinary.Cloudinary;
+import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.binding.ProfilePictureBindingModel;
 import com.example.instamarket.model.dto.FavouriteOfferDTO;
 import com.example.instamarket.model.entity.*;
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeNames(ProfileNamesServiceModel model, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         user.setFirstName(model.getFirstName());
         user.setLastName(model.getLastName());
@@ -137,7 +138,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ProfileNamesViewModel takeUserNames(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         ProfileNamesViewModel model = modelMapper.map(user, ProfileNamesViewModel.class);
 
@@ -146,7 +147,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<ProfileAddressesViewModel> takeUserAddresses(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         List<ProfileAddressesViewModel> addresses = user.getAddresses().stream().map(addr -> {
             ProfileAddressesViewModel mappedAddr = modelMapper.map(addr, ProfileAddressesViewModel.class);
@@ -159,7 +160,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveNewAddresses(SaveAddressesServiceModel model, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         List<Address> addresses = user.getAddresses();
 
@@ -180,7 +181,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean changeUserPassword(ChangePasswordServiceModel model, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         if(!checkPasswords(user, model.getOldPassword())){
             return false;
@@ -195,7 +196,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public FavouriteOfferDTO addToWishList(Long offerId, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         WishList isAdded = wishListRepository.findByOfferIdAndUser(offerId, user).orElse(null);
 
@@ -282,8 +283,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getProfilePicture(String username) {
-        //TODO Custom error
-        return userRepository.findByUsername(username).orElseThrow().getProfilePicture().getUrl();
+        return userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException()).getProfilePicture().getUrl();
     }
 
     private boolean checkPasswords(User user, String oldPassword){

@@ -1,5 +1,6 @@
 package com.example.instamarket.service.impl;
 
+import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.entity.Address;
 import com.example.instamarket.model.entity.User;
 import com.example.instamarket.model.view.ProfileAddressesViewModel;
@@ -7,6 +8,7 @@ import com.example.instamarket.repository.AddressRepository;
 import com.example.instamarket.repository.UserRepository;
 import com.example.instamarket.service.AddressService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<ProfileAddressesViewModel> findAllUserAddresses(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         return addressRepository.findAllByUser(user).stream().map(this::toAddressViewModel).collect(Collectors.toList());
     }

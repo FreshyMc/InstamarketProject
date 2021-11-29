@@ -1,5 +1,7 @@
 package com.example.instamarket.service.impl;
 
+import com.example.instamarket.exception.OfferNotFoundException;
+import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.binding.AddToCartBindingModel;
 import com.example.instamarket.model.dto.CartDTO;
 import com.example.instamarket.model.entity.Cart;
@@ -40,9 +42,9 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartDTO addToCart(Long offerId, AddToCartBindingModel optionModel, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
-        Offer offer = offerRepository.findById(offerId).orElseThrow();
+        Offer offer = offerRepository.findById(offerId).orElseThrow(()-> new OfferNotFoundException());
 
         OfferOption offerOption = null;
 
@@ -75,9 +77,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDTO removeFromCart(Long offerId, AddToCartBindingModel optionModel, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
-        Offer offer = offerRepository.findById(offerId).orElseThrow();
+        Offer offer = offerRepository.findById(offerId).orElseThrow(()-> new OfferNotFoundException());
 
         OfferOption offerOption = null;
 
@@ -108,7 +110,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartItemViewModel> getAllItems(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         return cartRepository.findAllByBuyerAndRemovedOrderByAddedAtDesc(user, false).stream().map(this::toCartItem).collect(Collectors.toList());
     }

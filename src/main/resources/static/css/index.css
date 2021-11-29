@@ -1439,6 +1439,19 @@ header {
     width: 300px;
 }
 
+/* Error Page Styling */
+
+main.error-page{
+    margin-top: 73px !important;
+    height: calc(100vh - 73px);
+    font-size: 18px;
+}
+
+.error-code{
+    font-size: 4rem;
+    color: #ff7979;
+}
+
 /* ----------------------------------------- */
 
 
