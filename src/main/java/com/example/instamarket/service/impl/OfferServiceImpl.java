@@ -5,12 +5,11 @@ import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.CategoriesEnum;
 import com.example.instamarket.model.enums.ShippingTypesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
+import com.example.instamarket.model.service.OfferQuestionServiceModel;
 import com.example.instamarket.model.service.SearchServiceModel;
 import com.example.instamarket.model.view.OfferDetailsViewModel;
-import com.example.instamarket.repository.CategoryRepository;
-import com.example.instamarket.repository.OfferRepository;
-import com.example.instamarket.repository.ShippingRepository;
-import com.example.instamarket.repository.UserRepository;
+import com.example.instamarket.model.view.OfferSellerViewModel;
+import com.example.instamarket.repository.*;
 import com.example.instamarket.repository.specification.OfferSearchSpecification;
 import com.example.instamarket.service.OfferService;
 import org.modelmapper.ModelMapper;
@@ -36,6 +35,8 @@ public class OfferServiceImpl implements OfferService {
     private final ShippingRepository shippingRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final SubscriberRepository subscriberRepository;
+    private final OfferQuestionRepository offerQuestionRepository;
     private final ModelMapper modelMapper;
     private static final String uploadDir = "D://projImages//";
     private static final String offerImagesDir = "offerImages//";
@@ -43,11 +44,13 @@ public class OfferServiceImpl implements OfferService {
     private static final List<String> validFileFormats = Arrays.asList("jpeg", "jpg", "png", "gif");
     private static final char[] characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_".toCharArray();
 
-    public OfferServiceImpl(OfferRepository offerRepository, ShippingRepository shippingRepository, CategoryRepository categoryRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public OfferServiceImpl(OfferRepository offerRepository, ShippingRepository shippingRepository, CategoryRepository categoryRepository, UserRepository userRepository, SubscriberRepository subscriberRepository, OfferQuestionRepository offerQuestionRepository, ModelMapper modelMapper) {
         this.offerRepository = offerRepository;
         this.shippingRepository = shippingRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.subscriberRepository = subscriberRepository;
+        this.offerQuestionRepository = offerQuestionRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -226,7 +229,7 @@ public class OfferServiceImpl implements OfferService {
         });
 
         offer.getOfferProperties().stream().forEach(property -> {
-            offerProperties.put(property.getPropertyName(), property.getPropertyName());
+            offerProperties.put(property.getPropertyName(), property.getPropertyValue());
         });
 
         offerModel.setOfferImages(offerImagesUrl);
@@ -253,6 +256,36 @@ public class OfferServiceImpl implements OfferService {
         User user = userRepository.findByUsername(username).orElseThrow();
 
         return offerRepository.findAll(new OfferSearchSpecification(model, user), pageable).map(this::asOffer);
+    }
+
+    @Override
+    public OfferSellerViewModel getOfferSeller(Long offerId) {
+        Offer offer = offerRepository.findById(offerId).orElseThrow();
+
+        User seller = offer.getSeller();
+
+        OfferSellerViewModel model = modelMapper.map(seller, OfferSellerViewModel.class);
+
+        model.setProfilePictureUrl(seller.getProfilePicture().getUrl());
+
+        model.setOfferCount(offerRepository.countOffersBySellerAndDeleted(seller, false));
+
+        model.setSubscriberCount(subscriberRepository.countSubscribersBySeller(seller));
+
+        return model;
+    }
+
+    @Override
+    public void saveOfferQuestion(OfferQuestionServiceModel model, String username) {
+        User inquiring = userRepository.findByUsername(username).orElseThrow();
+
+        Offer offer = offerRepository.findById(model.getOfferId()).orElseThrow();
+
+        OfferQuestion offerQuestion = new OfferQuestion();
+
+        offerQuestion.setQuestion(model.getQuestion()).setInquiring(inquiring).setOffer(offer);
+
+        offerQuestionRepository.save(offerQuestion);
     }
 
     private boolean isValidFileFormat(String filename){

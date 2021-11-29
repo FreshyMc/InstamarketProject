@@ -1,9 +1,7 @@
 package com.example.instamarket.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "offer_questions")
@@ -14,6 +12,9 @@ public class OfferQuestion extends BaseEntity{
     private Offer offer;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String question;
+    @OneToOne
+    private OfferAnswer answer;
+    private LocalDateTime addedAt;
 
     public OfferQuestion() {
     }
@@ -43,5 +44,28 @@ public class OfferQuestion extends BaseEntity{
     public OfferQuestion setQuestion(String question) {
         this.question = question;
         return this;
+    }
+
+    public OfferAnswer getAnswer() {
+        return answer;
+    }
+
+    public OfferQuestion setAnswer(OfferAnswer answer) {
+        this.answer = answer;
+        return this;
+    }
+
+    public LocalDateTime getAddedAt() {
+        return addedAt;
+    }
+
+    public OfferQuestion setAddedAt(LocalDateTime addedAt) {
+        this.addedAt = addedAt;
+        return this;
+    }
+
+    @PrePersist
+    public void populateAddedAt(){
+        this.setAddedAt(LocalDateTime.now());
     }
 }

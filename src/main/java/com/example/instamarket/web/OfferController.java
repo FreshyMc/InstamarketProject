@@ -63,8 +63,9 @@ public class OfferController {
     }
 
     @GetMapping("/{offerId}/details")
-    public String showOfferDetails(@PathVariable Long offerId, Model model, Principal principal){
-        model.addAttribute("offer", offerService.getOffer(offerId, principal.getName()));
+    public String showOfferDetails(@PathVariable Long offerId, Model model, @AuthenticationPrincipal InstamarketUser user){
+        model.addAttribute("offer", offerService.getOffer(offerId, user.getUserIdentifier()));
+        model.addAttribute("sellerInfo", offerService.getOfferSeller(offerId));
 
         return "offer";
     }

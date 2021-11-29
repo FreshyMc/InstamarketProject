@@ -1,8 +1,10 @@
 package com.example.instamarket.web;
 
+import com.example.instamarket.model.binding.OfferQuestionBindingModel;
 import com.example.instamarket.model.binding.SearchOfferBindingModel;
 import com.example.instamarket.model.dto.FavouriteOfferDTO;
 import com.example.instamarket.model.dto.OfferDTO;
+import com.example.instamarket.model.service.OfferQuestionServiceModel;
 import com.example.instamarket.model.service.SearchServiceModel;
 import com.example.instamarket.service.OfferService;
 import com.example.instamarket.service.UserService;
@@ -55,5 +57,14 @@ public class OfferRestController {
         FavouriteOfferDTO model = userService.addToWishList(offerId, user.getUserIdentifier());
 
         return ResponseEntity.ok(model);
+    }
+
+    @PostMapping("/question")
+    public ResponseEntity addOfferQuestion(@RequestBody @Valid OfferQuestionBindingModel questionBindingModel, @AuthenticationPrincipal InstamarketUser user){
+        OfferQuestionServiceModel model = modelMapper.map(questionBindingModel, OfferQuestionServiceModel.class);
+
+        offerService.saveOfferQuestion(model, user.getUserIdentifier());
+
+        return ResponseEntity.ok().build();
     }
 }

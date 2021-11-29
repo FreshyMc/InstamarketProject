@@ -44,16 +44,14 @@ public class ProfileController {
     }
 
     @GetMapping
-    public String showProfilePage(){
+    public String showProfilePage(Model model, @AuthenticationPrincipal InstamarketUser user) {
+        model.addAttribute("profilePicture", userService.getProfilePicture(user.getUserIdentifier()));
+
         return "profile";
     }
 
     @GetMapping("/change/names")
     public String showProfileChangeNamesForm(Model model, @AuthenticationPrincipal InstamarketUser user){
-        if(!model.containsAttribute("profileNamesChanged")){
-            model.addAttribute("profileNamesChanged", false);
-        }
-
         model.addAttribute("profileNames", userService.takeUserNames(user.getUserIdentifier()));
 
         return "change-names";
@@ -86,14 +84,6 @@ public class ProfileController {
 
     @GetMapping("/change/password")
     public String showProfileChangePasswordForm(Model model){
-        if(!model.containsAttribute("passwordsDontMatch")){
-            model.addAttribute("passwordsDontMatch", false);
-        }
-
-        if(!model.containsAttribute("incorrectPassword")){
-            model.addAttribute("incorrectPassword", false);
-        }
-
         return "change-password";
     }
 
@@ -138,10 +128,16 @@ public class ProfileController {
     }
 
     @PostMapping("/change/picture")
-    public String changeProfilePicture(ProfilePictureBindingModel bindingModel, @AuthenticationPrincipal InstamarketUser user) throws IOException {
+    public String changeProfilePicture(ProfilePictureBindingModel bindingModel, RedirectAttributes redirectAttributes, @AuthenticationPrincipal InstamarketUser user) throws IOException {
         boolean result = userService.changeProfilePicture(bindingModel, user.getUserIdentifier());
 
         logger.info("Upload result: {}", result);
+
+        if(result){
+            redirectAttributes.addFlashAttribute("pictureAlert", "Successfully changed your profile picture.");
+        }else{
+            redirectAttributes.addFlashAttribute("pictureAlert", "We failed to change your profile picture. Try again later!");
+        }
 
         return "redirect:/profile";
     }

@@ -280,6 +280,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public String getProfilePicture(String username) {
+        //TODO Custom error
+        return userRepository.findByUsername(username).orElseThrow().getProfilePicture().getUrl();
+    }
+
     private boolean checkPasswords(User user, String oldPassword){
         String currentPassword = user.getPassword();
 

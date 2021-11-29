@@ -34,4 +34,6 @@ public interface UserService {
     boolean isEmailAlreadyRegistered(String email);
 
     boolean changeProfilePicture(ProfilePictureBindingModel bindingModel, String username) throws IOException;
+
+    String getProfilePicture(String userIdentifier);
 }

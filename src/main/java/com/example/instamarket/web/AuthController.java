@@ -34,10 +34,6 @@ public class AuthController {
             return "redirect:/home";
         }
 
-        if(!model.containsAttribute("passwordChanged")){
-            model.addAttribute("passwordChanged", false);
-        }
-
         return "login";
     }
 
@@ -53,18 +49,6 @@ public class AuthController {
     public String showRegister(Model model){
         if(authHelper.isLoggedIn()){
             return "redirect:/home";
-        }
-
-        if(!model.containsAttribute("passwordsDontMatch")){
-            model.addAttribute("passwordsDontMatch", false);
-        }
-
-        if(!model.containsAttribute("usernameTaken")){
-            model.addAttribute("usernameTaken", false);
-        }
-
-        if(!model.containsAttribute("emailAlreadyRegistered")){
-            model.addAttribute("emailAlreadyRegistered", false);
         }
 
         return "register";

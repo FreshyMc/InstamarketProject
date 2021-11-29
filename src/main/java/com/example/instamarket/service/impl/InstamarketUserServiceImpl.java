@@ -36,8 +36,6 @@ public class InstamarketUserServiceImpl implements UserDetailsService {
 
         String userFullname = String.format("%s %s", user.getFirstName(), user.getLastName());
 
-        String profilePictureUrl = user.getProfilePicture().getUrl();
-
-        return new InstamarketUser(user.getUsername(), user.getPassword(), authorities, userId, userFullname, profilePictureUrl);
+        return new InstamarketUser(user.getUsername(), user.getPassword(), authorities, userId, userFullname);
     }
 }

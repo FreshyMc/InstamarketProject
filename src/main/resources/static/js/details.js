@@ -9,6 +9,9 @@ const apiUrl = '/api/offers';
     let toastMessageWrapper = doc.getElementById('toastMessages');
     let productImagesWrapper = doc.querySelector('.product-images-wrapper');
     let carouselBtnWrapper = doc.querySelector('.product-images-previewer');
+    let questionForm = doc.getElementById('questionForm');
+    let csrfInput = questionForm.querySelector('#questionCsrf');
+    let questionInput = questionForm.querySelector('textarea');
 
     let toastMessageTemplate = (message) => html.node`
         <div class="toast align-items-center show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
@@ -20,6 +23,7 @@ const apiUrl = '/api/offers';
             </div>
         </div>
     `;
+
     offerActions.addEventListener('submit', function(e){
         e.preventDefault();
     });
@@ -147,5 +151,68 @@ const apiUrl = '/api/offers';
         optionImageModal.show();
 
         optionImage.src = target.getAttribute('src');
+    }
+
+    /* Ask Question about offer functionality */
+
+    questionForm.addEventListener('submit', sendQuestion);
+
+    questionInput.addEventListener('input', validateInput);
+
+    let questionModel = new bootstrap.Modal(doc.getElementById('questionModal'));
+
+    async function sendQuestion(e){
+        e.preventDefault();
+
+        let question = questionInput.value.trim();
+
+        if(!question){
+            questionInput.classList.add('is-invalid');
+
+            return;
+        }
+
+        let result = await sendOfferQuestion(question);
+
+        questionModel.hide();
+
+        if(result){
+            appendToastMessage('Your question was sent successfully!');
+        }else{
+            appendToastMessage('We failed to send your question. Try again later!');
+        }
+    }
+
+    function validateInput(e){
+        e.preventDefault();
+
+        let target = e.target;
+        let value = target.value.trim();
+
+        if(value){
+            target.classList.remove('is-invalid');
+        }
+    }
+
+    async function sendOfferQuestion(questionText){
+        let offerId = questionForm.querySelector('input[name=offerId]').value;
+
+        let data = {offerId, question: questionText};
+
+        let csrf = csrfInput;
+
+        let csrfHeader = csrf.getAttribute('name');
+        let csrfValue = csrf.value;
+
+        let request = await fetch(`${apiUrl}/question`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [csrfHeader]: csrfValue
+            },
+            body: JSON.stringify(data)
+        });
+
+        return request.ok;
     }
 })();
