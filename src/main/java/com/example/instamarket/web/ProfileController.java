@@ -15,6 +15,7 @@ import com.example.instamarket.service.impl.InstamarketUser;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -150,6 +151,7 @@ public class ProfileController {
     }
 
     //TODO add preauthorize
+    @PreAuthorize("isAddressOwner(#id)")
     @DeleteMapping("/manage/addresses/{id}/delete")
     public String deleteAddress(@PathVariable Long id){
         addressService.deleteAddress(id);

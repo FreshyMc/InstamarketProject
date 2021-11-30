@@ -8,4 +8,6 @@ public interface AddressService {
     void deleteAddress(Long id);
 
     List<ProfileAddressesViewModel> findAllUserAddresses(String username);
+
+    boolean isOwner(Long id, String username);
 }

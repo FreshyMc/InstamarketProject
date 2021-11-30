@@ -38,6 +38,14 @@ public class AddressServiceImpl implements AddressService {
         return addressRepository.findAllByUser(user).stream().map(this::toAddressViewModel).collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isOwner(Long id, String username) {
+        //TODO Custom Exception
+        Address address = addressRepository.findById(id).orElseThrow();
+
+        return address.getUser().getUsername().equals(username);
+    }
+
     private ProfileAddressesViewModel toAddressViewModel(Address address){
         return modelMapper.map(address, ProfileAddressesViewModel.class);
     }
