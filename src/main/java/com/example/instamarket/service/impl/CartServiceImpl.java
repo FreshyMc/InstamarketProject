@@ -8,6 +8,7 @@ import com.example.instamarket.model.entity.Cart;
 import com.example.instamarket.model.entity.Offer;
 import com.example.instamarket.model.entity.OfferOption;
 import com.example.instamarket.model.entity.User;
+import com.example.instamarket.model.service.CheckoutServiceModel;
 import com.example.instamarket.model.view.CartItemViewModel;
 import com.example.instamarket.repository.CartRepository;
 import com.example.instamarket.repository.OfferOptionRepository;
@@ -15,10 +16,13 @@ import com.example.instamarket.repository.OfferRepository;
 import com.example.instamarket.repository.UserRepository;
 import com.example.instamarket.service.CartService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,6 +60,12 @@ public class CartServiceImpl implements CartService {
 
         if(cartItem != null){
             CartDTO item = new CartDTO();
+
+            if(cartItem.isRemoved()){
+                cartItem.setRemoved(false);
+
+                cartRepository.save(cartItem);
+            }
 
             item.setAdded(true).setOfferId(offerId);
 
@@ -113,6 +123,21 @@ public class CartServiceImpl implements CartService {
         User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
         return cartRepository.findAllByBuyerAndRemovedOrderByAddedAtDesc(user, false).stream().map(this::toCartItem).collect(Collectors.toList());
+    }
+
+    @Override
+    public void checkoutCart(CheckoutServiceModel model, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        List<Offer> offers = new LinkedList<>();
+
+        model.getCartItems().stream().map(offer -> {
+            Offer mappedOffer = offerRepository.findById(offer.getOfferId()).orElseThrow(()-> new OfferNotFoundException());
+
+            return mappedOffer;
+        }).forEach(offer -> {
+            offers.add(offer);
+        });
     }
 
     private CartItemViewModel toCartItem(Cart cartItem){

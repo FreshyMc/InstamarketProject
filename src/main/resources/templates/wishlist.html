@@ -10,27 +10,31 @@
             <span>Your wish list is empty.</span>
             <a href="/home" class="fancy-link ms-2">Go Home and add some offers to it!</a>
         </div>
-        <div class="wishlist mt-2">
-            <div class="wishlist-item mb-2" th:each="item : ${wishListItems}">
-                <p class="m-0 mb-3 offer-title"><a th:href="@{/offers/{id}/details(id = ${item.id})}" class="d-block" th:text="${item.title}">Offer title</a></p>
-                <div class="d-flex flex-column flex-lg-row mb-3 justify-content-lg-between align-items-lg-center">
-                    <div class="product-images-wrapper d-flex flex-nowrap">
-                        <div class="product-images-previewer d-flex justify-content-between">
-                            <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(item.images.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
-                            <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(item.images.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                        <div class="ratio ratio-1x1 product-image" th:each="imgName : ${item.images}">
-                            <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
+        <div class="wishlist row g-2 m-0 mt-2 p-0">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-2" th:each="item : ${wishListItems}">
+                <div class="wishlist-item">
+                    <a th:href="@{/offers/{id}/details(id = ${item.id})}" class="d-block mb-3 offer-title" th:text="${item.title}">Offer title</a>
+                    <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-center">
+                        <div class="product-images-wrapper d-flex flex-nowrap">
+                            <div class="product-images-previewer d-flex justify-content-between">
+                                <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(item.images.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
+                                <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(item.images.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <div class="ratio ratio-1x1 product-image" th:each="imgName : ${item.images}">
+                                <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
+                            </div>
                         </div>
                     </div>
-                    <p class="m-0 mt-2 ms-4 offer-price fw-bold flex-fill">$<span th:text="${item.price}">Price</span></p>
-                    <p class="m-0"><i class="far fa-clock"></i><span class="ms-2" th:text="${#temporals.format(item.addedAt, 'dd/MM/yyyy HH:mm:ss')}">Added at time</span></p>
+                    <div class="mb-2">
+                        <p class="m-0 mt-2 offer-price fw-bold flex-fill">$<span th:text="${item.price}">Price</span></p>
+                        <p class="m-0"><i class="far fa-clock"></i><span class="ms-2" th:text="${#temporals.format(item.addedAt, 'dd/MM/yyyy HH:mm:ss')}">Added at time</span></p>
+                    </div>
+                    <form class="d-flex flex-column justify-content-between align-items-stretch" onsubmit="return false;">
+                        <input type="hidden" th:name="${_csrf.headerName}" th:value="${_csrf.token}" class="csrf">
+                        <button role="button" class="btn-primary mb-2 btn-lg" th:data-id="${item.id}">Add to cart</button>
+                        <button role="button" class="btn-secondary btn-lg remove-btn" th:data-id="${item.id}">Remove from wishlist</button>
+                    </form>
                 </div>
-                <form class="d-flex flex-column flex-lg-row justify-content-between align-items-stretch" onsubmit="return false;">
-                    <input type="hidden" th:name="${_csrf.headerName}" th:value="${_csrf.token}" class="csrf">
-                    <button role="button" class="btn-primary mb-2 m-lg-0 btn-lg" th:data-id="${item.id}">Add to cart</button>
-                    <button role="button" class="btn-secondary btn-lg remove-btn" th:data-id="${item.id}">Remove from wishlist</button>
-                </form>
             </div>
         </div>
     </main>

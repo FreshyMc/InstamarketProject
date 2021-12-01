@@ -1,12 +1,13 @@
 package com.example.instamarket.model.view;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class CartItemViewModel {
     private Long id;
     private String title;
-    private String price;
+    private BigDecimal price;
     private String sellerUsername;
     private String sellerProfilePicture;
     private Set<String> offerImages = new LinkedHashSet<>();
@@ -36,11 +37,11 @@ public class CartItemViewModel {
         return this;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public CartItemViewModel setPrice(String price) {
+    public CartItemViewModel setPrice(BigDecimal price) {
         this.price = price;
         return this;
     }

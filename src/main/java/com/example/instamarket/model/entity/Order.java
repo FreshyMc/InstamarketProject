@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 public class Order extends BaseEntity{
     @ManyToOne
-    private User seller;
-    @ManyToOne
     private User buyer;
     @Column(nullable = false)
     private Integer quantity;
+    @ManyToOne
+    private Offer offer;
     @Column(nullable = false)
     private BigDecimal totalPrice;
     @ManyToOne
@@ -27,15 +27,6 @@ public class Order extends BaseEntity{
     private boolean delivered = false;
 
     public Order() {
-    }
-
-    public User getSeller() {
-        return seller;
-    }
-
-    public Order setSeller(User seller) {
-        this.seller = seller;
-        return this;
     }
 
     public User getBuyer() {
@@ -98,6 +89,15 @@ public class Order extends BaseEntity{
 
     public Order setDelivered(boolean delivered) {
         this.delivered = delivered;
+        return this;
+    }
+
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public Order setOffer(Offer offer) {
+        this.offer = offer;
         return this;
     }
 }

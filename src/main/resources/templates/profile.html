@@ -8,10 +8,8 @@
     <main class="form-page">
         <ul class="list-unstyled profile-actions-list m-0">
             <li class="d-flex flex-row p-3 justify-content-start align-items-center">
-                <th:block th:object="${#authentication.getPrincipal()}">
-                    <img th:src="${profilePicture}" alt="#" class="profile-image">
-                    <h3 class="m-0 ms-4 p-0" th:text="*{userFullname}">Nicolle Andrews</h3>
-                </th:block>
+                <img th:src="${profilePicture}" alt="#" class="profile-image">
+                <h3 class="m-0 ms-4 p-0" th:text="|${profileNames.firstName} ${profileNames.lastName}|">Nicolle Andrews</h3>
             </li>
             <th:block sec:authorize="!hasAuthority('SELLER')">
                 <li>

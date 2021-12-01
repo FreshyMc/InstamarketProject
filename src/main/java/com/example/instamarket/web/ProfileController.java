@@ -47,6 +47,7 @@ public class ProfileController {
     @GetMapping
     public String showProfilePage(Model model, @AuthenticationPrincipal InstamarketUser user) {
         model.addAttribute("profilePicture", userService.getProfilePicture(user.getUserIdentifier()));
+        model.addAttribute("profileNames", userService.takeUserNames(user.getUserIdentifier()));
 
         return "profile";
     }
@@ -150,7 +151,6 @@ public class ProfileController {
         return "manage-addresses";
     }
 
-    //TODO add preauthorize
     @PreAuthorize("isAddressOwner(#id)")
     @DeleteMapping("/manage/addresses/{id}/delete")
     public String deleteAddress(@PathVariable Long id){
