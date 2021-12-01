@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class CartItemViewModel {
     private Long id;
+    private Long cartId;
     private String title;
     private BigDecimal price;
     private String sellerUsername;
@@ -106,6 +107,15 @@ public class CartItemViewModel {
 
     public CartItemViewModel setSellerUsername(String sellerUsername) {
         this.sellerUsername = sellerUsername;
+        return this;
+    }
+
+    public Long getCartId() {
+        return cartId;
+    }
+
+    public CartItemViewModel setCartId(Long cartId) {
+        this.cartId = cartId;
         return this;
     }
 }

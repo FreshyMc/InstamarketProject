@@ -14,6 +14,8 @@ public class Order extends BaseEntity{
     private Integer quantity;
     @ManyToOne
     private Offer offer;
+    @ManyToOne
+    private OfferOption offerOption;
     @Column(nullable = false)
     private BigDecimal totalPrice;
     @ManyToOne
@@ -101,5 +103,14 @@ public class Order extends BaseEntity{
     @PrePersist
     public void populateOrderTime(){
         this.setOrderTime(LocalDateTime.now());
+    }
+
+    public OfferOption getOfferOption() {
+        return offerOption;
+    }
+
+    public Order setOfferOption(OfferOption offerOption) {
+        this.offerOption = offerOption;
+        return this;
     }
 }

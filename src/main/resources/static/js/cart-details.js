@@ -186,10 +186,13 @@ const apiUrl = '/api/cart';
     async function continueCheckout(e){
         e.preventDefault();
 
+        continueBtn.disabled = true;
+
         let selectedItems = [...doc.querySelectorAll('input[name=productSelector]:checked')];
 
         if(selectedItems.length === 0){
             //TODO Show error message
+            continueBtn.disabled = false;
             return;
         }
 
@@ -197,6 +200,7 @@ const apiUrl = '/api/cart';
 
         if(deliveryAddress == null){
             //TODO Show error message
+            continueBtn.disabled = false;
             return;
         }
 
@@ -235,7 +239,9 @@ const apiUrl = '/api/cart';
         let csrfHeader = csrf.getAttribute('name');
         let csrfValue = csrf.value;
 
-        let data = {deliveryAddress, cartItems};
+        let deliveryAddressId = Number(deliveryAddress.value);
+
+        let data = {deliveryAddress: deliveryAddressId, cartItems};
 
         //TODO Send cart data to checkout REST controller
         let request = await fetch(`${apiUrl}/checkout`, {
@@ -248,7 +254,20 @@ const apiUrl = '/api/cart';
         });
 
         if(request.ok){
-            //TODO Redirect to the checkout page
+            let response = await request.text();
+
+            //TODO Show success message with redirection to my offers page link :)
+            console.log(response);
+
+            selectedItems.forEach(item => {
+               let offer = findOffer(item);
+
+               offer.remove();
+            });
+
+            recalculateTotalPrice();
+
+            continueBtn.disabled = false;
         }
     }
 

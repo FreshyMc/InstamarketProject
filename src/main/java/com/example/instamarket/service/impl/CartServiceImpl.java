@@ -4,25 +4,17 @@ import com.example.instamarket.exception.OfferNotFoundException;
 import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.binding.AddToCartBindingModel;
 import com.example.instamarket.model.dto.CartDTO;
-import com.example.instamarket.model.entity.Cart;
-import com.example.instamarket.model.entity.Offer;
-import com.example.instamarket.model.entity.OfferOption;
-import com.example.instamarket.model.entity.User;
+import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.service.CheckoutServiceModel;
 import com.example.instamarket.model.view.CartItemViewModel;
-import com.example.instamarket.repository.CartRepository;
-import com.example.instamarket.repository.OfferOptionRepository;
-import com.example.instamarket.repository.OfferRepository;
-import com.example.instamarket.repository.UserRepository;
+import com.example.instamarket.repository.*;
 import com.example.instamarket.service.CartService;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,13 +24,17 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final OfferRepository offerRepository;
     private final OfferOptionRepository offerOptionRepository;
+    private final OrderRepository orderRepository;
+    private final AddressRepository addressRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public CartServiceImpl(CartRepository cartRepository, OfferRepository offerRepository, OfferOptionRepository offerOptionRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public CartServiceImpl(CartRepository cartRepository, OfferRepository offerRepository, OfferOptionRepository offerOptionRepository, OrderRepository orderRepository, AddressRepository addressRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.cartRepository = cartRepository;
         this.offerRepository = offerRepository;
         this.offerOptionRepository = offerOptionRepository;
+        this.orderRepository = orderRepository;
+        this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
@@ -129,15 +125,32 @@ public class CartServiceImpl implements CartService {
     public void checkoutCart(CheckoutServiceModel model, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
-        List<Offer> offers = new LinkedList<>();
+        //TODO Custom error object not found exception
+        Address userAddress = addressRepository.findById(model.getDeliveryAddress()).orElseThrow();
 
         model.getCartItems().stream().map(offer -> {
-            Offer mappedOffer = offerRepository.findById(offer.getOfferId()).orElseThrow(()-> new OfferNotFoundException());
+            Cart cartItem = cartRepository.findById(offer.getOfferId()).orElseThrow();
 
-            return mappedOffer;
-        }).forEach(offer -> {
-            offers.add(offer);
-        });
+            Offer mappedOffer = cartItem.getOffer();
+
+            Order order = new Order();
+
+            BigDecimal quantity = new BigDecimal(offer.getQuantity());
+
+            BigDecimal orderTotalPrice = mappedOffer.getPrice().multiply(quantity);
+
+            order.
+                    setBuyer(user).
+                    setOffer(mappedOffer).
+                    setQuantity(offer.getQuantity()).
+                    setDeliveryAddress(userAddress).
+                    setTotalPrice(orderTotalPrice).
+                    setOfferOption(cartItem.getOfferOption());
+
+            cartRepository.delete(cartItem);
+
+            return order;
+        }).forEach(orderRepository::save);
     }
 
     private CartItemViewModel toCartItem(Cart cartItem){
@@ -159,6 +172,7 @@ public class CartServiceImpl implements CartService {
         item.setOfferImages(offerImagesUrl);
         item.setSellerUsername(offer.getSeller().getUsername());
         item.setSellerProfilePicture(offer.getSeller().getProfilePicture().getUrl());
+        item.setCartId(cartItem.getId());
 
         return item;
     }

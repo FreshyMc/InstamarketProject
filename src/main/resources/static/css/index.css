@@ -522,7 +522,8 @@ img {
 
 .btn-primary {
     background: linear-gradient(to left, #eb4d4b, #ff7979) !important;
-    color: #fff;
+    color: #fff !important;
+    text-align: center;
     border: none;
     border: 1.5px solid rgba(0, 0, 0, .2) !important;
 }
