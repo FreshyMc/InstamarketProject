@@ -82,11 +82,7 @@ const apiUrl = '/api/cart';
         let totalPrice = 0;
 
         checkedOffers.map(input => {
-            let offer = input;
-
-            while(!offer.classList.contains('cart-offer')){
-                offer = offer.parentElement;
-            }
+            let offer = findOffer(input);
 
             let offerQuantityField = offer.querySelector('input[name=offerQuantity]');
 
@@ -147,11 +143,7 @@ const apiUrl = '/api/cart';
         let selectedItems = doc.querySelectorAll('input[name=productSelector]:checked');
 
         selectedItems.forEach(async (item) => {
-            let target = item;
-
-            while(!target.classList.contains('cart-offer')){
-                target = target.parentElement;
-            }
+            let target = findOffer(item);
 
             let offerId = target.getAttribute('data-id');
 
@@ -211,11 +203,7 @@ const apiUrl = '/api/cart';
         let cartItems = [];
 
         selectedItems.map(item => {
-            let offer = item;
-
-            while(!offer.classList.contains('cart-offer')){
-                offer = offer.parentElement;
-            }
+            let offer = findOffer(item);
 
             let offerId = offer.getAttribute('data-id');
 
@@ -262,5 +250,17 @@ const apiUrl = '/api/cart';
         if(request.ok){
             //TODO Redirect to the checkout page
         }
+    }
+
+    //MISC
+
+    function findOffer(el){
+        let target = el;
+
+        while(!target.classList.contains('cart-offer') && target.tagName != 'BODY'){
+            target = target.parentElement;
+        }
+
+        return target;
     }
 })();

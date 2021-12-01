@@ -1,9 +1,6 @@
 package com.example.instamarket.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -99,5 +96,10 @@ public class Order extends BaseEntity{
     public Order setOffer(Offer offer) {
         this.offer = offer;
         return this;
+    }
+
+    @PrePersist
+    public void populateOrderTime(){
+        this.setOrderTime(LocalDateTime.now());
     }
 }
