@@ -4,7 +4,9 @@ import com.example.instamarket.model.binding.AddOfferBindingModel;
 import com.example.instamarket.model.enums.CategoriesEnum;
 import com.example.instamarket.model.enums.ShippingTypesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
+import com.example.instamarket.model.view.OfferSellerViewModel;
 import com.example.instamarket.service.OfferService;
+import com.example.instamarket.service.SubscriberService;
 import com.example.instamarket.service.impl.InstamarketUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,16 +17,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/offers")
 public class OfferController {
     private final OfferService offerService;
+    private final SubscriberService subscriberService;
     private final ModelMapper modelMapper;
 
-    public OfferController(OfferService offerService, ModelMapper modelMapper) {
+    public OfferController(OfferService offerService, SubscriberService subscriberService, ModelMapper modelMapper) {
         this.offerService = offerService;
+        this.subscriberService = subscriberService;
         this.modelMapper = modelMapper;
     }
 
@@ -64,8 +67,11 @@ public class OfferController {
 
     @GetMapping("/{offerId}/details")
     public String showOfferDetails(@PathVariable Long offerId, Model model, @AuthenticationPrincipal InstamarketUser user){
+        OfferSellerViewModel offerSeller = offerService.getOfferSeller(offerId);
+
         model.addAttribute("offer", offerService.getOffer(offerId, user.getUserIdentifier()));
-        model.addAttribute("sellerInfo", offerService.getOfferSeller(offerId));
+        model.addAttribute("sellerInfo", offerSeller);
+        model.addAttribute("isSubscriber", subscriberService.isSubscribed(offerSeller.getId(), user.getUserIdentifier()));
 
         return "offer";
     }

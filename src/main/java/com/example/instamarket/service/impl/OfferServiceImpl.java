@@ -272,7 +272,7 @@ public class OfferServiceImpl implements OfferService {
 
         model.setOfferCount(offerRepository.countOffersBySellerAndDeleted(seller, false));
 
-        model.setSubscriberCount(subscriberRepository.countSubscribersBySeller(seller));
+        model.setSubscriberCount(subscriberRepository.countSubscribers(seller));
 
         return model;
     }

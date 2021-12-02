@@ -761,8 +761,8 @@ img {
 }
 
 .subscribe-btn {
-    background-color: #333;
-    color: #fff;
+    background-color: #333 !important;
+    color: #fff !important;
     padding: 0 10px;
     line-height: 40px;
     text-transform: uppercase;

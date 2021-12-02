@@ -17,6 +17,11 @@
         </button>
       </div>
       <div class="row g-2 m-0 mb-2 p-0">
+        <th:block th:if="${cartItems.isEmpty()}">
+          <div class="col-12">
+            <p class="specifications-empty-message">Your cart is empty. Go and add some offers from <a href="/" class="fancy-link">here</a>.</p>
+          </div>
+        </th:block>
         <div class="cart-offer-wrapper col-lg-6 col-md-6 col-sm-12" th:each="item : ${cartItems}">
           <div class="cart-offer d-flex" th:data-id="${item.cartId}" th:data-seller="${item.sellerUsername}">
             <label class="px-2 d-flex align-items-center cart-check-option">

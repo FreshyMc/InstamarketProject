@@ -144,9 +144,18 @@
                             <span>Subscribers</span>
                         </p>
                     </div>
-                    <div class="seller-subscribe">
-                        <button type="button" class="subscribe-btn">Subscribe</button>
-                    </div>
+                    <th:block th:if="${!isSubscriber}">
+                        <form class="seller-subscribe" th:action="@{/subscribe/{id}(id = *{id})}" th:method="POST">
+                            <input type="hidden" th:value="${offer.id}" name="offerId">
+                            <button type="submit" class="btn subscribe-btn">Subscribe</button>
+                        </form>
+                    </th:block>
+                    <th:block th:if="${isSubscriber}">
+                        <form class="seller-subscribe" th:action="@{/unsubscribe/{id}(id = *{id})}" th:method="POST">
+                            <input type="hidden" th:value="${offer.id}" name="offerId">
+                            <button type="submit" class="btn subscribe-btn">Unsubscribe</button>
+                        </form>
+                    </th:block>
                 </div>
             </div>
         </section>
@@ -228,6 +237,7 @@
                 </div>
             </div>
         </section>
+        <!--
         <section class="similar-products py-3">
             <h3>Similar products</h3>
             <div class="similar-products-wrapper py-2 d-flex flex-nowrap fancy-scroll">
@@ -251,6 +261,7 @@
                 </a>
             </div>
         </section>
+        -->
     </main>
     <!-- Bottom navigation -->
     <div class="bottom-navigation-menu">
@@ -306,6 +317,14 @@
     <div th:replace="common/fragments :: bottom-scripts"></div>
     <!-- Toast -->
     <div class="position-fixed top-0 start-0 p-3 w-100 d-flex justify-content-center align-items-center flex-column" id="toastMessages" style="z-index: 15;">
+        <div class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true" th:if="${subscription}">
+            <div class="d-flex">
+                <div class="toast-body" th:text="${subscription}">
+                    Message
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
     </div>
     <script>
         let dropdownIds = ['specifications-dropdown', 'description-dropdown', 'specifications-dropdown-mobile', 'description-dropdown-mobile'];
