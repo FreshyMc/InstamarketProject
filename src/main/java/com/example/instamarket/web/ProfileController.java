@@ -48,6 +48,7 @@ public class ProfileController {
     public String showProfilePage(Model model, @AuthenticationPrincipal InstamarketUser user) {
         model.addAttribute("profilePicture", userService.getProfilePicture(user.getUserIdentifier()));
         model.addAttribute("profileNames", userService.takeUserNames(user.getUserIdentifier()));
+        model.addAttribute("sellerApplied", userService.hasAppliedToBecomeSeller(user.getUserIdentifier()));
 
         return "profile";
     }
@@ -173,6 +174,21 @@ public class ProfileController {
         userService.saveNewAddresses(model, user.getUserIdentifier());
 
         return "redirect:/profile/manage/addresses";
+    }
+
+    @GetMapping("/become-seller")
+    public String becomeSeller(@AuthenticationPrincipal InstamarketUser user, RedirectAttributes redirectAttributes){
+        userService.becomeSeller(user.getUserIdentifier());
+
+        redirectAttributes.addFlashAttribute("sellerRequest", "You successfully applied to become a seller.");
+
+        return "redirect:/profile";
+    }
+
+    @GetMapping("{id}/showcase")
+    public String showcaseProfile(@PathVariable Long id){
+        //TODO Profile Showcase page
+        return "redirect:/home";
     }
 
     @ModelAttribute

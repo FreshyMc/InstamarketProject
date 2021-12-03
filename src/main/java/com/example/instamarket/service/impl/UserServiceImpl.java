@@ -25,10 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,18 +40,20 @@ public class UserServiceImpl implements UserService {
     private final ProfilePictureRepository profilePictureRepository;
     private final WishListRepository wishListRepository;
     private final OfferRepository offerRepository;
+    private final SellerRequestRepository sellerRequestRepository;
     private final InstamarketUserServiceImpl instamarketUserService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final Cloudinary cloudinary;
 
-    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, ProfilePictureRepository profilePictureRepository, WishListRepository wishListRepository, OfferRepository offerRepository, InstamarketUserServiceImpl instamarketUserService, PasswordEncoder passwordEncoder, ModelMapper modelMapper, Cloudinary cloudinary) {
+    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, ProfilePictureRepository profilePictureRepository, WishListRepository wishListRepository, OfferRepository offerRepository, SellerRequestRepository sellerRequestRepository, InstamarketUserServiceImpl instamarketUserService, PasswordEncoder passwordEncoder, ModelMapper modelMapper, Cloudinary cloudinary) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
         this.profilePictureRepository = profilePictureRepository;
         this.wishListRepository = wishListRepository;
         this.offerRepository = offerRepository;
+        this.sellerRequestRepository = sellerRequestRepository;
         this.instamarketUserService = instamarketUserService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
@@ -284,6 +283,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getProfilePicture(String username) {
         return userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException()).getProfilePicture().getUrl();
+    }
+
+    @Override
+    public void becomeSeller(String username) {
+        SellerRequest sellerRequest = sellerRequestRepository.findSellerRequestBySeller_Username(username).orElse(null);
+
+        if(sellerRequest != null){
+            return;
+        }
+
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        SellerRequest newRequest = new SellerRequest();
+
+        newRequest.setSeller(user);
+
+        sellerRequestRepository.save(newRequest);
+    }
+
+    @Override
+    public boolean hasAppliedToBecomeSeller(String username) {
+        Optional<SellerRequest> sellerRequest = sellerRequestRepository.findSellerRequestBySeller_Username(username);
+
+        return sellerRequest.isPresent();
     }
 
     private boolean checkPasswords(User user, String oldPassword){

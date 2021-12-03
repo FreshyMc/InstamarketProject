@@ -1,5 +1,6 @@
 package com.example.instamarket.config;
 
+import com.example.instamarket.model.enums.RolesEnum;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,6 +30,9 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 // the next line allows access to the home page, login page and registration for everyone
                         antMatchers("/", "/login", "/register").permitAll().
                 // we permit the page below only for admin users
+                        antMatchers("/admin/**").hasRole(RolesEnum.ADMIN.name()).
+                // we permit the page below only for approved sellers
+                        antMatchers("/offers/add").hasAnyRole(RolesEnum.SELLER.name(), RolesEnum.ADMIN.name()).
                 // next we forbid all other pages for unauthenticated users.
                         antMatchers("/**").authenticated().
                 and().

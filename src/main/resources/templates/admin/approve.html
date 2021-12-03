@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+<body class="container-fluid p-0 m-0">
+  <nav th:replace="common/fragments :: secondary-navigation"></nav>
+  <main class="form-page">
+    <!-- TODO Approve future seller table -->
+    <div class="row g-3 m-0 p-0">
+      <div class="col-lg-6 col-12">
+        <div class="specifications-empty-message table-responsive">
+          <table class="table table-striped align-middle caption-top">
+            <caption class="fw-bold">Sellers to Approve</caption>
+            <thead>
+            <tr>
+              <td>Username</td>
+              <td>Request time</td>
+              <td>Action</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${requestsToApprove}" th:object="${request}">
+              <td><a th:href="@{/profile/{id}/showcase(id = *{userId})}" th:text="*{username}">Username</a></td>
+              <td th:text="${#temporals.format(request.requestTime, 'dd/MM/yyyy HH:mm:ss')}">Request time</td>
+              <td><a th:href="@{/admin/approve/{id}(id = *{id})}" role="button" class="btn btn-primary">Approve</a></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-lg-6 col-12">
+        <div class="specifications-empty-message table-responsive">
+          <table class="table table-striped align-middle caption-top">
+            <caption class="fw-bold">Approved Sellers</caption>
+            <thead>
+            <tr>
+              <td>Username</td>
+              <td>Action</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${approvedRequests}" th:object="${request}">
+              <td><a th:href="@{/profile/{id}/showcase(id = *{userId})}" th:text="*{username}">Username</a></td>
+              <td><a th:href="@{/admin/disapprove/{id}(id = *{id})}" role="button" class="btn btn-secondary">Disapprove</a></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -11,15 +11,20 @@
                 <img th:src="${profilePicture}" alt="#" class="profile-image">
                 <h3 class="m-0 ms-4 p-0" th:text="|${profileNames.firstName} ${profileNames.lastName}|">Nicolle Andrews</h3>
             </li>
-            <th:block sec:authorize="!hasAuthority('SELLER')">
-                <li>
-                    <a href="#" class="action-link d-flex justify-content-between align-items-center">
+            <th:block sec:authorize="!hasAnyRole('ADMIN', 'SELLER')">
+                <li th:if="!${sellerApplied}">
+                    <a href="/profile/become-seller" class="action-link d-flex justify-content-between align-items-center">
                         <span>Become a seller</span>
                         <i class="fas fa-coins"></i>
                     </a>
                 </li>
             </th:block>
-            <th:block sec:authorize="hasAuthority('SELLER')">
+            <th:block sec:authorize="hasRole('ADMIN')">
+                <li>
+                    <a href="/admin/approve" class="basic-link">Approve sellers</a>
+                </li>
+            </th:block>
+            <th:block sec:authorize="hasRole('SELLER')">
                 <li>
                     <a href="#" class="basic-link">My subscribers</a>
                 </li>
@@ -52,9 +57,9 @@
             </li>
         </ul>
     </main>
-    <th:block th:if="${pictureAlert}">
-        <!-- Toast -->
-        <div class="position-fixed top-0 start-0 p-3 w-100 d-flex justify-content-center align-items-center flex-column" style="z-index: 15;">
+    <!-- Toast -->
+    <div class="position-fixed top-0 start-0 p-3 w-100 d-flex justify-content-center align-items-center flex-column" style="z-index: 15;">
+        <th:block th:if="${pictureAlert}">
             <div class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body" th:text="${pictureAlert}">
@@ -63,8 +68,18 @@
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
-        </div>
-    </th:block>
+        </th:block>
+        <th:block th:if="${sellerRequest}">
+            <div class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" th:text="${sellerRequest}">
+                        Alert text
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </th:block>
+    </div>
     <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 

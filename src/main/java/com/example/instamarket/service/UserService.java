@@ -36,4 +36,8 @@ public interface UserService {
     boolean changeProfilePicture(ProfilePictureBindingModel bindingModel, String username) throws IOException;
 
     String getProfilePicture(String userIdentifier);
+
+    void becomeSeller(String username);
+
+    boolean hasAppliedToBecomeSeller(String username);
 }

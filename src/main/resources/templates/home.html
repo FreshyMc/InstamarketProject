@@ -61,7 +61,9 @@
         <div class="d-flex justify-content-center align-items-center">
             <a href="/profile" class="secondary-btn d-flex justify-content-center align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="My profile"><i class="fas fa-user-circle"></i></a>
             <a href="/message" class="secondary-btn active d-flex justify-content-center align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Messaging"><i class="fas fa-bolt"></i></a>
-            <a href="/offers/add" class="action-btn d-flex justify-content-center align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Add new offer"><i class="fas fa-plus"></i></a>
+            <th:block sec:authorize="hasAnyRole('ADMIN', 'SELLER')">
+                <a href="/offers/add" class="action-btn d-flex justify-content-center align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Add new offer"><i class="fas fa-plus"></i></a>
+            </th:block>
             <button class="secondary-btn active" type="button" data-bs-toggle="offcanvas" data-bs-target="#notifications" aria-controls="notifications">
                 <i class="fas fa-bell"></i>
             </button>
