@@ -8,13 +8,13 @@ const apiUrl = '/api/offers';
     let removeBtns = doc.querySelectorAll('.remove-btn');
     let emptyMessage = doc.querySelector('.specifications-empty-message');
 
-    let toastMessageTemplate = (message) => html.node`
+    let toastMessageTemplate = (message, dismiss) => html.node`
         <div class="toast align-items-center show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
                     ${message}
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" onclick=${dismiss}></button>
             </div>
         </div>
     `;
@@ -59,7 +59,7 @@ const apiUrl = '/api/offers';
             if(response.favourite == false){
                 appendToastMessage('Offer removed from the wishlist!');
 
-                wishListItem.remove();
+                wishListItem.parentElement.remove();
 
                 if(doc.querySelectorAll('.wishlist-item').length === 0){
                     emptyMessage.style.display = 'block';
@@ -77,12 +77,16 @@ const apiUrl = '/api/offers';
     }
 
     function appendToastMessage(message){
-        let toast = toastMessageTemplate(message);
+        let toast = toastMessageTemplate(message, dismissToast);
 
         toastMessageWrapper.appendChild(toast);
 
         setTimeout(() => {
             toast.remove();
         }, 3000);
+
+        function dismissToast(){
+            toast.remove();
+        }
     }
 })();

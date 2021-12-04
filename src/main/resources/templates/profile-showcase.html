@@ -42,7 +42,7 @@
           </div>
         </a>
       </div>
-      <div class="col-12 specifications-empty-message d-flex align-items-center justify-content-between" th:if="${!profileOffers.isEmpty()}">
+      <div class="col-12 specifications-empty-message d-flex align-items-center justify-content-between" th:if="${profileOffers.hasNext() || !profileOffers.isFirst()}">
         <div>
           <a th:if="${!profileOffers.isFirst()}" th:href="@{/profile/{id}/showcase(id = ${profileShowcase.id}, pageNo=${profileOffers.pageable.previousOrFirst().getPageNumber()})}" role="button" class="btn btn-secondary btn-lg align-self-start">Previous</a>
         </div>

@@ -11,7 +11,7 @@
             <a href="/home" class="fancy-link ms-2">Go Home and add some offers to it!</a>
         </div>
         <div class="wishlist row g-2 m-0 mt-2 p-0">
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-2" th:each="item : ${wishListItems}">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-2 wishlist-item-wrapper" th:each="item : ${wishListItems}">
                 <div class="wishlist-item">
                     <a th:href="@{/offers/{id}/details(id = ${item.id})}" class="d-block mb-3 offer-title" th:text="${item.title}">Offer title</a>
                     <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-center">
