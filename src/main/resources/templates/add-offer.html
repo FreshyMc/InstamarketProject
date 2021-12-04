@@ -55,16 +55,6 @@
                 <div class="mt-2" id="optionsGroup">
                 </div>
             </div>
-            <div class="mb-2">
-                <h4>Shipping type</h4>
-                <select class="form-select" name="shippingType" th:field="*{shippingType}" th:errorclass="is-invalid">
-                    <option value="" selected>Select shipping type</option>
-                    <option th:value="${s.name()}" th:each="s : ${shipping}" th:text="${s.getDisplayName()}">International</option>
-                </select>
-                <div class="mt-2 form-alert invalid-feedback">
-                    <p class="m-0 p-0">Offer shipping type is required.</p>
-                </div>
-            </div>
             <button type="submit" class="mt-4 btn btn-primary btn-lg col-12">Create offer</button>
         </form>
     </main>

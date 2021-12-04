@@ -2,7 +2,6 @@ package com.example.instamarket.web;
 
 import com.example.instamarket.model.binding.AddOfferBindingModel;
 import com.example.instamarket.model.enums.CategoriesEnum;
-import com.example.instamarket.model.enums.ShippingTypesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
 import com.example.instamarket.model.view.OfferSellerViewModel;
 import com.example.instamarket.service.OfferService;
@@ -34,7 +33,6 @@ public class OfferController {
     @GetMapping("/add")
     public String showAddOfferPage(Model model){
         model.addAttribute("categories", CategoriesEnum.values());
-        model.addAttribute("shipping", ShippingTypesEnum.values());
 
        return "add-offer";
     }

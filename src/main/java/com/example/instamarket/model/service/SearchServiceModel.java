@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 public class SearchServiceModel {
     private String search;
     private CategoriesEnum category;
-    private Boolean freeShipping;
     private Boolean favouriteOffer;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
@@ -30,15 +29,6 @@ public class SearchServiceModel {
 
     public SearchServiceModel setCategory(CategoriesEnum category) {
         this.category = category;
-        return this;
-    }
-
-    public Boolean getFreeShipping() {
-        return freeShipping;
-    }
-
-    public SearchServiceModel setFreeShipping(Boolean freeShipping) {
-        this.freeShipping = freeShipping;
         return this;
     }
 

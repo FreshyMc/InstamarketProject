@@ -12,7 +12,6 @@ public class OfferDetailsViewModel {
     private Map<String, String> options = new LinkedHashMap<>();
     private Map<String, String> properties = new LinkedHashMap<>();
     private String offerCategory;
-    private String shippingType;
     private boolean isOwner;
 
     public OfferDetailsViewModel() {
@@ -87,15 +86,6 @@ public class OfferDetailsViewModel {
 
     public OfferDetailsViewModel setOfferCategory(String offerCategory) {
         this.offerCategory = offerCategory;
-        return this;
-    }
-
-    public String getShippingType() {
-        return shippingType;
-    }
-
-    public OfferDetailsViewModel setShippingType(String shippingType) {
-        this.shippingType = shippingType;
         return this;
     }
 

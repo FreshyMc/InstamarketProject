@@ -10,7 +10,7 @@ import java.util.List;
 public interface CartService {
     CartDTO addToCart(Long offerId, AddToCartBindingModel option, String username);
 
-    CartDTO removeFromCart(Long offerId, AddToCartBindingModel option, String username);
+    CartDTO removeFromCart(Long cartItemId);
 
     List<CartItemViewModel> getAllItems(String username);
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+<nav th:replace="common/fragments :: secondary-navigation"></nav>
+  <main class="form-page">
+    <section class="subscribers-wrapper p-4">
+      <h5 class="mb-2">Subscribers</h5>
+      <div class="row g-2 m-0 p-0">
+        <div class="col-6" th:each="subscriber : ${subscribers}" th:object="${subscriber}">
+          <div class="subscriber d-flex align-items-center">
+            <img th:src="*{profilePictureUrl}" alt="#" class="subscriber-profile-image">
+            <p class="fw-bold m-0 ms-2" th:text="*{username}">Subscriber username</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

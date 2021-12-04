@@ -13,7 +13,6 @@ const apiUrl = '/api/offers';
     let lastSearchPageNo = 0;
     let firstSearch = false;
     let searchInput = searchForm.querySelector('input[type=text]');
-    let searchFreeShipping = searchForm.querySelector('input[name=freeShipping]');
     let searchFavouriteOffer = searchForm.querySelector('input[name=favouriteOffer]');
     let searchMinPrice = searchForm.querySelector('input[name=minPrice]');
     let searchMaxPrice = searchForm.querySelector('input[name=maxPrice]');
@@ -29,7 +28,6 @@ const apiUrl = '/api/offers';
 
     searchInput.addEventListener('change', resetSearch);
     searchCategorySelect.addEventListener('change', resetSearch);
-    searchFreeShipping.addEventListener('change', resetSearch);
     searchFavouriteOffer.addEventListener('change', resetSearch);
     searchMinPrice.addEventListener('input', resetSearch);
     searchMaxPrice.addEventListener('input', resetSearch);
@@ -222,7 +220,6 @@ const apiUrl = '/api/offers';
 
         let searchCategory = searchCategorySelect.value;
 
-        let freeShipping = searchFreeShipping.checked;
         let favouriteOffer = searchFavouriteOffer.checked;
 
         let csrf = searchForm.querySelector('#searchCsrf');
@@ -233,7 +230,7 @@ const apiUrl = '/api/offers';
             return;
         }
 
-        let data = {search: searchText, category: searchCategory, freeShipping, favouriteOffer, minPrice, maxPrice};
+        let data = {search: searchText, category: searchCategory, favouriteOffer, minPrice, maxPrice};
 
         let csrfHeader = csrf.getAttribute('name');
         let csrfValue = csrf.value;

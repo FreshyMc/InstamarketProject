@@ -1,7 +1,6 @@
 package com.example.instamarket.model.binding;
 
 import com.example.instamarket.model.enums.CategoriesEnum;
-import com.example.instamarket.model.enums.ShippingTypesEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -27,8 +26,6 @@ public class AddOfferBindingModel {
     private List<PropertyBindingModel> properties = new LinkedList<>();
     @NotNull
     private CategoriesEnum offerCategory;
-    @NotNull
-    private ShippingTypesEnum shippingType;
 
     public AddOfferBindingModel() {
     }
@@ -66,15 +63,6 @@ public class AddOfferBindingModel {
 
     public AddOfferBindingModel setOfferCategory(CategoriesEnum offerCategory) {
         this.offerCategory = offerCategory;
-        return this;
-    }
-
-    public ShippingTypesEnum getShippingType() {
-        return shippingType;
-    }
-
-    public AddOfferBindingModel setShippingType(ShippingTypesEnum shippingType) {
-        this.shippingType = shippingType;
         return this;
     }
 

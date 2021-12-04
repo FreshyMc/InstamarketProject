@@ -8,6 +8,7 @@ import com.example.instamarket.model.service.SaveAddressesServiceModel;
 import com.example.instamarket.model.service.UserRegisterServiceModel;
 import com.example.instamarket.model.view.ProfileAddressesViewModel;
 import com.example.instamarket.model.view.ProfileNamesViewModel;
+import com.example.instamarket.model.view.ProfileViewModel;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,4 +41,6 @@ public interface UserService {
     void becomeSeller(String username);
 
     boolean hasAppliedToBecomeSeller(String username);
+
+    ProfileViewModel getProfileShowcase(Long userId);
 }

@@ -3,7 +3,6 @@ package com.example.instamarket.repository.specification;
 import com.example.instamarket.model.entity.Offer;
 import com.example.instamarket.model.entity.User;
 import com.example.instamarket.model.entity.WishList;
-import com.example.instamarket.model.enums.ShippingTypesEnum;
 import com.example.instamarket.model.service.SearchServiceModel;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,7 +11,6 @@ import javax.persistence.criteria.*;
 public class OfferSearchSpecification implements Specification<Offer> {
     private static final String TITLE = "title";
     private static final String CATEGORY = "offerCategory";
-    private static final String SHIPPING = "shippingType";
     private static final String PRICE = "price";
 
     private final SearchServiceModel searchServiceModel;
@@ -47,12 +45,6 @@ public class OfferSearchSpecification implements Specification<Offer> {
                     add(criteriaBuilder.
                             and(criteriaBuilder.
                                     lessThanOrEqualTo(root.get(PRICE), searchServiceModel.getMaxPrice())));
-        }
-
-        if(Boolean.TRUE.equals(searchServiceModel.getFreeShipping())){
-            p.getExpressions()
-                    .add(criteriaBuilder.and(criteriaBuilder.equal(root.join(SHIPPING).get("shipping"),
-                            ShippingTypesEnum.FREE)));
         }
 
         if(Boolean.TRUE.equals(searchServiceModel.getFavouriteOffer())){

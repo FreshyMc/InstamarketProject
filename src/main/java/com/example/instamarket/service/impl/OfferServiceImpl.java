@@ -5,7 +5,6 @@ import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.dto.OfferDTO;
 import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.CategoriesEnum;
-import com.example.instamarket.model.enums.ShippingTypesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
 import com.example.instamarket.model.service.OfferQuestionServiceModel;
 import com.example.instamarket.model.service.SearchServiceModel;
@@ -15,10 +14,7 @@ import com.example.instamarket.repository.*;
 import com.example.instamarket.repository.specification.OfferSearchSpecification;
 import com.example.instamarket.service.OfferService;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +30,6 @@ import java.util.stream.Collectors;
 @Service
 public class OfferServiceImpl implements OfferService {
     private final OfferRepository offerRepository;
-    private final ShippingRepository shippingRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final SubscriberRepository subscriberRepository;
@@ -46,27 +41,13 @@ public class OfferServiceImpl implements OfferService {
     private static final List<String> validFileFormats = Arrays.asList("jpeg", "jpg", "png", "gif");
     private static final char[] characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_".toCharArray();
 
-    public OfferServiceImpl(OfferRepository offerRepository, ShippingRepository shippingRepository, CategoryRepository categoryRepository, UserRepository userRepository, SubscriberRepository subscriberRepository, OfferQuestionRepository offerQuestionRepository, ModelMapper modelMapper) {
+    public OfferServiceImpl(OfferRepository offerRepository, CategoryRepository categoryRepository, UserRepository userRepository, SubscriberRepository subscriberRepository, OfferQuestionRepository offerQuestionRepository, ModelMapper modelMapper) {
         this.offerRepository = offerRepository;
-        this.shippingRepository = shippingRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.subscriberRepository = subscriberRepository;
         this.offerQuestionRepository = offerQuestionRepository;
         this.modelMapper = modelMapper;
-    }
-
-    @Override
-    public void initializeShippingTypes() {
-        if(shippingRepository.count() == 0) {
-            Arrays.stream(ShippingTypesEnum.values()).map(shippingEnum -> {
-                Shipping shipping = new Shipping();
-
-                shipping.setShipping(shippingEnum).setDisplayName(shippingEnum.getDisplayName());
-
-                return shipping;
-            }).forEach(shippingRepository::save);
-        }
     }
 
     @Override
@@ -89,15 +70,12 @@ public class OfferServiceImpl implements OfferService {
 
         Category category = categoryRepository.findCategoryByCategory(model.getOfferCategory()).get();
 
-        Shipping shipping = shippingRepository.findShippingByShipping(model.getShippingType()).get();
-
         Offer offer = new Offer();
 
         offer.setTitle(model.getTitle());
         offer.setDescription(model.getDescription());
         offer.setPrice(model.getPrice());
         offer.setOfferCategory(category);
-        offer.setShippingType(shipping);
         offer.setSeller(user);
 
         Set<OfferImage> offerImages = new HashSet<>();
@@ -238,10 +216,16 @@ public class OfferServiceImpl implements OfferService {
         offerModel.setOptions(offerOptions);
         offerModel.setProperties(offerProperties);
         offerModel.setOfferCategory(offer.getOfferCategory().getDisplayName());
-        offerModel.setShippingType(offer.getShippingType().getDisplayName());
         offerModel.setOwner(user.getId() == offer.getSeller().getId());
 
         return offerModel;
+    }
+
+    @Override
+    public Slice<OfferDTO> getSellerOffers(int pageNo, int pageSize, String sortBy, Long id) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
+
+        return offerRepository.findAllBySeller_Id(id, pageable).map(this::asOffer);
     }
 
     @Override

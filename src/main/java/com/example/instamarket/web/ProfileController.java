@@ -10,6 +10,7 @@ import com.example.instamarket.model.service.ProfileNamesServiceModel;
 import com.example.instamarket.model.service.SaveAddressesServiceModel;
 import com.example.instamarket.model.view.ProfileNamesViewModel;
 import com.example.instamarket.service.AddressService;
+import com.example.instamarket.service.OfferService;
 import com.example.instamarket.service.UserService;
 import com.example.instamarket.service.impl.InstamarketUser;
 import org.modelmapper.ModelMapper;
@@ -33,13 +34,15 @@ import java.io.IOException;
 public class ProfileController {
     private final UserService userService;
     private final AddressService addressService;
+    private final OfferService offerService;
     private final ModelMapper modelMapper;
     private final AuthHelper authHelper;
     private Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
-    public ProfileController(UserService userService, AddressService addressService, ModelMapper modelMapper, AuthHelper authHelper) {
+    public ProfileController(UserService userService, AddressService addressService, OfferService offerService, ModelMapper modelMapper, AuthHelper authHelper) {
         this.userService = userService;
         this.addressService = addressService;
+        this.offerService = offerService;
         this.modelMapper = modelMapper;
         this.authHelper = authHelper;
     }
@@ -186,9 +189,16 @@ public class ProfileController {
     }
 
     @GetMapping("{id}/showcase")
-    public String showcaseProfile(@PathVariable Long id){
-        //TODO Profile Showcase page
-        return "redirect:/home";
+    public String showcaseProfile(@PathVariable Long id,
+                                  Model model,
+                                  @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+                                  @RequestParam(name = "pageSize", defaultValue = "6") Integer pageSize,
+                                  @RequestParam(name = "sortBy", defaultValue = "createdAt") String sortBy)
+    {
+        model.addAttribute("profileShowcase", userService.getProfileShowcase(id));
+        model.addAttribute("profileOffers", offerService.getSellerOffers(pageNo, pageSize, sortBy, id));
+
+        return "profile-showcase";
     }
 
     @ModelAttribute

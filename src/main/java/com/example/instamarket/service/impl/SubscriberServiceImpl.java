@@ -3,12 +3,15 @@ package com.example.instamarket.service.impl;
 import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.entity.Subscriber;
 import com.example.instamarket.model.entity.User;
+import com.example.instamarket.model.view.SubscriberViewModel;
 import com.example.instamarket.repository.SubscriberRepository;
 import com.example.instamarket.repository.UserRepository;
 import com.example.instamarket.service.SubscriberService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubscriberServiceImpl implements SubscriberService {
@@ -73,5 +76,22 @@ public class SubscriberServiceImpl implements SubscriberService {
         Subscriber subscription = subscriberRepository.findBySubscriberAndSeller(subscriber, seller).orElseThrow().setSubscribed(false);
 
         subscriberRepository.save(subscription);
+    }
+
+    @Override
+    public List<SubscriberViewModel> listSubscribers(String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
+
+        List<SubscriberViewModel> subscribers = subscriberRepository.findAllSubscribers(seller).stream().map(subscriber -> {
+            SubscriberViewModel mappedSubscriber = new SubscriberViewModel();
+
+            mappedSubscriber.setSubscriberId(subscriber.getSubscriber().getId());
+            mappedSubscriber.setUsername(subscriber.getSubscriber().getUsername());
+            mappedSubscriber.setProfilePictureUrl(subscriber.getSubscriber().getProfilePicture().getUrl());
+
+            return mappedSubscriber;
+        }).collect(Collectors.toList());
+
+        return subscribers;
     }
 }

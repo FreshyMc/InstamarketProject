@@ -12,6 +12,7 @@ import com.example.instamarket.model.service.SaveAddressesServiceModel;
 import com.example.instamarket.model.service.UserRegisterServiceModel;
 import com.example.instamarket.model.view.ProfileAddressesViewModel;
 import com.example.instamarket.model.view.ProfileNamesViewModel;
+import com.example.instamarket.model.view.ProfileViewModel;
 import com.example.instamarket.repository.*;
 import com.example.instamarket.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -307,6 +308,17 @@ public class UserServiceImpl implements UserService {
         Optional<SellerRequest> sellerRequest = sellerRequestRepository.findSellerRequestBySeller_Username(username);
 
         return sellerRequest.isPresent();
+    }
+
+    @Override
+    public ProfileViewModel getProfileShowcase(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+
+        ProfileViewModel mappedUser = modelMapper.map(user, ProfileViewModel.class);
+
+        mappedUser.setProfilePictureUrl(user.getProfilePicture().getUrl());
+
+        return mappedUser;
     }
 
     private boolean checkPasswords(User user, String oldPassword){

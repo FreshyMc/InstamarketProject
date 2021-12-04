@@ -10,15 +10,11 @@ import com.example.instamarket.service.impl.InstamarketUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Controller
+@RestController
 @RequestMapping("/api/cart")
 public class CartRestController {
     private final CartService cartService;
@@ -36,9 +32,9 @@ public class CartRestController {
         return ResponseEntity.ok(model);
     }
 
-    @PostMapping("/{offerId}/remove")
-    public ResponseEntity<CartDTO> removeOfferFromCart(@PathVariable Long offerId, @RequestBody AddToCartBindingModel option, @AuthenticationPrincipal InstamarketUser user){
-        CartDTO model = cartService.removeFromCart(offerId, option, user.getUserIdentifier());
+    @PostMapping("/{cartItemId}/remove")
+    public ResponseEntity<CartDTO> removeOfferFromCart(@PathVariable Long cartItemId){
+        CartDTO model = cartService.removeFromCart(cartItemId);
 
         return ResponseEntity.ok(model);
     }

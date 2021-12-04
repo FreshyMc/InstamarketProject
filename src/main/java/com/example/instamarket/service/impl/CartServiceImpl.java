@@ -5,6 +5,7 @@ import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.binding.AddToCartBindingModel;
 import com.example.instamarket.model.dto.CartDTO;
 import com.example.instamarket.model.entity.*;
+import com.example.instamarket.model.enums.OrderStatusEnum;
 import com.example.instamarket.model.service.CheckoutServiceModel;
 import com.example.instamarket.model.view.CartItemViewModel;
 import com.example.instamarket.repository.*;
@@ -25,15 +26,17 @@ public class CartServiceImpl implements CartService {
     private final OfferRepository offerRepository;
     private final OfferOptionRepository offerOptionRepository;
     private final OrderRepository orderRepository;
+    private final OrderStatusRepository orderStatusRepository;
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public CartServiceImpl(CartRepository cartRepository, OfferRepository offerRepository, OfferOptionRepository offerOptionRepository, OrderRepository orderRepository, AddressRepository addressRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public CartServiceImpl(CartRepository cartRepository, OfferRepository offerRepository, OfferOptionRepository offerOptionRepository, OrderRepository orderRepository, OrderStatusRepository orderStatusRepository, AddressRepository addressRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.cartRepository = cartRepository;
         this.offerRepository = offerRepository;
         this.offerOptionRepository = offerOptionRepository;
         this.orderRepository = orderRepository;
+        this.orderStatusRepository = orderStatusRepository;
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
@@ -82,23 +85,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO removeFromCart(Long offerId, AddToCartBindingModel optionModel, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
-
-        Offer offer = offerRepository.findById(offerId).orElseThrow(()-> new OfferNotFoundException());
-
-        OfferOption offerOption = null;
-
-        if(optionModel.getOfferOptionIndex() != null){
-            offerOption = offer.getOfferOptions().get(optionModel.getOfferOptionIndex());
-        }
-
-        Cart cartItem = cartRepository.findCartByBuyerAndOfferAndOfferOption(user, offer, offerOption).orElse(null);
+    public CartDTO removeFromCart(Long cartItemId) {
+        Cart cartItem = cartRepository.findById(cartItemId).orElse(null);
 
         if(cartItem == null){
             CartDTO item = new CartDTO();
 
-            item.setAdded(false).setOfferId(offerId);
+            item.setAdded(false).setOfferId(cartItemId);
 
             return item;
         }
@@ -135,6 +128,8 @@ public class CartServiceImpl implements CartService {
 
             Order order = new Order();
 
+            OrderStatus initialStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.WAITING).get();
+
             BigDecimal quantity = new BigDecimal(offer.getQuantity());
 
             BigDecimal orderTotalPrice = mappedOffer.getPrice().multiply(quantity);
@@ -145,7 +140,8 @@ public class CartServiceImpl implements CartService {
                     setQuantity(offer.getQuantity()).
                     setDeliveryAddress(userAddress).
                     setTotalPrice(orderTotalPrice).
-                    setOfferOption(cartItem.getOfferOption());
+                    setOfferOption(cartItem.getOfferOption()).
+                    setStatus(initialStatus);
 
             cartRepository.delete(cartItem);
 

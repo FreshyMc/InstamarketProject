@@ -1,13 +1,9 @@
 package com.example.instamarket.model.entity;
 
-import com.example.instamarket.model.enums.CategoriesEnum;
-import com.example.instamarket.model.enums.ShippingTypesEnum;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -28,8 +24,6 @@ public class Offer extends BaseEntity{
     private Set<OfferProperty> offerProperties;
     @ManyToOne
     private Category offerCategory;
-    @ManyToOne
-    private Shipping shippingType;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     @Column
@@ -62,15 +56,6 @@ public class Offer extends BaseEntity{
 
     public Offer setOfferCategory(Category offerCategory) {
         this.offerCategory = offerCategory;
-        return this;
-    }
-
-    public Shipping getShippingType() {
-        return shippingType;
-    }
-
-    public Offer setShippingType(Shipping shippingType) {
-        this.shippingType = shippingType;
         return this;
     }
 

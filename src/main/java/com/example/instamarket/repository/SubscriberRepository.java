@@ -15,4 +15,7 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
     Integer countSubscribers(User seller);
 
     Optional<Subscriber> findBySubscriberAndSeller(User subscriber, User seller);
+
+    @Query("SELECT s FROM Subscriber s WHERE s.seller = :seller AND s.isSubscribed = true")
+    List<Subscriber> findAllSubscribers(User seller);
 }

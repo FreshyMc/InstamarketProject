@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" id="top">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+  <nav th:replace="common/fragments :: secondary-navigation"></nav>
+  <main class="form-page">
+    <div class="seller-profile-page d-flex align-items-center justify-content-center" th:object="${profileShowcase}">
+      <div class="d-flex align-items-center">
+        <img th:src="*{profilePictureUrl}" alt="#" class="profile-image">
+        <div class="ms-4">
+          <h5>@<span th:text="*{username}">Seller username</span></h5>
+          <h6 th:text="|*{firstName} *{lastName}|">Seller first and last name</h6>
+        </div>
+      </div>
+    </div>
+    <div class="p-4 my-2" th:if="${profileOffers.isEmpty()}">
+      <p class="specifications-empty-message text-center">This account has no offers.</p>
+    </div>
+    <!-- Offers -->
+    <div class="row g-0 p-0 m-0">
+      <div class="col-12 col-md-4 product" th:each="offer : ${profileOffers}" th:object="${offer}">
+        <a class="product-link" th:href="@{/offers/{id}/details(id = *{id})}">
+          <!-- Advert carousel -->
+          <div class="product-images-wrapper d-flex flex-nowrap">
+            <div class="product-images-previewer d-flex justify-content-between">
+              <button type="button" class="d-flex justify-content-center align-items-center d-none" th:classappend="${(offer.images.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
+              <button type="button" class="d-flex justify-content-center align-items-center d-none" th:classappend="${(offer.images.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="ratio ratio-1x1 product-image" th:each="imgName : *{images}">
+              <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
+            </div>
+          </div>
+          <!-- Advert Title -->
+          <div class="product-title" th:text="*{title}">
+            Title
+          </div>
+          <!-- Advert price tag -->
+          <div class="price-tag d-flex flex-column flex-lg-row justify-content-between">
+            <p class="price">$<span th:text="*{price}">Offer price</span></p>
+          </div>
+        </a>
+      </div>
+      <div class="col-12 specifications-empty-message d-flex align-items-center justify-content-between" th:if="${!profileOffers.isEmpty()}">
+        <div>
+          <a th:if="${!profileOffers.isFirst()}" th:href="@{/profile/{id}/showcase(id = ${profileShowcase.id}, pageNo=${profileOffers.pageable.previousOrFirst().getPageNumber()})}" role="button" class="btn btn-secondary btn-lg align-self-start">Previous</a>
+        </div>
+        <div>
+          <a th:if="${profileOffers.hasNext()}" th:href="@{/profile/{id}/showcase(id = ${profileShowcase.id}, pageNo=${profileOffers.pageable.next().getPageNumber()})}" role="button" class="btn btn-primary btn-lg align-self-end">Next</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

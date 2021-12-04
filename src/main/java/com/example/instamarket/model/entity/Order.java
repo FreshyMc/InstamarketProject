@@ -20,6 +20,8 @@ public class Order extends BaseEntity{
     private BigDecimal totalPrice;
     @ManyToOne
     private Address deliveryAddress;
+    @ManyToOne
+    private OrderStatus status;
     private LocalDateTime orderTime;
     private LocalDate deliveryDate;
     @Column
@@ -111,6 +113,15 @@ public class Order extends BaseEntity{
 
     public Order setOfferOption(OfferOption offerOption) {
         this.offerOption = offerOption;
+        return this;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public Order setStatus(OrderStatus status) {
+        this.status = status;
         return this;
     }
 }

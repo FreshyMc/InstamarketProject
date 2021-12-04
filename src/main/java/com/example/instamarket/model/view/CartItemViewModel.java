@@ -15,7 +15,6 @@ public class CartItemViewModel {
     private String optionKey;
     private String optionValue;
     private String offerCategory;
-    private String shippingType;
 
     public CartItemViewModel() {
     }
@@ -71,15 +70,6 @@ public class CartItemViewModel {
 
     public CartItemViewModel setOfferCategory(String offerCategory) {
         this.offerCategory = offerCategory;
-        return this;
-    }
-
-    public String getShippingType() {
-        return shippingType;
-    }
-
-    public CartItemViewModel setShippingType(String shippingType) {
-        this.shippingType = shippingType;
         return this;
     }
 

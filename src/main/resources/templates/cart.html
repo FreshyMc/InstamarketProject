@@ -34,23 +34,29 @@
                 <p class="m-0 ms-2 fw-bold" th:text="${item.sellerUsername}">Seller name</p>
               </div>
               <a th:href="@{/offers/{id}/details(id = ${item.id})}" class="d-flex offer-link offer-title m-0 mx-2 mb-2" th:text="${item.title}">Offer title</a>
-              <div class="row g-0 m-0 mb-2 p-0">
-                <div class="product-images-wrapper d-flex flex-nowrap col">
-                  <div class="product-images-previewer d-flex justify-content-between">
-                    <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(item.offerImages.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
-                    <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(item.offerImages.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
-                  </div>
-                  <div class="ratio ratio-1x1 product-image col" th:each="imgName : *{item.offerImages}">
-                    <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
+              <div class="row g-2 m-0 mb-2 p-0">
+                <div class="col-6">
+                  <div class="product-images-wrapper d-flex flex-nowrap">
+                    <div class="product-images-previewer d-flex justify-content-between">
+                      <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(item.offerImages.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
+                      <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(item.offerImages.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="ratio ratio-1x1 product-image" th:each="imgName : *{item.offerImages}">
+                      <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
+                    </div>
                   </div>
                 </div>
                 <th:block th:if="${item.optionValue != null}">
-                  <div class="cart-option ms-3 d-flex flex-grow-1">
-                    <div class="cart-option-selected">
-                      <div class="ratio ratio-1x1">
-                        <img th:src="@{/optionImage/{id}(id = ${item.optionKey})}" alt="#">
+                  <div class="col-6">
+                    <div class="cart-option d-flex flex-column">
+                      <div class="cart-option-selected">
+                        <div class="ratio ratio-1x1">
+                          <img th:src="@{/optionImage/{id}(id = ${item.optionKey})}" alt="#">
+                        </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-12">
                     <div class="m-0 fw-bold d-flex flex-grow-1 justify-content-center align-items-center" th:text="${item.optionValue}">Option text</div>
                   </div>
                 </th:block>

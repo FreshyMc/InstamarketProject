@@ -2,12 +2,9 @@ package com.example.instamarket.model.service;
 
 import com.example.instamarket.model.binding.OptionBindingModel;
 import com.example.instamarket.model.binding.PropertyBindingModel;
-import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.CategoriesEnum;
-import com.example.instamarket.model.enums.ShippingTypesEnum;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +18,6 @@ public class AddOfferServiceModel {
     private List<OptionBindingModel> options = new LinkedList<>();
     private List<PropertyBindingModel> properties = new LinkedList<>();
     private CategoriesEnum offerCategory;
-    private ShippingTypesEnum shippingType;
 
     public AddOfferServiceModel() {
     }
@@ -86,15 +82,6 @@ public class AddOfferServiceModel {
 
     public AddOfferServiceModel setOfferCategory(CategoriesEnum offerCategory) {
         this.offerCategory = offerCategory;
-        return this;
-    }
-
-    public ShippingTypesEnum getShippingType() {
-        return shippingType;
-    }
-
-    public AddOfferServiceModel setShippingType(ShippingTypesEnum shippingType) {
-        this.shippingType = shippingType;
         return this;
     }
 }

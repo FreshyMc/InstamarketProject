@@ -128,7 +128,7 @@
                 <div class="col-sm-8 col-lg-6 m-auto">
                     <div class="d-flex align-items-center">
                         <img th:src="*{profilePictureUrl}" alt="#" class="seller-picture">
-                        <h4 class="seller-name m-0" th:text="*{username}">Seller name</h4>
+                        <h4 class="seller-name m-0"><a th:href="@{/profile/{id}/showcase(id=*{id})}" th:text="*{username}">Seller name</a></h4>
                     </div>
                     <div class="seller-stats d-flex justify-content-between align-items-center">
                         <p class="m-0 p-0">
