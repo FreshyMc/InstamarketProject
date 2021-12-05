@@ -262,7 +262,7 @@ const apiUrl = '/api/cart';
             selectedItems.forEach(item => {
                let offer = findOffer(item);
 
-               offer.remove();
+               offer.parentElement.remove();
             });
 
             recalculateTotalPrice();

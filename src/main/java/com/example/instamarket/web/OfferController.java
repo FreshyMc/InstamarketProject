@@ -65,7 +65,7 @@ public class OfferController {
 
         EditOfferBindingModel binding = modelMapper.map(offerDetails, EditOfferBindingModel.class);
 
-        model.addAttribute("offerBinding", binding);
+        model.addAttribute("editOfferBindingModel", binding);
         model.addAttribute("offerDetails", offerDetails);
         model.addAttribute("categories", CategoriesEnum.values());
 
@@ -85,7 +85,7 @@ public class OfferController {
     @PatchMapping("/{offerId}/edit")
     public String editOffer(@PathVariable Long offerId, @Valid EditOfferBindingModel editOfferBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("offerBinding", editOfferBindingModel);
+            redirectAttributes.addFlashAttribute("editOfferBindingModel", editOfferBindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editOfferBindingModel", bindingResult);
 
             return "redirect:/offers/" + offerId + "/edit/errors";
@@ -108,11 +108,6 @@ public class OfferController {
         return new EditOfferBindingModel();
     }
 
-    @GetMapping("/demo")
-    public String showDemoOffer(){
-        return "offer";
-    }
-
     @PreAuthorize("@offerServiceImpl.isSpecOwner(#user.username, #id)")
     @GetMapping("/remove/specification/{id}")
     public ResponseEntity removeSpecification(@PathVariable Long id, @AuthenticationPrincipal InstamarketUser user){
@@ -127,6 +122,14 @@ public class OfferController {
         offerService.removeOption(id);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("@offerServiceImpl.isOfferOwner(#user.username, #offerId)")
+    @GetMapping("/{offerId}/remove")
+    public String removeOffer(@PathVariable Long offerId, @AuthenticationPrincipal InstamarketUser user){
+        offerService.removeOffer(offerId);
+
+        return "redirect:/home";
     }
 
     @GetMapping("/{offerId}/details")

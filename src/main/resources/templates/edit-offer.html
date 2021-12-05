@@ -7,7 +7,7 @@
 <nav th:replace="common/fragments :: secondary-navigation"></nav>
 <!-- Adverts main section -->
 <main class="form-page">
-  <form class="p-2 p-sm-3 offer-form" th:action="@{/offers/{id}/edit(id = ${offerBinding.id})}" th:method="PATCH" enctype="multipart/form-data" th:object="${offerBinding}">
+  <form class="p-2 p-sm-3 offer-form" th:action="@{/offers/{id}/edit(id = ${editOfferBindingModel.id})}" th:method="PATCH" enctype="multipart/form-data" th:object="${editOfferBindingModel}">
     <h3>Edit offer</h3>
     <div class="mb-2">
       <input type="text" class="form-control" th:field="*{title}" th:errorclass="is-invalid" placeholder="Offer title">

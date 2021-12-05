@@ -187,14 +187,14 @@ public class OfferServiceImpl implements OfferService {
     public Slice<OfferDTO> getSellerOffers(int pageNo, int pageSize, String sortBy, Long id) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
 
-        return offerRepository.findAllBySeller_Id(id, pageable).map(this::asOffer);
+        return offerRepository.findAllBySeller_IdAndDeletedIsFalse(id, pageable).map(this::asOffer);
     }
 
     @Override
     public Page<OfferDTO> getOffers(int pageNo, int pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
 
-        return offerRepository.findAll(pageable).map(this::asOffer);
+        return offerRepository.findAllByDeletedIsFalse(pageable).map(this::asOffer);
     }
 
     @Override
@@ -371,6 +371,23 @@ public class OfferServiceImpl implements OfferService {
         offer.setOfferProperties(offerProperties);
 
         offerRepository.save(offer);
+    }
+
+    @Override
+    public void removeOffer(Long offerId) {
+        Offer offer = offerRepository.findById(offerId).orElseThrow(() -> new OfferNotFoundException());
+
+        offer.setDeleted(true);
+
+        offerRepository.save(offer);
+    }
+
+    @Override
+    public boolean isOfferOwner(String username, Long offerId) {
+        //TODO Object not found exception
+        Offer offer = offerRepository.findById(offerId).orElseThrow();
+
+        return offer.getSeller().getUsername().equals(username);
     }
 
     private boolean isValidFileFormat(String filename){

@@ -40,4 +40,8 @@ public interface OfferService {
     boolean isOptionOwner(String username, Long optionId);
 
     void editOffer(EditOfferServiceModel model);
+
+    void removeOffer(Long offerId);
+
+    boolean isOfferOwner(String username, Long offerId);
 }

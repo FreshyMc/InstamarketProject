@@ -111,7 +111,7 @@ public class CartServiceImpl implements CartService {
     public List<CartItemViewModel> getAllItems(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
 
-        return cartRepository.findAllByBuyerAndRemovedOrderByAddedAtDesc(user, false).stream().map(this::toCartItem).collect(Collectors.toList());
+        return cartRepository.findAllCartItems(user).stream().map(this::toCartItem).collect(Collectors.toList());
     }
 
     @Override

@@ -13,7 +13,7 @@
                         <span class="me-2">Edit Offer</span>
                         <i class="fas fa-pen"></i>
                     </a>
-                    <a href="#" role="button" class="btn btn-secondary btn-lg">
+                    <a th:href="@{/offers/{id}/remove(id= *{id})}" role="button" class="btn btn-secondary btn-lg" onclick="return confirm('Are you sure to remove this offer?');">
                         <span class="me-2">Remove Offer</span>
                         <i class="fas fa-times"></i>
                     </a>

@@ -20,4 +20,8 @@ public interface OfferRepository extends JpaRepository<Offer, Long>, JpaSpecific
     Slice<Offer> findAllBySeller_Id(Long sellerId, Pageable pageable);
 
     Optional<Offer> findOfferByIdAndSeller(Long id, User seller);
+
+    Page<Offer> findAllByDeletedIsFalse(Pageable pageable);
+
+    Page<Offer> findAllBySeller_IdAndDeletedIsFalse(Long sellerId, Pageable pageable);
 }

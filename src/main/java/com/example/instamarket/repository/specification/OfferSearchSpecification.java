@@ -53,6 +53,8 @@ public class OfferSearchSpecification implements Specification<Offer> {
             p.getExpressions().add(criteriaBuilder.exists(subQuery));
         }
 
+        p.getExpressions().add(criteriaBuilder.equal(root.get("deleted"), false));
+
         return p;
     }
 
