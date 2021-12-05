@@ -1,13 +1,19 @@
 package com.example.instamarket.web;
 
 import com.example.instamarket.model.binding.AddOfferBindingModel;
+import com.example.instamarket.model.binding.EditOfferBindingModel;
 import com.example.instamarket.model.enums.CategoriesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
+import com.example.instamarket.model.service.EditOfferServiceModel;
+import com.example.instamarket.model.view.EditOfferViewModel;
+import com.example.instamarket.model.view.OfferDetailsViewModel;
 import com.example.instamarket.model.view.OfferSellerViewModel;
 import com.example.instamarket.service.OfferService;
 import com.example.instamarket.service.SubscriberService;
 import com.example.instamarket.service.impl.InstamarketUser;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,14 +59,74 @@ public class OfferController {
         return "redirect:/offers/" + offerId + "/details";
     }
 
+    @GetMapping("/{offerId}/edit")
+    public String showEditOfferPage(@PathVariable Long offerId, Model model, @AuthenticationPrincipal InstamarketUser user){
+        EditOfferViewModel offerDetails = offerService.getOfferDetails(offerId, user.getUserIdentifier());
+
+        EditOfferBindingModel binding = modelMapper.map(offerDetails, EditOfferBindingModel.class);
+
+        model.addAttribute("offerBinding", binding);
+        model.addAttribute("offerDetails", offerDetails);
+        model.addAttribute("categories", CategoriesEnum.values());
+
+        return "edit-offer";
+    }
+
+    @GetMapping("/{offerId}/edit/errors")
+    public String showEditErrors(@PathVariable Long offerId, Model model, @AuthenticationPrincipal InstamarketUser user){
+        EditOfferViewModel offerDetails = offerService.getOfferDetails(offerId, user.getUserIdentifier());
+
+        model.addAttribute("offerDetails", offerDetails);
+        model.addAttribute("categories", CategoriesEnum.values());
+
+        return "edit-offer";
+    }
+
+    @PatchMapping("/{offerId}/edit")
+    public String editOffer(@PathVariable Long offerId, @Valid EditOfferBindingModel editOfferBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("offerBinding", editOfferBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editOfferBindingModel", bindingResult);
+
+            return "redirect:/offers/" + offerId + "/edit/errors";
+        }
+
+        EditOfferServiceModel serviceModel = modelMapper.map(editOfferBindingModel, EditOfferServiceModel.class);
+
+        offerService.editOffer(serviceModel);
+
+        return "redirect:/offers/" + offerId + "/details";
+    }
+
     @ModelAttribute
     public AddOfferBindingModel addOfferBindingModel(){
         return new AddOfferBindingModel();
     }
 
+    @ModelAttribute
+    public EditOfferBindingModel editOfferBindingModel(){
+        return new EditOfferBindingModel();
+    }
+
     @GetMapping("/demo")
     public String showDemoOffer(){
         return "offer";
+    }
+
+    @PreAuthorize("@offerServiceImpl.isSpecOwner(#user.username, #id)")
+    @GetMapping("/remove/specification/{id}")
+    public ResponseEntity removeSpecification(@PathVariable Long id, @AuthenticationPrincipal InstamarketUser user){
+        offerService.removeSpecification(id);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("@offerServiceImpl.isOptionOwner(#user.username, #id)")
+    @GetMapping("/remove/option/{id}")
+    public ResponseEntity removeOption(@PathVariable Long id, @AuthenticationPrincipal InstamarketUser user){
+        offerService.removeOption(id);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{offerId}/details")

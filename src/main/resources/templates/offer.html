@@ -7,6 +7,18 @@
     <nav th:replace="common/fragments :: primary-navigation"></nav>
     <main class="product-wrapper">
         <section class="row g-0 g-lg-4 mt-4 mb-lg-4 col-sm-8 col-lg-12 m-auto">
+            <th:block th:if="*{owner}">
+                <div class="col-12 mb-2 specifications-empty-message d-flex flex-column flex-sm-row justify-content-between">
+                    <a th:href="@{/offers/{id}/edit(id= *{id})}" role="button" class="btn btn-primary btn-lg mb-2 mb-sm-0">
+                        <span class="me-2">Edit Offer</span>
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    <a href="#" role="button" class="btn btn-secondary btn-lg">
+                        <span class="me-2">Remove Offer</span>
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+            </th:block>
             <div class="col-12 col-lg-5">
                 <div class="product-images-wrapper d-flex flex-nowrap">
                     <div class="product-images-previewer d-flex justify-content-between">

@@ -49,8 +49,7 @@ public class ProfileController {
 
     @GetMapping
     public String showProfilePage(Model model, @AuthenticationPrincipal InstamarketUser user) {
-        model.addAttribute("profilePicture", userService.getProfilePicture(user.getUserIdentifier()));
-        model.addAttribute("profileNames", userService.takeUserNames(user.getUserIdentifier()));
+        model.addAttribute("profileInfo", userService.getProfileShowcase(user.getUserId()));
         model.addAttribute("sellerApplied", userService.hasAppliedToBecomeSeller(user.getUserIdentifier()));
 
         return "profile";

@@ -1,9 +1,12 @@
 package com.example.instamarket.service;
 
+import com.example.instamarket.model.binding.EditOfferBindingModel;
 import com.example.instamarket.model.dto.OfferDTO;
 import com.example.instamarket.model.service.AddOfferServiceModel;
+import com.example.instamarket.model.service.EditOfferServiceModel;
 import com.example.instamarket.model.service.OfferQuestionServiceModel;
 import com.example.instamarket.model.service.SearchServiceModel;
+import com.example.instamarket.model.view.EditOfferViewModel;
 import com.example.instamarket.model.view.OfferDetailsViewModel;
 import com.example.instamarket.model.view.OfferSellerViewModel;
 import org.springframework.data.domain.Page;
@@ -25,4 +28,16 @@ public interface OfferService {
     OfferSellerViewModel getOfferSeller(Long offerId);
 
     void saveOfferQuestion(OfferQuestionServiceModel model, String username);
+
+    EditOfferViewModel getOfferDetails(Long offerId, String username);
+
+    void removeSpecification(Long specificationId);
+
+    boolean isSpecOwner(String username, Long specificationId);
+
+    void removeOption(Long optionId);
+
+    boolean isOptionOwner(String username, Long optionId);
+
+    void editOffer(EditOfferServiceModel model);
 }

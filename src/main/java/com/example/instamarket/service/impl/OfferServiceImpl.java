@@ -6,10 +6,10 @@ import com.example.instamarket.model.dto.OfferDTO;
 import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.CategoriesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
+import com.example.instamarket.model.service.EditOfferServiceModel;
 import com.example.instamarket.model.service.OfferQuestionServiceModel;
 import com.example.instamarket.model.service.SearchServiceModel;
-import com.example.instamarket.model.view.OfferDetailsViewModel;
-import com.example.instamarket.model.view.OfferSellerViewModel;
+import com.example.instamarket.model.view.*;
 import com.example.instamarket.repository.*;
 import com.example.instamarket.repository.specification.OfferSearchSpecification;
 import com.example.instamarket.service.OfferService;
@@ -34,19 +34,24 @@ public class OfferServiceImpl implements OfferService {
     private final UserRepository userRepository;
     private final SubscriberRepository subscriberRepository;
     private final OfferQuestionRepository offerQuestionRepository;
+    private final OfferOptionRepository offerOptionRepository;
+    private final OfferPropertyRepository offerPropertyRepository;
     private final ModelMapper modelMapper;
+
     private static final String uploadDir = "D://projImages//";
     private static final String offerImagesDir = "offerImages//";
     private static final String optionImagesDir = "optionImages//";
     private static final List<String> validFileFormats = Arrays.asList("jpeg", "jpg", "png", "gif");
     private static final char[] characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_".toCharArray();
 
-    public OfferServiceImpl(OfferRepository offerRepository, CategoryRepository categoryRepository, UserRepository userRepository, SubscriberRepository subscriberRepository, OfferQuestionRepository offerQuestionRepository, ModelMapper modelMapper) {
+    public OfferServiceImpl(OfferRepository offerRepository, CategoryRepository categoryRepository, UserRepository userRepository, SubscriberRepository subscriberRepository, OfferQuestionRepository offerQuestionRepository, OfferOptionRepository offerOptionRepository, OfferPropertyRepository offerPropertyRepository, ModelMapper modelMapper) {
         this.offerRepository = offerRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.subscriberRepository = subscriberRepository;
         this.offerQuestionRepository = offerQuestionRepository;
+        this.offerOptionRepository = offerOptionRepository;
+        this.offerPropertyRepository = offerPropertyRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -87,31 +92,7 @@ public class OfferServiceImpl implements OfferService {
         model.getOfferImages().stream().filter(img -> {
            return isValidFileFormat(img.getOriginalFilename());
         }).map(img -> {
-            String fileName = "";
-
-            try {
-                String fileExt = FilenameUtils.getExtension(img.getOriginalFilename());
-
-                byte[] bytes = img.getBytes();
-
-                while(true){
-                    fileName = generateFileName(30, fileExt);
-
-                    Path path = Paths.get(uploadDir + offerImagesDir + fileName);
-
-                    if(!Files.exists(path)){
-                        break;
-                    }
-                }
-
-                Path path = Paths.get(uploadDir + offerImagesDir + fileName);
-
-                Files.write(path, bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return fileName;
+            return uploadOfferImage(img);
         }).forEach(imgFileName -> {
             OfferImage offerImage = new OfferImage();
 
@@ -142,30 +123,7 @@ public class OfferServiceImpl implements OfferService {
 
             MultipartFile img = option.getImage();
 
-            String fileName = "";
-
-            //Option image upload code
-            try {
-                String fileExt = FilenameUtils.getExtension(img.getOriginalFilename());
-
-                byte[] bytes = img.getBytes();
-
-                while(true){
-                    fileName = generateFileName(30, fileExt);
-
-                    Path path = Paths.get(uploadDir + optionImagesDir + fileName);
-
-                    if(!Files.exists(path)){
-                        break;
-                    }
-                }
-
-                Path path = Paths.get(uploadDir + optionImagesDir + fileName);
-
-                Files.write(path, bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String fileName = uploadOptionImage(img);
 
             offerOption.setOptionName(fileName);
             offerOption.setOptionValue(option.getValue());
@@ -204,11 +162,15 @@ public class OfferServiceImpl implements OfferService {
             offerImagesUrl.add(img.getImageUrl());
         });
 
-        offer.getOfferOptions().stream().forEach(option -> {
+        offer.getOfferOptions().stream().filter(option -> {
+            return !option.isRemoved();
+        }).forEach(option -> {
             offerOptions.put(option.getOptionName(), option.getOptionValue());
         });
 
-        offer.getOfferProperties().stream().forEach(property -> {
+        offer.getOfferProperties().stream().filter(property -> {
+            return !property.isRemoved();
+        }).forEach(property -> {
             offerProperties.put(property.getPropertyName(), property.getPropertyValue());
         });
 
@@ -274,6 +236,143 @@ public class OfferServiceImpl implements OfferService {
         offerQuestionRepository.save(offerQuestion);
     }
 
+    @Override
+    @Transactional
+    public EditOfferViewModel getOfferDetails(Long offerId, String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        Offer offer = offerRepository.findOfferByIdAndSeller(offerId, seller).orElseThrow(() -> new OfferNotFoundException());
+
+        EditOfferViewModel model = modelMapper.map(offer, EditOfferViewModel.class);
+
+        Set<OfferImageViewModel> offerImages = offer.getImages().stream().map(img -> {
+            return modelMapper.map(img, OfferImageViewModel.class);
+        }).collect(Collectors.toSet());
+
+        List<OptionViewModel> offerOptions = offer.getOfferOptions().stream().filter(option -> {
+            return !option.isRemoved();
+        }).map(option -> {
+            return modelMapper.map(option, OptionViewModel.class);
+        }).collect(Collectors.toList());
+
+        List<PropertyViewModel> offerProperties = offer.getOfferProperties().stream().filter(property -> {
+            return !property.isRemoved();
+        }).map(property -> {
+            return modelMapper.map(property, PropertyViewModel.class);
+        }).collect(Collectors.toList());
+
+        model.setOfferImages(offerImages);
+        model.setOptions(offerOptions);
+        model.setProperties(offerProperties);
+
+        return model;
+    }
+
+    //Remove Option Method known as specification
+    @Override
+    public void removeSpecification(Long specificationId) {
+        OfferProperty property = offerPropertyRepository.findById(specificationId).orElseThrow();
+
+        property.setRemoved(true);
+
+        offerPropertyRepository.save(property);
+    }
+
+    @Override
+    public boolean isSpecOwner(String username, Long specificationId) {
+        //TODO Object not found exception
+        OfferProperty property = offerPropertyRepository.findById(specificationId).orElseThrow();
+
+        return property.getOffer().getSeller().getUsername().equals(username);
+    }
+
+    @Override
+    public void removeOption(Long optionId) {
+        OfferOption option = offerOptionRepository.findById(optionId).orElseThrow();
+
+        option.setRemoved(true);
+
+        offerOptionRepository.save(option);
+    }
+
+    @Override
+    public boolean isOptionOwner(String username, Long optionId) {
+        //TODO Object not found exception
+        OfferOption option = offerOptionRepository.findById(optionId).orElseThrow();
+
+        return option.getOffer().getSeller().getUsername().equals(username);
+    }
+
+    @Override
+    @Transactional
+    public void editOffer(EditOfferServiceModel model) {
+        Offer offer = offerRepository.findById(model.getId()).orElseThrow(() -> new OfferNotFoundException());
+
+        Category category = categoryRepository.findCategoryByCategory(model.getOfferCategory()).get();
+
+        offer.setTitle(model.getTitle());
+        offer.setDescription(model.getDescription());
+        offer.setPrice(model.getPrice());
+        offer.setOfferCategory(category);
+
+        Set<OfferImage> offerImages = offer.getImages();
+
+        Set<OfferProperty> offerProperties = offer.getOfferProperties();
+
+        List<OfferOption> offerOptions = offer.getOfferOptions();
+
+        model.getOfferImages().stream().filter(img -> {
+            return isValidFileFormat(img.getOriginalFilename());
+        }).map(img -> {
+            return uploadOfferImage(img);
+        }).forEach(imgFileName -> {
+            OfferImage offerImage = new OfferImage();
+
+            offerImage.setOffer(offer);
+            offerImage.setImageUrl(imgFileName);
+
+            offerImages.add(offerImage);
+        });
+
+        model.getProperties().stream().filter(property -> {
+            return (property.getName() != null && property.getValue() != null);
+        }).map(property -> {
+            OfferProperty offerProperty = new OfferProperty();
+
+            offerProperty.setPropertyName(property.getName());
+            offerProperty.setPropertyValue(property.getValue());
+            offerProperty.setOffer(offer);
+
+            return offerProperty;
+        }).forEach(offerProperty -> {
+            offerProperties.add(offerProperty);
+        });
+
+        model.getOptions().stream().filter(option -> {
+            return (option.getValue() != null && !option.getImage().isEmpty() && isValidFileFormat(option.getImage().getOriginalFilename()));
+        }).map(option -> {
+            OfferOption offerOption = new OfferOption();
+
+            MultipartFile img = option.getImage();
+
+            String fileName = uploadOptionImage(img);
+
+            offerOption.setOptionName(fileName);
+            offerOption.setOptionValue(option.getValue());
+            offerOption.setOffer(offer);
+
+            return offerOption;
+        }).forEach(offerOption -> {
+            offerOptions.add(offerOption);
+        });
+
+        offer.setImages(offerImages);
+        offer.setOfferOptions(offerOptions);
+        offer.setOfferProperties(offerProperties);
+
+        offerRepository.save(offer);
+    }
+
     private boolean isValidFileFormat(String filename){
         String fileExt = FilenameUtils.getExtension(filename);
 
@@ -312,5 +411,62 @@ public class OfferServiceImpl implements OfferService {
         offerDTO.setOfferUrl(String.format("/offers/%d/details", offer.getId()));
 
         return offerDTO;
+    }
+
+    private String uploadOfferImage(MultipartFile img){
+        String fileName = "";
+
+        try {
+            String fileExt = FilenameUtils.getExtension(img.getOriginalFilename());
+
+            byte[] bytes = img.getBytes();
+
+            while(true){
+                fileName = generateFileName(30, fileExt);
+
+                Path path = Paths.get(uploadDir + offerImagesDir + fileName);
+
+                if(!Files.exists(path)){
+                    break;
+                }
+            }
+
+            Path path = Paths.get(uploadDir + offerImagesDir + fileName);
+
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return fileName;
+    }
+
+    private String uploadOptionImage(MultipartFile img){
+        String fileName = "";
+
+        //Option image upload code
+        try {
+            String fileExt = FilenameUtils.getExtension(img.getOriginalFilename());
+
+            byte[] bytes = img.getBytes();
+
+            while(true){
+                fileName = generateFileName(30, fileExt);
+
+                Path path = Paths.get(uploadDir + optionImagesDir + fileName);
+
+                if(!Files.exists(path)){
+                    break;
+                }
+            }
+
+            Path path = Paths.get(uploadDir + optionImagesDir + fileName);
+
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return fileName;
     }
 }

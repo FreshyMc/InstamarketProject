@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/fragments :: head"></head>
+
+<body class="container-fluid p-0 m-0">
+<nav th:replace="common/fragments :: secondary-navigation"></nav>
+<!-- Adverts main section -->
+<main class="form-page">
+  <form class="p-2 p-sm-3 offer-form" th:action="@{/offers/{id}/edit(id = ${offerBinding.id})}" th:method="PATCH" enctype="multipart/form-data" th:object="${offerBinding}">
+    <h3>Edit offer</h3>
+    <div class="mb-2">
+      <input type="text" class="form-control" th:field="*{title}" th:errorclass="is-invalid" placeholder="Offer title">
+      <div class="mt-2 form-alert invalid-feedback">
+        <p class="m-0 p-0">Offer title is required.</p>
+      </div>
+    </div>
+    <div class="mb-2">
+      <select class="form-select" th:field="*{offerCategory}" th:errorclass="is-invalid">
+        <option value="" selected>Select product category</option>
+        <option th:value="${c.name()}" th:each="c : ${categories}" th:text="${c.getDisplayName()}" th:selected="${c} == *{offerCategory}">Category</option>
+      </select>
+      <div class="mt-2 form-alert invalid-feedback">
+        <p class="m-0 p-0">Offer category is required.</p>
+      </div>
+    </div>
+    <div class="mb-2">
+      <input type="number" class="form-control" th:field="*{price}" th:errorclass="is-invalid" min="0" step="0.01" placeholder="Product price">
+      <div class="mt-2 form-alert invalid-feedback">
+        <p class="m-0 p-0">Offer price is required.</p>
+      </div>
+    </div>
+    <div class="mb-2">
+      <textarea class="form-control" th:field="*{description}" th:errorclass="is-invalid" placeholder="Product description"></textarea>
+      <div class="mt-2 form-alert invalid-feedback">
+        <p class="m-0 p-0">Offer description is required.</p>
+      </div>
+    </div>
+    <div class="mb-2">
+      <h4>Product heading images</h4>
+      <input type="file" class="form-control" th:field="*{offerImages}" th:errorclass="is-invalid" multiple>
+      <div class="mt-2 form-alert invalid-feedback">
+        <p class="m-0 p-0">Offer images is required.</p>
+      </div>
+    </div>
+    <div class="mb-2">
+      <h4>Product specifications</h4>
+      <button type="button" class="btn btn-secondary col-12" id="addSpecificationBtn">Add specification</button>
+      <div class="mt-2" id="specificationsGroup">
+      </div>
+      <div class="mt-2" th:if="${!offerDetails.properties.isEmpty()}">
+        <div class="input-group mb-2 action-removal" th:each="property : ${offerDetails.properties}" th:object="${property}">
+          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item link-to-action" th:href="@{/offers/remove/specification/{id}(id = *{id})}">Remove specification</a></li>
+          </ul>
+          <input type="text" class="form-control" th:value="*{propertyName}" placeholder="Specification title" disabled>
+          <input type="text" class="form-control" th:value="*{propertyValue}" placeholder="Specification value" disabled>
+        </div>
+      </div>
+    </div>
+    <div class="mb-2">
+      <h4>Product options</h4>
+      <button type="button" class="btn btn-secondary col-12" id="addOptionBtn">Add option</button>
+      <div class="mt-2" id="optionsGroup">
+      </div>
+      <div class="mt-2" th:if="${!offerDetails.options.isEmpty()}">
+        <div class="mb-2 d-flex specifications-empty-message action-removal" th:each="option : ${offerDetails.options}" th:object="${option}">
+          <img th:src="@{/optionImage/{name}(name = *{optionName})}" alt="#" class="small-image">
+          <div class="ms-2 flex-grow-1 d-flex flex-column justify-content-between">
+            <input type="text" class="form-control" th:value="*{optionValue}" placeholder="Option text" disabled>
+            <a th:href="@{/offers/remove/option/{id}(id = *{id})}" role="button" class="btn btn-secondary w-100 link-to-action">Remove Option</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" th:field="*{id}">
+    <button type="submit" class="mt-4 btn btn-primary btn-lg col-12">Edit offer</button>
+  </form>
+</main>
+<script src="/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="/js/offer.js" type="module"></script>
+<script>
+  (function(){
+    let doc = document;
+    let actionLinks = doc.querySelectorAll(".link-to-action");
+
+    actionLinks.forEach(link => {
+      link.addEventListener('click', callAction);
+    });
+
+    async function callAction(e){
+      e.preventDefault();
+
+      let link = e.target;
+
+      let action = link.getAttribute('href');
+
+      let request = await fetch(action);
+
+      if(request.ok){
+        let toRemove = findRemoval(link);
+
+        toRemove.remove();
+      }
+    }
+
+    function findRemoval(el){
+      while(!el.classList.contains('action-removal')){
+        el = el.parentElement;
+      }
+
+      return el;
+    }
+  })();
+</script>
+</body>
+
+</html>

@@ -2,8 +2,14 @@ package com.example.instamarket.config;
 
 import com.cloudinary.Cloudinary;
 import com.example.instamarket.misc.AuthHelper;
+import com.example.instamarket.model.binding.AddOfferBindingModel;
+import com.example.instamarket.model.binding.EditOfferBindingModel;
+import com.example.instamarket.model.service.EditOfferServiceModel;
+import com.example.instamarket.model.view.EditOfferViewModel;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +49,14 @@ public class ApplicationConfig {
     @Bean
     public ModelMapper modelMapper(){
         ModelMapper mapper = new ModelMapper();
+
+        TypeMap<EditOfferViewModel, EditOfferBindingModel> propertyMapper = mapper.createTypeMap(EditOfferViewModel.class, EditOfferBindingModel.class);
+
+        propertyMapper.addMappings(map -> {
+            map.skip(EditOfferBindingModel::setOfferImages);
+            map.skip(EditOfferBindingModel::setOptions);
+            map.skip(EditOfferBindingModel::setProperties);
+        });
 
         Converter<BigDecimal, String> converter = new Converter<>() {
             @Override

@@ -11,9 +11,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long>, JpaSpecificationExecutor<Offer> {
     Integer countOffersBySellerAndDeleted(User seller, boolean deleted);
 
     Slice<Offer> findAllBySeller_Id(Long sellerId, Pageable pageable);
+
+    Optional<Offer> findOfferByIdAndSeller(Long id, User seller);
 }

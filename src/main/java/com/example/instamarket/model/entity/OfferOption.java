@@ -12,6 +12,7 @@ public class OfferOption extends BaseEntity{
     private String optionName;
     @Column(nullable = false, length = 200)
     private String optionValue;
+    private boolean removed = false;
 
     public OfferOption() {
     }
@@ -40,6 +41,15 @@ public class OfferOption extends BaseEntity{
 
     public OfferOption setOffer(Offer offer) {
         this.offer = offer;
+        return this;
+    }
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public OfferOption setRemoved(boolean removed) {
+        this.removed = removed;
         return this;
     }
 }
