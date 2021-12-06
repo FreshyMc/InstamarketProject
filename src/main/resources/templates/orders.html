@@ -56,6 +56,7 @@
                             <p class="mb-2"><strong>Order status: </strong><span th:text="*{orderStatus}">Status</span></p>
                             <p class="mb-2"><strong>Delivery address: </strong><span th:text="*{deliveryAddress}">Order delivery address</span></p>
                             <p class="m-0"><strong>Order time: </strong><span th:text="${#temporals.format(order.orderTime, 'dd/MM/yyyy HH:mm:ss')}">Order time</span></p>
+                            <a th:href="@{/orders/{id}/received(id = *{id})}" class="btn btn-primary mt-2 col-12" th:if="*{shipped}">Order Received</a>
                         </div>
                     </li>
                 </ul>

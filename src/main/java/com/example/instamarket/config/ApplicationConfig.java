@@ -4,8 +4,10 @@ import com.cloudinary.Cloudinary;
 import com.example.instamarket.misc.AuthHelper;
 import com.example.instamarket.model.binding.AddOfferBindingModel;
 import com.example.instamarket.model.binding.EditOfferBindingModel;
+import com.example.instamarket.model.entity.Order;
 import com.example.instamarket.model.service.EditOfferServiceModel;
 import com.example.instamarket.model.view.EditOfferViewModel;
+import com.example.instamarket.model.view.OrderViewModel;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -50,9 +52,14 @@ public class ApplicationConfig {
     public ModelMapper modelMapper(){
         ModelMapper mapper = new ModelMapper();
 
-        TypeMap<EditOfferViewModel, EditOfferBindingModel> propertyMapper = mapper.createTypeMap(EditOfferViewModel.class, EditOfferBindingModel.class);
+        //Currently not working strategy
+        /*
+        mapper.createTypeMap(Order.class, OrderViewModel.class).addMappings(map -> {
+            map.skip(OrderViewModel::setOrderStatus);
+        });
+         */
 
-        propertyMapper.addMappings(map -> {
+        mapper.createTypeMap(EditOfferViewModel.class, EditOfferBindingModel.class).addMappings(map -> {
             map.skip(EditOfferBindingModel::setOfferImages);
             map.skip(EditOfferBindingModel::setOptions);
             map.skip(EditOfferBindingModel::setProperties);

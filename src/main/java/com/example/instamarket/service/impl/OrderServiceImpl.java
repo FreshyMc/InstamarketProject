@@ -1,5 +1,6 @@
 package com.example.instamarket.service.impl;
 
+import com.example.instamarket.exception.ObjectNotFoundException;
 import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.entity.Address;
 import com.example.instamarket.model.entity.Order;
@@ -53,35 +54,113 @@ public class OrderServiceImpl implements OrderService {
 
         OrderStatus completedStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.COMPLETED).get();
 
-        List<OrderViewModel> orders = orderRepository.findAllByBuyerAndStatusNot(buyer, completedStatus).stream().map(order -> {
-            OrderViewModel mappedOrder = modelMapper.map(order, OrderViewModel.class);
-
-            mappedOrder.setOfferTitle(order.getOffer().getTitle());
-
-            mappedOrder.setOfferId(order.getOffer().getId());
-
-            mappedOrder.setOrderStatus(order.getStatus().getName().getDisplayName());
-
-            Set<String> orderImagesUrl = order.getOffer().getImages().stream().map(img -> {
-               return img.getImageUrl();
-            }).collect(Collectors.toSet());
-
-            mappedOrder.setOfferImages(orderImagesUrl);
-
-            Address address = order.getDeliveryAddress();
-
-            String deliveryAddress = String.format("%s, %s, %s, %s", address.getCountry(), address.getPostalCode(), address.getCity(), address.getStreet());
-
-            mappedOrder.setDeliveryAddress(deliveryAddress);
-
-            if(order.getOfferOption() != null){
-                mappedOrder.setOptionKey(order.getOfferOption().getOptionName());
-                mappedOrder.setOptionValue(order.getOfferOption().getOptionValue());
-            }
-
-            return mappedOrder;
-        }).collect(Collectors.toList());
+        List<OrderViewModel> orders = orderRepository.findAllByBuyerAndStatusNot(buyer, completedStatus).stream().map(this::mapAsOrderView).collect(Collectors.toList());
 
         return orders;
+    }
+
+    @Override
+    public List<OrderViewModel> getSellerRecentOrders(String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        OrderStatus orderStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.WAITING).get();
+
+        List<OrderViewModel> orders = orderRepository.findAllSellerOrdersByStatus(seller, orderStatus).stream().map(this::mapAsOrderView).collect(Collectors.toList());
+
+        return orders;
+    }
+
+    @Override
+    public void acceptOrder(Long orderId, String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        Order order = orderRepository.findSellerOrder(seller, orderId).orElseThrow(() -> new ObjectNotFoundException());
+
+        OrderStatus orderStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.ACCEPTED).get();
+
+        order.setStatus(orderStatus);
+
+        orderRepository.save(order);
+    }
+
+    @Override
+    public List<OrderViewModel> getSellerAcceptedOrders(String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        OrderStatus orderStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.ACCEPTED).get();
+
+        List<OrderViewModel> orders = orderRepository.findAllSellerOrdersByStatus(seller, orderStatus).stream().map(this::mapAsOrderView).collect(Collectors.toList());
+
+        return orders;
+    }
+
+    @Override
+    public void cancelOrder(Long orderId, String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        Order order = orderRepository.findSellerOrder(seller, orderId).orElseThrow(() -> new ObjectNotFoundException());
+
+        OrderStatus orderStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.CANCELED).get();
+
+        order.setStatus(orderStatus);
+
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void shipOrder(Long orderId, String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        Order order = orderRepository.findSellerOrder(seller, orderId).orElseThrow(() -> new ObjectNotFoundException());
+
+        OrderStatus orderStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.SHIPPED).get();
+
+        order.setStatus(orderStatus);
+
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void completeOrder(Long orderId, String username) {
+        User buyer = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
+
+        Order order = orderRepository.findBuyerOrder(buyer, orderId).orElseThrow(() -> new ObjectNotFoundException());
+
+        OrderStatus orderStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.COMPLETED).get();
+
+        order.setStatus(orderStatus);
+
+        orderRepository.save(order);
+    }
+
+    private OrderViewModel mapAsOrderView(Order order){
+        OrderViewModel mappedOrder = modelMapper.map(order, OrderViewModel.class);
+
+        mappedOrder.setOfferTitle(order.getOffer().getTitle());
+
+        mappedOrder.setOfferId(order.getOffer().getId());
+
+        mappedOrder.setOrderStatus(order.getStatus().getName().getDisplayName());
+
+        Set<String> orderImagesUrl = order.getOffer().getImages().stream().map(img -> {
+            return img.getImageUrl();
+        }).collect(Collectors.toSet());
+
+        mappedOrder.setOfferImages(orderImagesUrl);
+
+        Address address = order.getDeliveryAddress();
+
+        String deliveryAddress = String.format("%s, %s, %s, %s", address.getCountry(), address.getPostalCode(), address.getCity(), address.getStreet());
+
+        mappedOrder.setDeliveryAddress(deliveryAddress);
+
+        if(order.getOfferOption() != null){
+            mappedOrder.setOptionKey(order.getOfferOption().getOptionName());
+            mappedOrder.setOptionValue(order.getOfferOption().getOptionValue());
+        }
+
+        mappedOrder.setShipped(order.getStatus().getName().equals(OrderStatusEnum.SHIPPED));
+
+        return mappedOrder;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.instamarket.model.view;
 
+import com.example.instamarket.model.enums.OrderStatusEnum;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,6 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class OrderViewModel {
+    private Long id;
     private Long offerId;
     private String offerTitle;
     private Set<String> offerImages = new LinkedHashSet<>();
@@ -18,6 +21,7 @@ public class OrderViewModel {
     private String deliveryAddress;
     private LocalDateTime orderTime;
     private LocalDate deliveryDate;
+    private boolean isShipped = false;
 
     public OrderViewModel() {
     }
@@ -118,6 +122,24 @@ public class OrderViewModel {
 
     public OrderViewModel setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+        return this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public OrderViewModel setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public boolean isShipped() {
+        return isShipped;
+    }
+
+    public OrderViewModel setShipped(boolean shipped) {
+        isShipped = shipped;
         return this;
     }
 }

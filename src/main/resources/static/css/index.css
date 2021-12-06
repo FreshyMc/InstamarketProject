@@ -1462,6 +1462,12 @@ main.error-page{
     border-radius: .4rem;
 }
 
+/* Other */
+
+.option-selected{
+    border: 4px solid rgba(235, 77, 75, .5);
+}
+
 /* ----------------------------------------- */
 
 
