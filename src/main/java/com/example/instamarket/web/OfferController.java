@@ -82,8 +82,9 @@ public class OfferController {
         return "edit-offer";
     }
 
+    @PreAuthorize("@offerServiceImpl.isOfferOwner(#user.username, #offerId)")
     @PatchMapping("/{offerId}/edit")
-    public String editOffer(@PathVariable Long offerId, @Valid EditOfferBindingModel editOfferBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public String editOffer(@PathVariable Long offerId, @Valid EditOfferBindingModel editOfferBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal InstamarketUser user){
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("editOfferBindingModel", editOfferBindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editOfferBindingModel", bindingResult);

@@ -5,6 +5,7 @@ import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.dto.OfferDTO;
 import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.CategoriesEnum;
+import com.example.instamarket.model.enums.RolesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
 import com.example.instamarket.model.service.EditOfferServiceModel;
 import com.example.instamarket.model.service.OfferQuestionServiceModel;
@@ -387,7 +388,11 @@ public class OfferServiceImpl implements OfferService {
         //TODO Object not found exception
         Offer offer = offerRepository.findById(offerId).orElseThrow();
 
-        return offer.getSeller().getUsername().equals(username);
+        boolean isAdmin = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException()).getRoles().stream().map(role -> {
+            return role.getName();
+        }).anyMatch(r -> r.equals(RolesEnum.ADMIN));
+
+        return offer.getSeller().getUsername().equals(username) || isAdmin;
     }
 
     private boolean isValidFileFormat(String filename){
