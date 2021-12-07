@@ -56,7 +56,7 @@
                             <p class="mb-2"><strong>Order status: </strong><span th:text="*{orderStatus}">Status</span></p>
                             <p class="mb-2"><strong>Delivery address: </strong><span th:text="*{deliveryAddress}">Order delivery address</span></p>
                             <p class="m-0"><strong>Order time: </strong><span th:text="${#temporals.format(order.orderTime, 'dd/MM/yyyy HH:mm:ss')}">Order time</span></p>
-                            <a th:href="@{/orders/{id}/received(id = *{id})}" class="btn btn-primary mt-2 col-12" th:if="*{shipped}">Order Received</a>
+                            <a th:href="@{/orders/{id}/received(id = *{id})}" class="btn btn-primary mt-2 col-12" th:if="*{shipped}" onclick="return confirm('Are you sure you have received this order?');">Order Received</a>
                         </div>
                     </li>
                 </ul>
@@ -64,7 +64,53 @@
             <div class="order-section">
                 <a class="collapse-btn fw-bold" role="button" data-bs-toggle="collapse" href="#deliveredCollapse" aria-expanded="false" aria-controls="deliveredCollapse">Completed Orders</a>
                 <ul class="list-unstyled m-0 collapse orders" id="deliveredCollapse">
-                    <li>
+                    <li th:if="${completedOrders.isEmpty()}">
+                        <p class="specifications-empty-message m-0">Your orders list is empty.</p>
+                    </li>
+                    <li th:each="order : ${completedOrders}" th:object="${order}">
+                        <div class="order">
+                            <a th:href="@{/offers/{id}/details(id=*{offerId})}" class="d-flex offer-title offer-link mb-2" th:text="*{offerTitle}">Order title</a>
+                            <div class="row g-2 m-0 mb-2 p-0">
+                                <div class="col-12 col-lg-5">
+                                    <div class="row g-2 m-0 p-0">
+                                        <div class="col-6">
+                                            <div class="product-images-wrapper d-flex flex-nowrap">
+                                                <div class="product-images-previewer d-flex justify-content-between">
+                                                    <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(order.offerImages.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
+                                                    <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(order.offerImages.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
+                                                </div>
+                                                <div class="ratio ratio-1x1 product-image" th:each="imgName : *{offerImages}">
+                                                    <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <th:block th:if="${order.optionValue != null}">
+                                            <div class="col-6">
+                                                <div class="cart-option d-flex flex-column">
+                                                    <div class="cart-option-selected">
+                                                        <div class="ratio ratio-1x1">
+                                                            <img th:src="@{/optionImage/{id}(id = ${order.optionKey})}" alt="#" title="Option selected">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="m-0 fw-bold d-flex flex-grow-1 justify-content-center align-items-center" th:text="${order.optionValue}">Option text</div>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-7 d-flex align-items-end flex-column">
+                                    <p class="m-0">Total price: <span class="order-price" th:text="|$${#numbers.formatDecimal(order.totalPrice, 0, 'WHITESPACE', 2, 'POINT')}|">$0.00</span></p>
+                                    <p class="m-0">Quantity: <span class="fw-bold" th:text="|*{quantity}x|"></span></p>
+                                </div>
+                            </div>
+                            <p class="mb-2"><strong>Order status: </strong><span th:text="*{orderStatus}">Status</span></p>
+                            <p class="mb-2"><strong>Delivery address: </strong><span th:text="*{deliveryAddress}">Order delivery address</span></p>
+                            <p class="m-0"><strong>Order time: </strong><span th:text="${#temporals.format(order.orderTime, 'dd/MM/yyyy HH:mm:ss')}">Order time</span></p>
+                            <p class="m-0"><strong>Delivery date: </strong><span th:text="${#temporals.format(order.deliveryDate, 'dd/MM/yyyy')}">Delivery time</span></p>
+                            <a href="#" class="btn btn-primary mt-2 col-12">Add Feedback</a>
+                        </div>
                     </li>
                 </ul>
             </div>

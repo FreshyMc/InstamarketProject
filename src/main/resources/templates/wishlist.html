@@ -5,7 +5,7 @@
     <nav th:replace="common/fragments :: secondary-navigation"></nav>
     <!-- WishList Content -->
     <main class="row g-0 p-0 py-3 px-1 px-sm-3">
-        <h2>Wish List</h2>
+        <h2 class="specifications-empty-message">Wish List</h2>
         <div class="specifications-empty-message" th:classappend="${wishListItems.isEmpty()} ? 'd-block' : ''" style="display: none;">
             <span>Your wish list is empty.</span>
             <a href="/home" class="fancy-link ms-2">Go Home and add some offers to it!</a>

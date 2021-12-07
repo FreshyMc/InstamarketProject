@@ -13,7 +13,7 @@
                     <h4 class="m-0">Orders to accept</h4>
                 </div>
                 <div class="specifications-empty-message mb-2" th:each="order : ${recentOrders}" th:object="${order}">
-                    <a th:href="@{/offers/{id}/details(id=*{offerId})}" class="d-flex offer-title offer-link mb-2">Order title</a>
+                    <a th:href="@{/offers/{id}/details(id=*{offerId})}" class="d-flex offer-title offer-link mb-2" th:text="*{offerTitle}">Order title</a>
                     <div class="row g-2 m-0 mb-2 p-0">
                         <div class="col-6">
                             <div class="product-images-wrapper d-flex flex-nowrap">
@@ -55,7 +55,7 @@
                     <h4 class="m-0">Orders to ship</h4>
                 </div>
                 <div class="specifications-empty-message mb-2" th:each="order : ${acceptedOrders}" th:object="${order}">
-                    <a th:href="@{/offers/{id}/details(id=*{offerId})}" class="d-flex offer-title offer-link mb-2">Order title</a>
+                    <a th:href="@{/offers/{id}/details(id=*{offerId})}" class="d-flex offer-title offer-link mb-2" th:text="*{offerTitle}">Order title</a>
                     <div class="row g-2 m-0 mb-2 p-0">
                         <div class="col-6">
                             <div class="product-images-wrapper d-flex flex-nowrap">
@@ -95,25 +95,37 @@
                 <div class="specifications-empty-message mb-2">
                     <h4 class="m-0">Completed Orders</h4>
                 </div>
-                <div class="specifications-empty-message mb-2">
-                    <a href="#" class="d-flex offer-title offer-link mb-2">Order title</a>
+                <div class="specifications-empty-message mb-2" th:each="order : ${completedOrders}" th:object="${order}">
+                    <a th:href="@{/offers/{id}/details(id=*{offerId})}" class="d-flex offer-title offer-link mb-2" th:text="*{offerTitle}">Order title</a>
                     <div class="row g-2 m-0 mb-2 p-0">
                         <div class="col-6">
-                            <img src="https://media.istockphoto.com/photos/red-generic-sedan-car-isolated-on-white-background-3d-illustration-picture-id1189903200" alt="#" class="w-100 rounded shadow-sm">
+                            <div class="product-images-wrapper d-flex flex-nowrap">
+                                <div class="product-images-previewer d-flex justify-content-between">
+                                    <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(order.offerImages.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
+                                    <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(order.offerImages.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <div class="ratio ratio-1x1 product-image" th:each="imgName : *{offerImages}">
+                                    <img th:src="@{/headingImage/{name}(name = ${imgName})}" alt="#">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <img src="https://media.istockphoto.com/photos/red-generic-sedan-car-isolated-on-white-background-3d-illustration-picture-id1189903200" alt="#" class="w-100 rounded shadow-sm option-selected" title="Selected option">
-                        </div>
-                        <div class="col-12">
-                            <h5 class="m-0">Selected option title</h5>
-                        </div>
+                        <th:block th:if="*{optionValue != null}">
+                            <div class="col-6">
+                                <div class="ratio ratio-1x1">
+                                    <img th:src="@{/optionImage/{id}(id = ${order.optionKey})}" alt="#" class="w-100 rounded shadow-sm option-selected" title="Selected option">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <h5 class="m-0" th:text="|Selected option: *{optionValue}|">Selected option title</h5>
+                            </div>
+                        </th:block>
                     </div>
                     <div class="mb-2">
-                        <p class="m-0">Total price: <span class="order-price">$0.00</span></p>
-                        <p class="m-0">Quantity: <span class="fw-bold">Quantity</span></p>
-                        <p class="m-0"><strong>Delivery address: </strong><span>Order delivery address</span></p>
-                        <p class="m-0"><strong>Order time: </strong><span>Order time</span></p>
-                        <p class="m-0"><strong>Delivery time: </strong><span>Delivery time</span></p>
+                        <p class="m-0">Total price: <span class="order-price" th:text="|$${#numbers.formatDecimal(order.totalPrice, 0, 'WHITESPACE', 2, 'POINT')}|">$0.00</span></p>
+                        <p class="m-0">Quantity: <span class="fw-bold" th:text="|*{quantity}x|">Quantity</span></p>
+                        <p class="m-0"><strong>Delivery address: </strong><span th:text="*{deliveryAddress}">Order delivery address</span></p>
+                        <p class="m-0"><strong>Order time: </strong><span th:text="${#temporals.format(order.orderTime, 'dd/MM/yyyy HH:mm:ss')}">Order time</span></p>
+                        <p class="m-0"><strong>Delivery date: </strong><span th:text="${#temporals.format(order.deliveryDate, 'dd/MM/yyyy')}">Delivery time</span></p>
                     </div>
                 </div>
             </div>

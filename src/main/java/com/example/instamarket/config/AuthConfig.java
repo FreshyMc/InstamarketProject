@@ -32,7 +32,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 // we permit the page below only for admin users
                         antMatchers("/admin/**").hasRole(RolesEnum.ADMIN.name()).
                 // we permit the page below only for approved sellers
-                        antMatchers("/offers/add").hasAnyRole(RolesEnum.SELLER.name(), RolesEnum.ADMIN.name()).
+                        antMatchers("/offers/add", "/seller/**").hasAnyRole(RolesEnum.SELLER.name(), RolesEnum.ADMIN.name()).
                 // next we forbid all other pages for unauthenticated users.
                         antMatchers("/**").authenticated().
                 and().

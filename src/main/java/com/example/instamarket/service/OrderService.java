@@ -21,4 +21,8 @@ public interface OrderService {
     void shipOrder(Long orderId, String username);
 
     void completeOrder(Long orderId, String username);
+
+    List<OrderViewModel> getSellerCompletedOrders(String username);
+
+    List<OrderViewModel> showCompletedOrders(String username);
 }

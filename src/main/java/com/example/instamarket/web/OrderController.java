@@ -19,6 +19,7 @@ public class OrderController {
     @GetMapping("/orders")
     public String showOrdersPage(Model model, @AuthenticationPrincipal InstamarketUser user){
         model.addAttribute("recentOrders", orderService.showRecentOrders(user.getUserIdentifier()));
+        model.addAttribute("completedOrders", orderService.showCompletedOrders(user.getUserIdentifier()));
 
         return "orders";
     }
@@ -34,6 +35,7 @@ public class OrderController {
     public String showSellerOrders(Model model, @AuthenticationPrincipal InstamarketUser user){
         model.addAttribute("recentOrders", orderService.getSellerRecentOrders(user.getUserIdentifier()));
         model.addAttribute("acceptedOrders", orderService.getSellerAcceptedOrders(user.getUserIdentifier()));
+        model.addAttribute("completedOrders", orderService.getSellerCompletedOrders(user.getUserIdentifier()));
 
         return "seller/orders";
     }

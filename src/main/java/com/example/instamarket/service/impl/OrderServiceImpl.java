@@ -15,6 +15,7 @@ import com.example.instamarket.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -130,7 +131,31 @@ public class OrderServiceImpl implements OrderService {
 
         order.setStatus(orderStatus);
 
+        order.setDeliveryDate(LocalDate.now());
+
         orderRepository.save(order);
+    }
+
+    @Override
+    public List<OrderViewModel> getSellerCompletedOrders(String username) {
+        User seller = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
+
+        OrderStatus orderStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.COMPLETED).get();
+
+        List<OrderViewModel> orders = orderRepository.findAllSellerOrdersByStatus(seller, orderStatus).stream().map(this::mapAsOrderView).collect(Collectors.toList());
+
+        return orders;
+    }
+
+    @Override
+    public List<OrderViewModel> showCompletedOrders(String username) {
+        User buyer = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
+
+        OrderStatus completedStatus = orderStatusRepository.findOrderStatusByName(OrderStatusEnum.COMPLETED).get();
+
+        List<OrderViewModel> orders = orderRepository.findAllByBuyerAndStatus(buyer, completedStatus).stream().map(this::mapAsOrderView).collect(Collectors.toList());
+
+        return orders;
     }
 
     private OrderViewModel mapAsOrderView(Order order){

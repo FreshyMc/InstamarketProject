@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByBuyerAndStatusNot(User buyer, OrderStatus status);
 
+    List<Order> findAllByBuyerAndStatus(User buyer, OrderStatus status);
+
     @Query("SELECT o FROM Order o WHERE o.offer.seller = :seller AND o.status = :status ORDER BY o.orderTime DESC")
     List<Order> findAllSellerOrdersByStatus(@Param("seller") User seller, @Param("status") OrderStatus status);
 
