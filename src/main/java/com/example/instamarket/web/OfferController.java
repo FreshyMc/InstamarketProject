@@ -140,6 +140,7 @@ public class OfferController {
         model.addAttribute("offer", offerService.getOffer(offerId, user.getUserIdentifier()));
         model.addAttribute("sellerInfo", offerSeller);
         model.addAttribute("isSubscriber", subscriberService.isSubscribed(offerSeller.getId(), user.getUserIdentifier()));
+        model.addAttribute("feedback", offerService.getOfferFeedback(offerId));
 
         return "offer";
     }

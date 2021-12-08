@@ -1,19 +1,29 @@
 package com.example.instamarket.web;
 
+import com.example.instamarket.model.binding.FeedbackBindingModel;
+import com.example.instamarket.model.service.FeedbackServiceModel;
 import com.example.instamarket.service.OrderService;
 import com.example.instamarket.service.impl.InstamarketUser;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 @Controller
 public class OrderController {
     private final OrderService orderService;
+    private final ModelMapper modelMapper;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, ModelMapper modelMapper) {
         this.orderService = orderService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/orders")
@@ -59,5 +69,14 @@ public class OrderController {
         orderService.shipOrder(orderId, user.getUserIdentifier());
 
         return "redirect:/seller/orders";
+    }
+
+    @PostMapping("/orders/feedback")
+    public ResponseEntity sendFeedback(@RequestBody @Valid FeedbackBindingModel feedbackModel, @AuthenticationPrincipal InstamarketUser user){
+        FeedbackServiceModel model = modelMapper.map(feedbackModel, FeedbackServiceModel.class);
+
+        orderService.addFeedback(model, user.getUserIdentifier());
+
+        return ResponseEntity.ok().build();
     }
 }

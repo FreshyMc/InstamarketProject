@@ -1,5 +1,7 @@
 package com.example.instamarket.service;
 
+import com.example.instamarket.model.binding.FeedbackBindingModel;
+import com.example.instamarket.model.service.FeedbackServiceModel;
 import com.example.instamarket.model.view.OrderViewModel;
 
 import java.util.List;
@@ -25,4 +27,6 @@ public interface OrderService {
     List<OrderViewModel> getSellerCompletedOrders(String username);
 
     List<OrderViewModel> showCompletedOrders(String username);
+
+    void addFeedback(FeedbackServiceModel model, String username);
 }

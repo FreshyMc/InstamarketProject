@@ -7,10 +7,13 @@ import com.example.instamarket.model.service.EditOfferServiceModel;
 import com.example.instamarket.model.service.OfferQuestionServiceModel;
 import com.example.instamarket.model.service.SearchServiceModel;
 import com.example.instamarket.model.view.EditOfferViewModel;
+import com.example.instamarket.model.view.FeedbackViewModel;
 import com.example.instamarket.model.view.OfferDetailsViewModel;
 import com.example.instamarket.model.view.OfferSellerViewModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
+
+import java.util.List;
 
 public interface OfferService {
     void initializeOfferCategories();
@@ -44,4 +47,6 @@ public interface OfferService {
     void removeOffer(Long offerId);
 
     boolean isOfferOwner(String username, Long offerId);
+
+    List<FeedbackViewModel> getOfferFeedback(Long offerId);
 }

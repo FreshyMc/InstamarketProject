@@ -2,12 +2,12 @@ package com.example.instamarket.service.impl;
 
 import com.example.instamarket.exception.ObjectNotFoundException;
 import com.example.instamarket.exception.UserNotFoundException;
-import com.example.instamarket.model.entity.Address;
-import com.example.instamarket.model.entity.Order;
-import com.example.instamarket.model.entity.OrderStatus;
-import com.example.instamarket.model.entity.User;
+import com.example.instamarket.model.binding.FeedbackBindingModel;
+import com.example.instamarket.model.entity.*;
 import com.example.instamarket.model.enums.OrderStatusEnum;
+import com.example.instamarket.model.service.FeedbackServiceModel;
 import com.example.instamarket.model.view.OrderViewModel;
+import com.example.instamarket.repository.OrderFeedbackRepository;
 import com.example.instamarket.repository.OrderRepository;
 import com.example.instamarket.repository.OrderStatusRepository;
 import com.example.instamarket.repository.UserRepository;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,12 +26,14 @@ public class OrderServiceImpl implements OrderService {
     private final OrderStatusRepository orderStatusRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final OrderFeedbackRepository orderFeedbackRepository;
     private final ModelMapper modelMapper;
 
-    public OrderServiceImpl(OrderStatusRepository orderStatusRepository, OrderRepository orderRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public OrderServiceImpl(OrderStatusRepository orderStatusRepository, OrderRepository orderRepository, UserRepository userRepository, OrderFeedbackRepository orderFeedbackRepository, ModelMapper modelMapper) {
         this.orderStatusRepository = orderStatusRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.orderFeedbackRepository = orderFeedbackRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -156,6 +157,27 @@ public class OrderServiceImpl implements OrderService {
         List<OrderViewModel> orders = orderRepository.findAllByBuyerAndStatus(buyer, completedStatus).stream().map(this::mapAsOrderView).collect(Collectors.toList());
 
         return orders;
+    }
+
+    @Override
+    public void addFeedback(FeedbackServiceModel model, String username) {
+        User buyer = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
+
+        Order order = orderRepository.findBuyerOrder(buyer, model.getOrderId()).orElseThrow(() -> new ObjectNotFoundException());
+
+        OrderFeedback orderFeedback = new OrderFeedback();
+
+        orderFeedback.
+                setBuyer(buyer).
+                setFeedback(model.getFeedback()).
+                setRating(model.getRating()).
+                setOrder(order);
+
+        orderFeedbackRepository.save(orderFeedback);
+
+        order.setAddedFeedback(true);
+
+        orderRepository.save(order);
     }
 
     private OrderViewModel mapAsOrderView(Order order){

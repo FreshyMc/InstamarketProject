@@ -26,6 +26,8 @@ public class Order extends BaseEntity{
     private LocalDate deliveryDate;
     @Column
     private boolean delivered = false;
+    @Column
+    private boolean addedFeedback = false;
 
     public Order() {
     }
@@ -122,6 +124,15 @@ public class Order extends BaseEntity{
 
     public Order setStatus(OrderStatus status) {
         this.status = status;
+        return this;
+    }
+
+    public boolean isAddedFeedback() {
+        return addedFeedback;
+    }
+
+    public Order setAddedFeedback(boolean addedFeedback) {
+        this.addedFeedback = addedFeedback;
         return this;
     }
 }

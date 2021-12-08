@@ -22,6 +22,7 @@ public class OrderViewModel {
     private LocalDateTime orderTime;
     private LocalDate deliveryDate;
     private boolean isShipped = false;
+    private boolean addedFeedback;
 
     public OrderViewModel() {
     }
@@ -140,6 +141,15 @@ public class OrderViewModel {
 
     public OrderViewModel setShipped(boolean shipped) {
         isShipped = shipped;
+        return this;
+    }
+
+    public boolean isAddedFeedback() {
+        return addedFeedback;
+    }
+
+    public OrderViewModel setAddedFeedback(boolean addedFeedback) {
+        this.addedFeedback = addedFeedback;
         return this;
     }
 }

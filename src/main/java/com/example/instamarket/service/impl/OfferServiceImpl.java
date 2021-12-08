@@ -37,6 +37,7 @@ public class OfferServiceImpl implements OfferService {
     private final OfferQuestionRepository offerQuestionRepository;
     private final OfferOptionRepository offerOptionRepository;
     private final OfferPropertyRepository offerPropertyRepository;
+    private final OrderFeedbackRepository orderFeedbackRepository;
     private final ModelMapper modelMapper;
 
     private static final String uploadDir = "D://projImages//";
@@ -45,7 +46,7 @@ public class OfferServiceImpl implements OfferService {
     private static final List<String> validFileFormats = Arrays.asList("jpeg", "jpg", "png", "gif");
     private static final char[] characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_".toCharArray();
 
-    public OfferServiceImpl(OfferRepository offerRepository, CategoryRepository categoryRepository, UserRepository userRepository, SubscriberRepository subscriberRepository, OfferQuestionRepository offerQuestionRepository, OfferOptionRepository offerOptionRepository, OfferPropertyRepository offerPropertyRepository, ModelMapper modelMapper) {
+    public OfferServiceImpl(OfferRepository offerRepository, CategoryRepository categoryRepository, UserRepository userRepository, SubscriberRepository subscriberRepository, OfferQuestionRepository offerQuestionRepository, OfferOptionRepository offerOptionRepository, OfferPropertyRepository offerPropertyRepository, OrderFeedbackRepository orderFeedbackRepository, ModelMapper modelMapper) {
         this.offerRepository = offerRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
@@ -53,6 +54,7 @@ public class OfferServiceImpl implements OfferService {
         this.offerQuestionRepository = offerQuestionRepository;
         this.offerOptionRepository = offerOptionRepository;
         this.offerPropertyRepository = offerPropertyRepository;
+        this.orderFeedbackRepository = orderFeedbackRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -393,6 +395,21 @@ public class OfferServiceImpl implements OfferService {
         }).anyMatch(r -> r.equals(RolesEnum.ADMIN));
 
         return offer.getSeller().getUsername().equals(username) || isAdmin;
+    }
+
+    @Override
+    public List<FeedbackViewModel> getOfferFeedback(Long offerId) {
+        List<FeedbackViewModel> offerFeedback = orderFeedbackRepository.getOfferFeedback(offerId).stream().map(feedback -> {
+            FeedbackViewModel mapped = modelMapper.map(feedback, FeedbackViewModel.class);
+
+            mapped.setFirstName(feedback.getBuyer().getFirstName());
+            mapped.setLastName(feedback.getBuyer().getLastName());
+            mapped.setProfilePicture(feedback.getBuyer().getProfilePicture().getUrl());
+
+            return mapped;
+        }).collect(Collectors.toList());
+
+        return offerFeedback;
     }
 
     private boolean isValidFileFormat(String filename){

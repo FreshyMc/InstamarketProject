@@ -44,7 +44,9 @@
                     </div>
                     -->
                 </div>
+                <!--
                 <div class="sold">5 orders</div>
+                -->
                 <div class="product-options" th:if="*{!options.isEmpty()}">
                     <h3>Product options</h3>
                     <div class="options">
@@ -173,81 +175,44 @@
         </section>
         <section class="product-feedback py-3">
             <h3>Feedback</h3>
+            <p class="specifications-empty-message m-0" th:if="${feedback.isEmpty()}">There is no feedback about this product.</p>
             <!-- Feeback comment -->
-            <div class="feedback d-flex">
-                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
+            <div class="feedback d-flex" th:each="f : ${feedback}" th:object="${f}">
+                <img th:src="*{profilePicture}" alt="#" class="feedback-profile-image">
                 <div>
-                    <p class="m-0 pb-2"><b>First name Last name</b></p>
-                    <p class="m-0 pb-2 product-feedback-rating three-star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </p>
-                    <p class="m-0 p-0">
+                    <p class="m-0 pb-2"><b th:text="|*{firstName} *{lastName}|">First name Last name</b></p>
+                    <th:block th:switch="*{rating}">
+                        <p class="m-0 pb-2 product-feedback-rating one-star" th:case="0">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </p>
+                        <p class="m-0 pb-2 product-feedback-rating two-star" th:case="1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </p>
+                        <p class="m-0 pb-2 product-feedback-rating three-star" th:case="2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </p>
+                        <p class="m-0 pb-2 product-feedback-rating four-star" th:case="3">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </p>
+                    </th:block>
+                    <p class="m-0 p-0" th:if="*{!feedback.isEmpty()}" th:text="*{feedback}">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt qui, nulla nisi laborum soluta ex natus non illo excepturi minima debitis ipsam placeat consequatur iure.
                     </p>
                 </div>
             </div>
             <!-- Feedback comment end -->
-            <div class="feedback d-flex">
-                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
-                <div>
-                    <p class="m-0 pb-2"><b>First name Last name</b></p>
-                    <p class="m-0 pb-2 product-feedback-rating four-star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </p>
-                    <p class="m-0 p-0">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt qui, nulla nisi laborum soluta ex natus non illo excepturi minima debitis ipsam placeat consequatur iure.
-                    </p>
-                </div>
-            </div>
-            <div class="feedback d-flex">
-                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
-                <div>
-                    <p class="m-0 pb-2"><b>First name Last name</b></p>
-                    <p class="m-0 pb-2 product-feedback-rating two-star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </p>
-                    <p class="m-0 p-0">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt qui, nulla nisi laborum soluta ex natus non illo excepturi minima debitis ipsam placeat consequatur iure.
-                    </p>
-                </div>
-            </div>
-            <div class="feedback d-flex">
-                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
-                <div>
-                    <p class="m-0 pb-2"><b>First name Last name</b></p>
-                    <p class="m-0 pb-2 product-feedback-rating one-star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </p>
-                    <p class="m-0 p-0">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt qui, nulla nisi laborum soluta ex natus non illo excepturi minima debitis ipsam placeat consequatur iure.
-                    </p>
-                </div>
-            </div>
-            <!-- Feedback without comment -->
-            <div class="feedback d-flex">
-                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2018%2F01%2F28%2F15%2F31%2Fportrait-3113948_640.jpg&f=1&nofb=1" alt="#" class="feedback-profile-image">
-                <div>
-                    <p class="m-0 pb-2"><b>First name Last name</b></p>
-                    <p class="m-0 pb-2 product-feedback-rating three-star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </p>
-                </div>
-            </div>
         </section>
         <!--
         <section class="similar-products py-3">
