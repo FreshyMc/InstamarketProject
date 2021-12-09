@@ -6,6 +6,7 @@ import com.example.instamarket.model.service.ChangePasswordServiceModel;
 import com.example.instamarket.model.service.ProfileNamesServiceModel;
 import com.example.instamarket.model.service.SaveAddressesServiceModel;
 import com.example.instamarket.model.service.UserRegisterServiceModel;
+import com.example.instamarket.model.view.OfferSellerViewModel;
 import com.example.instamarket.model.view.ProfileAddressesViewModel;
 import com.example.instamarket.model.view.ProfileNamesViewModel;
 import com.example.instamarket.model.view.ProfileViewModel;
@@ -43,4 +44,6 @@ public interface UserService {
     boolean hasAppliedToBecomeSeller(String username);
 
     ProfileViewModel getProfileShowcase(Long userId);
+
+    Double getUserPositiveFeedback(OfferSellerViewModel offerSeller);
 }

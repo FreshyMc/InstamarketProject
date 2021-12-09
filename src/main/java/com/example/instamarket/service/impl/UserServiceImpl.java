@@ -10,6 +10,7 @@ import com.example.instamarket.model.service.ChangePasswordServiceModel;
 import com.example.instamarket.model.service.ProfileNamesServiceModel;
 import com.example.instamarket.model.service.SaveAddressesServiceModel;
 import com.example.instamarket.model.service.UserRegisterServiceModel;
+import com.example.instamarket.model.view.OfferSellerViewModel;
 import com.example.instamarket.model.view.ProfileAddressesViewModel;
 import com.example.instamarket.model.view.ProfileNamesViewModel;
 import com.example.instamarket.model.view.ProfileViewModel;
@@ -43,11 +44,12 @@ public class UserServiceImpl implements UserService {
     private final OfferRepository offerRepository;
     private final SellerRequestRepository sellerRequestRepository;
     private final InstamarketUserServiceImpl instamarketUserService;
+    private final OrderFeedbackRepository orderFeedbackRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final Cloudinary cloudinary;
 
-    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, ProfilePictureRepository profilePictureRepository, WishListRepository wishListRepository, OfferRepository offerRepository, SellerRequestRepository sellerRequestRepository, InstamarketUserServiceImpl instamarketUserService, PasswordEncoder passwordEncoder, ModelMapper modelMapper, Cloudinary cloudinary) {
+    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, AddressRepository addressRepository, CartRepository cartRepository, ProfilePictureRepository profilePictureRepository, WishListRepository wishListRepository, OfferRepository offerRepository, SellerRequestRepository sellerRequestRepository, InstamarketUserServiceImpl instamarketUserService, OrderFeedbackRepository orderFeedbackRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, Cloudinary cloudinary) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.addressRepository = addressRepository;
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
         this.offerRepository = offerRepository;
         this.sellerRequestRepository = sellerRequestRepository;
         this.instamarketUserService = instamarketUserService;
+        this.orderFeedbackRepository = orderFeedbackRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.cloudinary = cloudinary;
@@ -319,6 +322,21 @@ public class UserServiceImpl implements UserService {
         mappedUser.setProfilePictureUrl(user.getProfilePicture().getUrl());
 
         return mappedUser;
+    }
+
+    @Override
+    public Double getUserPositiveFeedback(OfferSellerViewModel offerSeller) {
+        User user = userRepository.findByUsername(offerSeller.getUsername()).orElseThrow(() -> new UserNotFoundException());
+
+        Optional<Double> positiveFeedback = orderFeedbackRepository.getSellerPositiveFeedback(user);
+
+        Double feedback = 0.0;
+
+        if(positiveFeedback.isPresent()){
+            feedback = Math.floor((positiveFeedback.get().doubleValue() * 100) / (4 - 1) * 100) / 100;
+        }
+
+        return feedback;
     }
 
     private boolean checkPasswords(User user, String oldPassword){

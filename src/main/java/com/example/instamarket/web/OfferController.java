@@ -6,10 +6,10 @@ import com.example.instamarket.model.enums.CategoriesEnum;
 import com.example.instamarket.model.service.AddOfferServiceModel;
 import com.example.instamarket.model.service.EditOfferServiceModel;
 import com.example.instamarket.model.view.EditOfferViewModel;
-import com.example.instamarket.model.view.OfferDetailsViewModel;
 import com.example.instamarket.model.view.OfferSellerViewModel;
 import com.example.instamarket.service.OfferService;
 import com.example.instamarket.service.SubscriberService;
+import com.example.instamarket.service.UserService;
 import com.example.instamarket.service.impl.InstamarketUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +28,13 @@ import javax.validation.Valid;
 public class OfferController {
     private final OfferService offerService;
     private final SubscriberService subscriberService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public OfferController(OfferService offerService, SubscriberService subscriberService, ModelMapper modelMapper) {
+    public OfferController(OfferService offerService, SubscriberService subscriberService, UserService userService, ModelMapper modelMapper) {
         this.offerService = offerService;
         this.subscriberService = subscriberService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -141,6 +143,7 @@ public class OfferController {
         model.addAttribute("sellerInfo", offerSeller);
         model.addAttribute("isSubscriber", subscriberService.isSubscribed(offerSeller.getId(), user.getUserIdentifier()));
         model.addAttribute("feedback", offerService.getOfferFeedback(offerId));
+        model.addAttribute("feedbackPercent", userService.getUserPositiveFeedback(offerSeller));
 
         return "offer";
     }
