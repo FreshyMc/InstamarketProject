@@ -1,5 +1,6 @@
 package com.example.instamarket.service.impl;
 
+import com.example.instamarket.exception.ObjectNotFoundException;
 import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.entity.Subscriber;
 import com.example.instamarket.model.entity.User;
@@ -72,8 +73,7 @@ public class SubscriberServiceImpl implements SubscriberService {
         User seller = userRepository.findById(sellerId).orElseThrow(() -> new UserNotFoundException());
         User subscriber = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
 
-        //TODO Generic custom exception object for error handling
-        Subscriber subscription = subscriberRepository.findBySubscriberAndSeller(subscriber, seller).orElseThrow().setSubscribed(false);
+        Subscriber subscription = subscriberRepository.findBySubscriberAndSeller(subscriber, seller).orElseThrow(()-> new ObjectNotFoundException()).setSubscribed(false);
 
         subscriberRepository.save(subscription);
     }

@@ -1,5 +1,6 @@
 package com.example.instamarket.service.impl;
 
+import com.example.instamarket.exception.ObjectNotFoundException;
 import com.example.instamarket.exception.OfferNotFoundException;
 import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.dto.OfferDTO;
@@ -283,8 +284,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public boolean isSpecOwner(String username, Long specificationId) {
-        //TODO Object not found exception
-        OfferProperty property = offerPropertyRepository.findById(specificationId).orElseThrow();
+        OfferProperty property = offerPropertyRepository.findById(specificationId).orElseThrow(()-> new ObjectNotFoundException());
 
         return property.getOffer().getSeller().getUsername().equals(username);
     }
