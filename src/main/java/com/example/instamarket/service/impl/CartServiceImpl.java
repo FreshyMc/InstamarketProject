@@ -1,5 +1,6 @@
 package com.example.instamarket.service.impl;
 
+import com.example.instamarket.exception.ObjectNotFoundException;
 import com.example.instamarket.exception.OfferNotFoundException;
 import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.binding.AddToCartBindingModel;
@@ -117,9 +118,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public void checkoutCart(CheckoutServiceModel model, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException());
-
-        //TODO Custom error object not found exception
-        Address userAddress = addressRepository.findById(model.getDeliveryAddress()).orElseThrow();
+        
+        Address userAddress = addressRepository.findById(model.getDeliveryAddress()).orElseThrow(()-> new ObjectNotFoundException());
 
         model.getCartItems().stream().map(offer -> {
             Cart cartItem = cartRepository.findById(offer.getOfferId()).orElseThrow();

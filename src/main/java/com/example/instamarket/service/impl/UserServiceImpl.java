@@ -1,6 +1,7 @@
 package com.example.instamarket.service.impl;
 
 import com.cloudinary.Cloudinary;
+import com.example.instamarket.exception.ObjectNotFoundException;
 import com.example.instamarket.exception.UserNotFoundException;
 import com.example.instamarket.model.binding.ProfilePictureBindingModel;
 import com.example.instamarket.model.dto.FavouriteOfferDTO;
@@ -263,8 +264,7 @@ public class UserServiceImpl implements UserService {
                 return false;
             }
 
-            //TODO Error
-            ProfilePicture userProfilePicture = userRepository.findByUsername(username).orElseThrow().getProfilePicture();
+            ProfilePicture userProfilePicture = userRepository.findByUsername(username).orElseThrow(()-> new ObjectNotFoundException()).getProfilePicture();
 
             if(userProfilePicture.isDefault() == false){
                 cloudinary.uploader().destroy(userProfilePicture.getPublicId(), Map.of());
