@@ -18,4 +18,7 @@ public interface WishListRepository extends JpaRepository<WishList, Long> {
 
     @Query(value = "SELECT w FROM WishList w WHERE w.removed = false AND w.user.id = :id AND w.offer.deleted = false ORDER BY w.addedAt DESC")
     List<WishList> findAllUserWishListItems(@Param("id") Long id);
+
+    @Query(value = "DELETE FROM WishList w WHERE w.removed = true")
+    void clearRemovedItems();
 }

@@ -20,4 +20,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     @Query("SELECT c FROM Cart c WHERE c.buyer = :buyer AND c.removed = false AND c.offer.deleted = false ORDER BY c.addedAt DESC")
     List<Cart> findAllCartItems(@Param("buyer") User buyer);
+
+    @Query(value = "DELETE FROM Cart c WHERE c.removed = true")
+    void clearRemovedItems();
 }
