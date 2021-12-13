@@ -11,14 +11,9 @@ import com.example.instamarket.repository.SellerRequestRepository;
 import com.example.instamarket.repository.UserRepository;
 import com.example.instamarket.service.AdminService;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,13 +24,15 @@ public class AdminServiceImpl implements AdminService {
     private final SellerRequestRepository sellerRequestRepository;
     private final RoleRepository roleRepository;
     private final InstamarketUserServiceImpl instamarketUserService;
+    private final SessionRegistry sessionRegistry;
     private final ModelMapper modelMapper;
 
-    public AdminServiceImpl(UserRepository userRepository, SellerRequestRepository sellerRequestRepository, RoleRepository roleRepository, InstamarketUserServiceImpl instamarketUserService, ModelMapper modelMapper) {
+    public AdminServiceImpl(UserRepository userRepository, SellerRequestRepository sellerRequestRepository, RoleRepository roleRepository, InstamarketUserServiceImpl instamarketUserService, SessionRegistry sessionRegistry, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.sellerRequestRepository = sellerRequestRepository;
         this.roleRepository = roleRepository;
         this.instamarketUserService = instamarketUserService;
+        this.sessionRegistry = sessionRegistry;
         this.modelMapper = modelMapper;
     }
 
@@ -58,18 +55,8 @@ public class AdminServiceImpl implements AdminService {
         sellerRequest.setApproved(true);
 
         sellerRequestRepository.save(sellerRequest);
-        /*
-        Set<GrantedAuthority> authorities = new HashSet<>();
 
-        authorities.add(new SimpleGrantedAuthority(userRole.getName().name()));
-        authorities.add(new SimpleGrantedAuthority(sellerRole.getName().name()));
-
-        UserDetails userDetails = instamarketUserService.loadUserByUsername(approvedSeller.getUsername());
-
-        UsernamePasswordAuthenticationToken reAuth = new UsernamePasswordAuthenticationToken(userDetails, approvedSeller.getPassword(), authorities);
-
-        SecurityContextHolder.getContext().setAuthentication(reAuth);
-         */
+        logoutUser(approvedSeller.getUsername());
     }
 
     @Override
@@ -90,17 +77,8 @@ public class AdminServiceImpl implements AdminService {
         sellerRequest.setApproved(false);
 
         sellerRequestRepository.save(sellerRequest);
-        /*
-        Set<GrantedAuthority> authorities = new HashSet<>();
 
-        authorities.add(new SimpleGrantedAuthority(userRole.getName().name()));
-
-        UserDetails userDetails = instamarketUserService.loadUserByUsername(approvedSeller.getUsername());
-
-        UsernamePasswordAuthenticationToken reAuth = new UsernamePasswordAuthenticationToken(userDetails, approvedSeller.getPassword(), authorities);
-
-        SecurityContextHolder.getContext().setAuthentication(reAuth);
-         */
+        logoutUser(approvedSeller.getUsername());
     }
 
     @Override
@@ -128,5 +106,19 @@ public class AdminServiceImpl implements AdminService {
         sellerApprovalRequest.setUsername(approval.getSeller().getUsername());
 
         return sellerApprovalRequest;
+    }
+
+    private void logoutUser(String username){
+        List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+
+        for(Object p : allPrincipals){
+            if(p instanceof InstamarketUser){
+                if(((InstamarketUser) p).getUsername().equals(username)){
+                    sessionRegistry.getAllSessions(p, false).stream().forEach(s -> {
+                        s.expireNow();
+                    });
+                }
+            }
+        }
     }
 }

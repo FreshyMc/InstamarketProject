@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -14,10 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AuthConfig extends WebSecurityConfigurerAdapter {
     private  final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final SessionRegistry sessionRegistry;
 
-    public AuthConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public AuthConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, SessionRegistry sessionRegistry) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.sessionRegistry = sessionRegistry;
     }
 
     @Override
@@ -59,7 +62,12 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 // remove the session from server
                         invalidateHttpSession(true).
                 //delete the cookie that references my session
-                        deleteCookies("JSESSIONID");
+                        deleteCookies("JSESSIONID").
+                and().
+                    sessionManagement().
+                    maximumSessions(-1).
+                    sessionRegistry(sessionRegistry).
+                    expiredUrl("/login");
     }
 
     @Override
