@@ -2,22 +2,20 @@ package com.example.instamarket.config;
 
 import com.example.instamarket.websocket.WebsocketHandler;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.*;
 
-@EnableWebSocket
+@EnableWebSocketMessageBroker
 @Configuration
-public class WebsocketConfig implements WebSocketConfigurer {
-    private final WebsocketHandler websocketHandler;
-
-    public WebsocketConfig(WebsocketHandler websocketHandler) {
-        this.websocketHandler = websocketHandler;
+public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws").withSockJS();
     }
 
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        //TODO
-        registry.addHandler(websocketHandler, "/socket/demo");
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.setApplicationDestinationPrefixes("/app");
+        registry.enableSimpleBroker("/topic");
     }
 }
