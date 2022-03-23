@@ -20,7 +20,7 @@
                 </div>
             </th:block>
             <div class="col-12 col-lg-5">
-                <div class="product-images-wrapper d-flex flex-nowrap">
+                <div class="product-images-wrapper d-flex flex-nowrap" id="product-overview">
                     <div class="product-images-previewer d-flex justify-content-between">
                         <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(offer.offerImages.size() > 1) ? '' : 'd-none'}" disabled><i class="fas fa-chevron-left"></i></button>
                         <button type="button" class="d-flex justify-content-center align-items-center" th:classappend="${(offer.offerImages.size() > 1) ? '' : 'd-none'}"><i class="fas fa-chevron-right"></i></button>
@@ -322,6 +322,7 @@
     </script>
     <script src="/js/details.js" type="module"></script>
     <script src="/js/cart.js" type="module"></script>
+    <script src="/js/zoom.js"></script>
 </body>
 
 </html>

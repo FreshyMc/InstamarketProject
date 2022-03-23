@@ -16,6 +16,7 @@ import com.example.instamarket.repository.*;
 import com.example.instamarket.repository.specification.OfferSearchSpecification;
 import com.example.instamarket.service.OfferService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.apache.commons.io.FilenameUtils;
@@ -41,9 +42,12 @@ public class OfferServiceImpl implements OfferService {
     private final OrderFeedbackRepository orderFeedbackRepository;
     private final ModelMapper modelMapper;
 
-    private static final String uploadDir = "D://projImages//";
-    private static final String offerImagesDir = "offerImages//";
-    private static final String optionImagesDir = "optionImages//";
+    @Value("${save.directory}")
+    private static String uploadDir;
+    @Value("${offer.images.directory}")
+    private static String offerImagesDir;
+    @Value("${option.images.directory}")
+    private static String optionImagesDir;
     private static final List<String> validFileFormats = Arrays.asList("jpeg", "jpg", "png", "gif");
     private static final char[] characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_".toCharArray();
 
